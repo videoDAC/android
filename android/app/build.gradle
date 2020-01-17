@@ -51,11 +51,14 @@ dependencies {
     implementation ('org.web3j:core:4.2.0-android')
 
     // rx java
-    implementation "io.reactivex.rxjava2:rxjava:2.2.12"
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
     implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
 
     // android spinners
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+
+    // qr code
+    implementation 'com.github.kenglxn.QRGen:android:2.6.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

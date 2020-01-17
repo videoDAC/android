@@ -1,48 +1,63 @@
 package com.videodac.hls
 
+import android.R.attr.password
+import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
+import android.os.Environment.DIRECTORY_DOWNLOADS
+import android.os.Handler
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.zxing.EncodeHintType
+import com.videodac.hls.helpers.Utils
+import com.videodac.hls.helpers.Utils.WALLET_CREATED
+import com.videodac.hls.helpers.Utils.WALLET_PATH
+import com.videodac.hls.helpers.Utils.streamingFeeInEth
 import kotlinx.android.synthetic.main.wallet_layout.*
-import org.web3j.crypto.*
-import org.web3j.protocol.Web3j
+import net.glxn.qrgen.android.QRCode
+import org.web3j.crypto.Credentials
+import org.web3j.crypto.WalletUtils
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.methods.response.Web3ClientVersion
-import org.web3j.protocol.http.HttpService
 import org.web3j.utils.Convert
 import org.web3j.utils.Convert.Unit
-import java.util.*
+
+import java.io.File
+import java.math.BigDecimal
 
 
 class WalletActivity : AppCompatActivity() {
-
+    // shared preferences
     private var PRIVATE_MODE = 0
     private val PREF_NAME = "video-dac-wallet"
     private lateinit var sharedPref: SharedPreferences
     private val TAG = "VIDEO_DAC_WALLET"
 
+    // wallet vars
+    private lateinit var walletPrivateKey: String
+    private lateinit var walletPublicKey: String
+
+    // polling vars
+    var handler: Handler? = Handler()
+    var runnable: Runnable? = null
+    var delay = 5 * 1000 //Delay for 5 seconds.  One second = 1000 milliseconds.
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.wallet_layout)
-        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        supportActionBar!!.hide()
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         sharedPref = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
 
+        Utils.goFullScreen(this)
         initializeWallet()
     }
 
     private fun initializeWallet() {
 
-        val walletCreated = sharedPref.getBoolean("walletCreated", false)
+        val walletCreated = sharedPref.getBoolean(WALLET_CREATED, false)
 
         if (!walletCreated) {
+            showLoadingUi()
             // create the wallet first
             createWallet()
             // then get it
@@ -50,78 +65,97 @@ class WalletActivity : AppCompatActivity() {
 
         } else{
             // otherwise just get it
+            showLoadingUi()
             getWalletBalance()
         }
 
     }
 
     private fun createWallet() {
+        val path = getExternalFilesDir(DIRECTORY_DOWNLOADS)!!.path
+        val fileName = WalletUtils.generateLightNewWalletFile("password", File(path))
+        val filePath = "$path/$fileName"
 
-        try {
-            val ecKeyPair = Keys.createEcKeyPair()
-            val creds = Credentials.create(ecKeyPair)
-            val privateKeyInDec = ecKeyPair.privateKey
-            val sPrivatekeyInHex = privateKeyInDec.toString(16)
-            val aWallet = Wallet.createLight(UUID.randomUUID().toString(), ecKeyPair);
-            val sAddress = aWallet.getAddress()
+        sharedPref.edit().apply {
+            putString(WALLET_PATH, filePath)
+            putBoolean(WALLET_CREATED, true)
+            apply()
         }
-        catch (e: Exception){
-            Log.e(TAG, e.message!!)
-        }
-
     }
 
-    private fun getWalletBalance() {
-        var web3: Web3j
-        var clientVersion: Web3ClientVersion
 
-        initWalletView.visibility = View.GONE
-        hideWalletUi()
-        showLoadingUi()
+
+    private fun getWalletBalance() {
+        var clientVersion: Web3ClientVersion
+        val web3 = Utils.getWeb3(this)
+
+        val walletPath = sharedPref.getString(WALLET_PATH,"")
+        val credentials = WalletUtils.loadCredentials("password", walletPath)
+        walletPublicKey = credentials.address
+
         Thread {
-            //Do some Network Request
-            web3 = Web3j.build(HttpService(getString(R.string.rinkeby_infura_url)))
+            //get client version
             clientVersion = web3.web3ClientVersion().send()
-            val balanceWei = web3.ethGetBalance("0xF0f15Cedc719B5A55470877B0710d5c7816916b1", DefaultBlockParameterName.LATEST).send()
+            walletPublicKey = walletPublicKey
+            val balanceWei = web3.ethGetBalance(walletPublicKey, DefaultBlockParameterName.LATEST).send()
 
             runOnUiThread {
-                showWalletUi()
                 hideLoadingUi()
                 if (!clientVersion.hasError()) { //Connected
                     // get the address balance
                     val balanceInEther = Convert.fromWei(balanceWei.balance.toString(), Unit.ETHER)
-                    wallet_balance.text = "Balance: $balanceInEther"
+                    wallet_balance.text = "Balance: $balanceInEther ETH"
+                    wallet_address.text = walletPublicKey
 
+                    // set the qr code for the address too
+                    qr_code.setImageBitmap(QRCode.from(walletPublicKey).withHint(EncodeHintType.MARGIN, 1).bitmap())
+
+                    // finally start playing the video if the balance is greater than
+                    if(balanceInEther > BigDecimal.valueOf(streamingFeeInEth)) {
+                        startActivity(Intent(this@WalletActivity, VideoActivity::class.java))
+                        finish()
+                    }
                 }
                 else { //Show Error
                     Toast.makeText(this, "Unable to instantiate burner wallet", Toast.LENGTH_LONG).show()
                 }
-
             }
         }.start()
 
     }
 
-    private fun hideWalletUi() {
-        wallet_address.visibility = View.GONE
-        wallet_balance.visibility = View.GONE
-        qr_code.visibility = View.GONE
-    }
+    private fun hideLoadingUi() {
+        loading_text.visibility = View.GONE
+        loader.visibility = View.GONE
 
-    private fun showWalletUi() {
         wallet_address.visibility = View.VISIBLE
         wallet_balance.visibility = View.VISIBLE
         qr_code.visibility = View.VISIBLE
     }
 
-    private fun hideLoadingUi() {
-        loading_text.visibility = View.GONE
-        loader.visibility = View.GONE
-    }
-
     private fun showLoadingUi() {
         loading_text.visibility = View.VISIBLE
         loader.visibility = View.VISIBLE
+
+        wallet_address.visibility = View.GONE
+        wallet_balance.visibility = View.GONE
+        qr_code.visibility = View.GONE
+    }
+
+    override fun onResume() {
+        // update the wallet balance every 5 seconds
+        handler!!.postDelayed(Runnable {
+            //do something
+            getWalletBalance()
+            handler!!.postDelayed(runnable!!, delay.toLong())
+        }.also { runnable = it }, delay.toLong())
+
+        super.onResume();
+    }
+
+    override fun onPause() {
+        handler!!.removeCallbacks(runnable!!) //stop handler when activity not visible
+        super.onPause()
     }
 
 }
