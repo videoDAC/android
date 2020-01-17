@@ -16,7 +16,6 @@ import com.videodac.hls.helpers.Utils.WALLET_PATH
 import com.videodac.hls.helpers.Utils.streamingFeeInEth
 import kotlinx.android.synthetic.main.wallet_layout.*
 import net.glxn.qrgen.android.QRCode
-import org.web3j.crypto.Credentials
 import org.web3j.crypto.WalletUtils
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.methods.response.Web3ClientVersion
@@ -32,11 +31,6 @@ class WalletActivity : AppCompatActivity() {
     private var PRIVATE_MODE = 0
     private val PREF_NAME = "video-dac-wallet"
     private lateinit var sharedPref: SharedPreferences
-    private val TAG = "VIDEO_DAC_WALLET"
-
-    // wallet vars
-    private lateinit var walletPrivateKey: String
-    private lateinit var walletPublicKey: String
 
     // polling vars
     var handler: Handler? = Handler()
@@ -91,12 +85,11 @@ class WalletActivity : AppCompatActivity() {
 
         val walletPath = sharedPref.getString(WALLET_PATH,"")
         val credentials = WalletUtils.loadCredentials("password", walletPath)
-        walletPublicKey = credentials.address
+        val walletPublicKey = credentials.address
 
         Thread {
             //get client version
             clientVersion = web3.web3ClientVersion().send()
-            walletPublicKey = walletPublicKey
             val balanceWei = web3.ethGetBalance(walletPublicKey, DefaultBlockParameterName.LATEST).send()
 
             runOnUiThread {
