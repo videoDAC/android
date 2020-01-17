@@ -1,6 +1,8 @@
 package com.videodac.hls
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.net.Uri
@@ -31,6 +33,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mediaDataSourceFactory: DataSource.Factory
     private var fullscreen = false
 
+    private var PRIVATE_MODE = 0
+    private val PREF_NAME = "video-dac-wallet"
+    private lateinit var sharedPref: SharedPreferences
+
     companion object {
         const val STREAM_URL = "http://159.100.251.158:8935/stream/0xdac817294c0c87ca4fa1895ef4b972eade99f2fd.m3u8"
     }
@@ -40,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.video_layout)
+        sharedPref = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
     }
 
     private fun initializePlayer() {
@@ -107,21 +114,34 @@ class MainActivity : AppCompatActivity() {
 
     public override fun onResume() {
         super.onResume()
-        initializePlayer()
+        val walletCreated = sharedPref.getBoolean("walletCreated", false)
+        if (walletCreated) {
+            initializePlayer()
+        } else {
+            val walletIntent = Intent(this, WalletActivity::class.java)
+            startActivity(walletIntent)
+            finish()
+        }
     }
 
     public override fun onPause() {
         super.onPause()
-        releasePlayer()
+        if (::player.isInitialized) {
+            releasePlayer()
+        }
     }
 
     public override fun onStop() {
         super.onStop()
-        releasePlayer()
+        if (::player.isInitialized) {
+            releasePlayer()
+        }
     }
 
     public override fun onDestroy() {
         super.onDestroy()
-        releasePlayer()
+        if (::player.isInitialized) {
+            releasePlayer()
+        }
     }
 }
