@@ -1,6 +1,6 @@
 package com.videodac.hls
 
-import android.R.attr.password
+
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -44,6 +44,12 @@ class WalletActivity : AppCompatActivity() {
 
         Utils.goFullScreen(this)
         initializeWallet()
+
+        with(root, {
+            setOnClickListener {
+                finish()
+            }
+        })
     }
 
     private fun initializeWallet() {
@@ -77,8 +83,6 @@ class WalletActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun getWalletBalance() {
         var clientVersion: Web3ClientVersion
         val web3 = Utils.getWeb3(this)
@@ -93,20 +97,20 @@ class WalletActivity : AppCompatActivity() {
             val balanceWei = web3.ethGetBalance(walletPublicKey, DefaultBlockParameterName.LATEST).send()
 
             runOnUiThread {
-                hideLoadingUi()
+
                 if (!clientVersion.hasError()) { //Connected
                     // get the address balance
                     val balanceInEther = Convert.fromWei(balanceWei.balance.toString(), Unit.ETHER)
-                    wallet_balance.text = "Balance: $balanceInEther ETH"
-                    wallet_address.text = walletPublicKey
-
-                    // set the qr code for the address too
-                    qr_code.setImageBitmap(QRCode.from(walletPublicKey).withHint(EncodeHintType.MARGIN, 1).bitmap())
-
                     // finally start playing the video if the balance is greater than
                     if(balanceInEther > BigDecimal.valueOf(streamingFeeInEth)) {
                         startActivity(Intent(this@WalletActivity, VideoActivity::class.java))
                         finish()
+                    } else {
+                        hideLoadingUi()
+                        wallet_balance.text = "Livestream Viewing Credits: $balanceInEther ETH"
+                        wallet_address.text = "Credits Wallet Address:  $walletPublicKey"
+                        // set the qr code for the address too
+                        qr_code.setImageBitmap(QRCode.from(walletPublicKey).withHint(EncodeHintType.MARGIN, 1).bitmap())
                     }
                 }
                 else { //Show Error

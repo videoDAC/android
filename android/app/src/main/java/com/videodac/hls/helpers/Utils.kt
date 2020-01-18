@@ -1,8 +1,12 @@
 package com.videodac.hls.helpers
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Build
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.videodac.hls.R
 import org.web3j.protocol.Web3j
@@ -15,7 +19,6 @@ object Utils {
     internal const val WALLET_CREATED = "WALLET_CREATED"
     internal const val WALLET_PATH = "WALLET_PATH"
     internal const val streamingFeeInEth = 0.0059
-    // Recipient address
     internal const val recipientAddress = "0xdac817294c0c87ca4fa1895ef4b972eade99f2fd"
 
     internal fun goFullScreen(activity: AppCompatActivity) {
@@ -31,4 +34,5 @@ object Utils {
     }
 
     internal fun getWeb3(activity: AppCompatActivity) = Web3j.build(HttpService(activity.getString(R.string.rinkeby_infura_url)))
+
 }

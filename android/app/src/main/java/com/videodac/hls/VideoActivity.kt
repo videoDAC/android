@@ -1,6 +1,7 @@
 package com.videodac.hls
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Color
@@ -31,8 +32,10 @@ import com.videodac.hls.helpers.Utils.streamingFeeInEth
 import kotlinx.android.synthetic.main.video_layout.*
 
 import org.web3j.crypto.WalletUtils
+import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.methods.response.Web3ClientVersion
 import org.web3j.tx.Transfer
+import org.web3j.utils.Convert
 import org.web3j.utils.Convert.Unit
 
 import java.io.IOException
@@ -81,13 +84,10 @@ class VideoActivity : AppCompatActivity() {
 
                     Log.d("VIDEO_DAC", String.format("play video listener video size changed, WIDTH IS %1\$2s , HEIGHT IS %2\$2s", width.toString(), height.toString()))
 
-                    when {
-                        width > height -> goFullScreen("landscape")
-                        width <= height -> goFullScreen("portrait")
-                    }
                 }
 
                 override fun onRenderedFirstFrame() {
+                    showPlayer()
                     Log.d("VIDEO_DAC", String.format("First frame rendered"))
                 }
             })
@@ -107,23 +107,11 @@ class VideoActivity : AppCompatActivity() {
 
     }
 
-    @SuppressLint("DefaultLocale", "InlinedApi")
-    private fun goFullScreen(orientation:String) {
-
-        if ( orientation.toLowerCase() == "portrait" ) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
-
-        if ( orientation.toLowerCase() == "landscape" ) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        }
-
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-        val params = playerView.layoutParams as RelativeLayout.LayoutParams
-        params.width = ViewGroup.LayoutParams.MATCH_PARENT
-        params.height = ViewGroup.LayoutParams.MATCH_PARENT
-        playerView.layoutParams = params
-        fullscreen = true
+    private fun showPlayer() {
+        loading_text.visibility = View.GONE
+        loader.visibility = View.GONE
+        loader_view.visibility = View.GONE
+        playerView.visibility = View.VISIBLE
     }
 
     private fun payStreamingFee() {
@@ -143,6 +131,14 @@ class VideoActivity : AppCompatActivity() {
 
                 if(transferReceipt.isStatusOK) {
                     Log.d(TAG, "Streamed $streamingFeeInEth to $recipientAddress")
+
+                    val balanceWei = web3.ethGetBalance(credentials.address, DefaultBlockParameterName.LATEST).send()
+                    val balanceInEther = Convert.fromWei(balanceWei.balance.toString(), Unit.ETHER)
+
+                    // finally stop playing the video if the balance is lesser than the streaming fee
+                    if(balanceInEther <= BigDecimal.valueOf(streamingFeeInEth)) {
+                        finish()
+                    }
                 }
             }
             catch (io: IOException) {
@@ -158,9 +154,7 @@ class VideoActivity : AppCompatActivity() {
                 }
             }
 
-
         }.start()
-
     }
 
     private fun releasePlayer() {
@@ -170,6 +164,7 @@ class VideoActivity : AppCompatActivity() {
     public override fun onResume() {
         super.onResume()
         initializePlayer()
+        payStreamingFee()
 
         // pay the streaming fee every 1 minute
         handler!!.postDelayed(Runnable {
