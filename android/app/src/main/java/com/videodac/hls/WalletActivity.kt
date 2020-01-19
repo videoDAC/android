@@ -9,13 +9,21 @@ import android.os.Handler
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+
 import com.google.zxing.EncodeHintType
+
 import com.videodac.hls.helpers.Utils
 import com.videodac.hls.helpers.Utils.WALLET_CREATED
 import com.videodac.hls.helpers.Utils.WALLET_PATH
+import com.videodac.hls.helpers.Utils.closeActivity
 import com.videodac.hls.helpers.Utils.streamingFeeInEth
+import com.videodac.hls.helpers.Utils.walletPassword
+import com.videodac.hls.helpers.Utils.walletPublicKey
+
 import kotlinx.android.synthetic.main.wallet_layout.*
+
 import net.glxn.qrgen.android.QRCode
+
 import org.web3j.crypto.WalletUtils
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.methods.response.Web3ClientVersion
@@ -33,9 +41,9 @@ class WalletActivity : AppCompatActivity() {
     private lateinit var sharedPref: SharedPreferences
 
     // polling vars
-    var handler: Handler? = Handler()
-    var runnable: Runnable? = null
-    var delay = 5 * 1000 //Delay for 5 seconds.  One second = 1000 milliseconds.
+    private var handler: Handler? = Handler()
+    private var runnable: Runnable? = null
+    private var delay = 5 * 1000 //Delay for 5 seconds.  One second = 1000 milliseconds.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +55,8 @@ class WalletActivity : AppCompatActivity() {
 
         with(root, {
             setOnClickListener {
-                finish()
+                Toast.makeText(this@WalletActivity, "Address copied to clipboard $walletPublicKey", Toast.LENGTH_LONG).show()
+                closeActivity(this@WalletActivity, walletPublicKey)
             }
         })
     }
@@ -88,8 +97,8 @@ class WalletActivity : AppCompatActivity() {
         val web3 = Utils.getWeb3(this)
 
         val walletPath = sharedPref.getString(WALLET_PATH,"")
-        val credentials = WalletUtils.loadCredentials("password", walletPath)
-        val walletPublicKey = credentials.address
+        val credentials = WalletUtils.loadCredentials(walletPassword, walletPath)
+        walletPublicKey = credentials.address
 
         Thread {
             //get client version
@@ -104,10 +113,10 @@ class WalletActivity : AppCompatActivity() {
                     // finally start playing the video if the balance is greater than
                     if(balanceInEther > BigDecimal.valueOf(streamingFeeInEth)) {
                         startActivity(Intent(this@WalletActivity, VideoActivity::class.java))
-                        finish()
+                        closeActivity(this, null)
                     } else {
                         hideLoadingUi()
-                        wallet_balance.text = "Livestream Viewing Credits: $balanceInEther ETH"
+                        wallet_balance.text = "${getString(R.string.livestream_credits)} $balanceInEther ${getString(R.string.eth_txt)}"
                         wallet_address.text = "Credits Wallet Address:  $walletPublicKey"
                         // set the qr code for the address too
                         qr_code.setImageBitmap(QRCode.from(walletPublicKey).withHint(EncodeHintType.MARGIN, 1).bitmap())
@@ -145,7 +154,9 @@ class WalletActivity : AppCompatActivity() {
             //do something
             getWalletBalance()
             handler!!.postDelayed(runnable!!, delay.toLong())
-        }.also { runnable = it }, delay.toLong())
+        }.also {
+            runnable = it
+        }, delay.toLong())
 
         super.onResume();
     }

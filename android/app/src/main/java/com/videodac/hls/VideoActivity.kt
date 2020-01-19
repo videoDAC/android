@@ -1,17 +1,13 @@
 package com.videodac.hls
 
-import android.annotation.SuppressLint
-import android.content.Intent
+
 import android.content.SharedPreferences
-import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import android.widget.RelativeLayout
 import android.widget.Toast
 
 import androidx.appcompat.app.AppCompatActivity
@@ -25,9 +21,15 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoListener
 
-import com.videodac.hls.helpers.Utils
+import com.videodac.hls.helpers.Utils.STREAM_URL
+import com.videodac.hls.helpers.Utils.WALLET_PATH
 import com.videodac.hls.helpers.Utils.recipientAddress
 import com.videodac.hls.helpers.Utils.streamingFeeInEth
+import com.videodac.hls.helpers.Utils.walletPassword
+import com.videodac.hls.helpers.Utils.walletPublicKey
+import com.videodac.hls.helpers.Utils.closeActivity
+import com.videodac.hls.helpers.Utils.getWeb3
+import com.videodac.hls.helpers.Utils.goFullScreen
 
 import kotlinx.android.synthetic.main.video_layout.*
 
@@ -45,7 +47,6 @@ class VideoActivity : AppCompatActivity() {
 
     private lateinit var player: SimpleExoPlayer
     private lateinit var mediaDataSourceFactory: DataSource.Factory
-    private var fullscreen = false
 
     // streaming vars
     var handler: Handler? = Handler()
@@ -59,14 +60,11 @@ class VideoActivity : AppCompatActivity() {
     private val TAG = "VIDEO_DAC_WALLET"
 
 
-    companion object {
-        const val STREAM_URL = "http://159.100.251.158:8935/stream/0xdac817294c0c87ca4fa1895ef4b972eade99f2fd.m3u8"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.video_layout)
-        Utils.goFullScreen(this)
+        goFullScreen(this)
         sharedPref = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
     }
 
@@ -101,7 +99,8 @@ class VideoActivity : AppCompatActivity() {
 
         with(playerView, {
             setOnClickListener {
-                finish()
+                Toast.makeText(this@VideoActivity, "Address copied to clipboard ${walletPublicKey}", Toast.LENGTH_LONG).show()
+                closeActivity(this@VideoActivity, walletPublicKey)
             }
         })
 
@@ -117,15 +116,15 @@ class VideoActivity : AppCompatActivity() {
     private fun payStreamingFee() {
 
         var clientVersion: Web3ClientVersion
-        val web3 = Utils.getWeb3(this)
+        val web3 = getWeb3(this)
 
         Thread {
             clientVersion = web3.web3ClientVersion().send()
 
             try {
                 // open the wallet into a Credential object
-                val walletPath = sharedPref.getString(Utils.WALLET_PATH,"")
-                val credentials = WalletUtils.loadCredentials("password", walletPath)
+                val walletPath = sharedPref.getString(WALLET_PATH,"")
+                val credentials = WalletUtils.loadCredentials(walletPassword, walletPath)
 
                 val transferReceipt = Transfer.sendFunds(web3, credentials, recipientAddress, BigDecimal.valueOf(streamingFeeInEth), Unit.ETHER).send()
 
