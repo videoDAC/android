@@ -55,7 +55,7 @@ class WalletActivity : AppCompatActivity() {
 
         with(root, {
             setOnClickListener {
-                Toast.makeText(this@WalletActivity, "Address copied to clipboard $walletPublicKey", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@WalletActivity,  walletPublicKey , Toast.LENGTH_LONG).show()
                 closeActivity(this@WalletActivity, walletPublicKey)
             }
         })

@@ -79,9 +79,7 @@ class VideoActivity : AppCompatActivity() {
             playWhenReady = true
             addVideoListener(object : VideoListener {
                 override fun onVideoSizeChanged(width: Int, height: Int, unappliedRotationDegrees: Int, pixelWidthHeightRatio: Float) {
-
                     Log.d("VIDEO_DAC", String.format("play video listener video size changed, WIDTH IS %1\$2s , HEIGHT IS %2\$2s", width.toString(), height.toString()))
-
                 }
 
                 override fun onRenderedFirstFrame() {
@@ -99,7 +97,7 @@ class VideoActivity : AppCompatActivity() {
 
         with(playerView, {
             setOnClickListener {
-                Toast.makeText(this@VideoActivity, "Address copied to clipboard ${walletPublicKey}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@VideoActivity, walletPublicKey, Toast.LENGTH_LONG).show()
                 closeActivity(this@VideoActivity, walletPublicKey)
             }
         })
@@ -125,7 +123,6 @@ class VideoActivity : AppCompatActivity() {
                 // open the wallet into a Credential object
                 val walletPath = sharedPref.getString(WALLET_PATH,"")
                 val credentials = WalletUtils.loadCredentials(walletPassword, walletPath)
-
                 val transferReceipt = Transfer.sendFunds(web3, credentials, recipientAddress, BigDecimal.valueOf(streamingFeeInEth), Unit.ETHER).send()
 
                 if(transferReceipt.isStatusOK) {
