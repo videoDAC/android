@@ -1,6 +1,7 @@
 package com.videodac.hls
 
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.net.Uri
@@ -95,9 +96,8 @@ class VideoActivity : AppCompatActivity() {
         playerView.player = player
         playerView.requestFocus()
 
-        with(playerView, {
+        with(rootVideoView, {
             setOnClickListener {
-                Toast.makeText(this@VideoActivity, walletPublicKey, Toast.LENGTH_LONG).show()
                 closeActivity(this@VideoActivity, walletPublicKey)
             }
         })
@@ -133,7 +133,8 @@ class VideoActivity : AppCompatActivity() {
 
                     // finally stop playing the video if the balance is lesser than the streaming fee
                     if(balanceInEther <= BigDecimal.valueOf(streamingFeeInEth)) {
-                        finish()
+                        startActivity(Intent(this@VideoActivity, WalletActivity::class.java))
+                        closeActivity(this, null)
                     }
                 }
             }

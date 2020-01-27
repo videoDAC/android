@@ -55,7 +55,6 @@ class WalletActivity : AppCompatActivity() {
 
         with(root, {
             setOnClickListener {
-                Toast.makeText(this@WalletActivity,  walletPublicKey , Toast.LENGTH_LONG).show()
                 closeActivity(this@WalletActivity, walletPublicKey)
             }
         })
@@ -82,7 +81,7 @@ class WalletActivity : AppCompatActivity() {
 
     private fun createWallet() {
         val path = getExternalFilesDir(DIRECTORY_DOWNLOADS)!!.path
-        val fileName = WalletUtils.generateLightNewWalletFile("password", File(path))
+        val fileName = WalletUtils.generateLightNewWalletFile(walletPassword, File(path))
         val filePath = "$path/$fileName"
 
         sharedPref.edit().apply {
@@ -116,8 +115,9 @@ class WalletActivity : AppCompatActivity() {
                         closeActivity(this, null)
                     } else {
                         hideLoadingUi()
-                        wallet_balance.text = "${getString(R.string.livestream_credits)} $balanceInEther ${getString(R.string.eth_txt)}"
-                        wallet_address.text = "Credits Wallet Address:  $walletPublicKey"
+                        wallet_balance.text = getString(R.string.livestream_credits, balanceInEther, getString(R.string.eth_txt))
+                        wallet_address.text = walletPublicKey
+                        creator_fee.text = getString(R.string.creator_fee, String.format("%.4f", streamingFeeInEth), getString(R.string.eth_txt_per_minute))
                         // set the qr code for the address too
                         qr_code.setImageBitmap(QRCode.from(walletPublicKey).withHint(EncodeHintType.MARGIN, 1).bitmap())
                     }
@@ -134,8 +134,11 @@ class WalletActivity : AppCompatActivity() {
         loading_text.visibility = View.GONE
         loader.visibility = View.GONE
 
+        welcome_title.visibility = View.VISIBLE
         wallet_address.visibility = View.VISIBLE
+        creator_fee.visibility = View.VISIBLE
         wallet_balance.visibility = View.VISIBLE
+        tap_instructions.visibility = View.VISIBLE
         qr_code.visibility = View.VISIBLE
     }
 
@@ -143,8 +146,11 @@ class WalletActivity : AppCompatActivity() {
         loading_text.visibility = View.VISIBLE
         loader.visibility = View.VISIBLE
 
+        welcome_title.visibility = View.GONE
         wallet_address.visibility = View.GONE
+        creator_fee.visibility = View.GONE
         wallet_balance.visibility = View.GONE
+        tap_instructions.visibility = View.GONE
         qr_code.visibility = View.GONE
     }
 

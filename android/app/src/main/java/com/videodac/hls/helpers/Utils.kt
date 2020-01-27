@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Build
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 import com.videodac.hls.R
@@ -17,7 +18,7 @@ object Utils {
 
     internal const val WALLET_CREATED = "WALLET_CREATED"
     internal const val WALLET_PATH = "WALLET_PATH"
-    internal const val streamingFeeInEth = 0.00059
+    internal const val streamingFeeInEth = 0.0005
     internal const val recipientAddress = "0xdac817294c0c87ca4fa1895ef4b972eade99f2fd"
     internal const val walletPassword = "password"
     internal lateinit var walletPublicKey: String
@@ -45,6 +46,8 @@ object Utils {
             val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("User Address", userAddress)
             clipboard.setPrimaryClip(clip)
+
+            Toast.makeText(activity, "Address copied to clipboard" , Toast.LENGTH_LONG).show()
         }
         // finish activity
         activity.finish()
