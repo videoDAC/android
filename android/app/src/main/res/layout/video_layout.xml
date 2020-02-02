@@ -32,6 +32,7 @@
         android:layout_marginBottom="40dp"
         android:textSize="20sp"
         android:textColor="@android:color/white"
+        android:fontFamily="@font/akkurat"
         android:text="@string/loading_stream" />
 
     <com.github.ybq.android.spinkit.SpinKitView

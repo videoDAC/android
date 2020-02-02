@@ -132,7 +132,7 @@ class VideoActivity : AppCompatActivity() {
                     val balanceInEther = Convert.fromWei(balanceWei.balance.toString(), Unit.ETHER)
 
                     // finally stop playing the video if the balance is lesser than the streaming fee
-                    if(balanceInEther <= BigDecimal.valueOf(streamingFeeInEth)) {
+                    if(balanceInEther < BigDecimal.valueOf(streamingFeeInEth)) {
                         startActivity(Intent(this@VideoActivity, WalletActivity::class.java))
                         closeActivity(this, null)
                     }
