@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "804468944751",
+    "firebase_url": "https://rinkeby-tv.firebaseio.com",
+    "project_id": "rinkeby-tv",
+    "storage_bucket": "rinkeby-tv.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:804468944751:android:dbab13ed2bdb47b109029a",
+        "android_client_info": {
+          "package_name": "com.videodac.hls"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "804468944751-19e6ah2qt5in0cc1dun49a35iufje363.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQwDntetPrACNAIqlqGw5czgih7LOgy7A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "804468944751-19e6ah2qt5in0cc1dun49a35iufje363.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

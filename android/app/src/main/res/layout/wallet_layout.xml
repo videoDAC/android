@@ -10,40 +10,84 @@
     android:keepScreenOn="true">
 
     <TextView
+        android:id="@+id/welcome_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginRight="10dp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/akkurat"
+        android:text="@string/welcome_title" />
+
+    <TextView
         android:id="@+id/wallet_balance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="25sp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="100dp"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
         android:textColor="@android:color/white"
-        android:text="@string/wallet_balance" />
+        android:fontFamily="@font/akkurat"
+        android:text="@string/wallet_balance"/>
 
     <TextView
-        android:id="@+id/wallet_address"
-        android:layout_width="wrap_content"
+        android:id="@+id/creator_fee"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:textSize="25sp"
+        android:layout_marginTop="200dp"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:layout_below="@id/wallet_balance"
-        android:textSize="25sp"
         android:textColor="@android:color/white"
-        android:text="@string/wallet_address" />
+        android:fontFamily="@font/akkurat"
+        android:text="@string/creator_fee"/>
+
+    <TextView
+        android:id="@+id/tap_instructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:layout_marginTop="300dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/akkurat"
+        android:text="@string/tap_instructions"/>
 
     <ImageView
         android:id="@+id/qr_code"
         android:layout_width="240dp"
         android:layout_height="240dp"
-        android:layout_below="@id/wallet_address"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginEnd="40dp"
         android:contentDescription="@string/qr_code"
         app:srcCompat="@drawable/ic_qr_placeholder"
+         />
+
+    <TextView
+        android:id="@+id/wallet_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/qr_code"
+        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="30dp" />
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="480dp"
+        android:layout_marginStart="480dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginEnd="40dp"
+        android:textSize="25sp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/akkurat"
+        android:text="@string/wallet_address"/>
 
     <TextView
         android:id="@+id/loading_text"
@@ -55,6 +99,7 @@
         android:textSize="20sp"
         android:visibility="gone"
         android:textColor="@android:color/white"
+        android:fontFamily="@font/akkurat"
         android:text="@string/loading_burner_wallet" />
 
     <com.github.ybq.android.spinkit.SpinKitView

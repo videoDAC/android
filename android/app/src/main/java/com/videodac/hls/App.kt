@@ -1,5 +1,7 @@
 package com.videodac.hls
 
+import android.content.Context
+import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import java.security.Security
@@ -29,6 +31,11 @@ class App : MultiDexApplication() {
          // of that it's possible to have another BC implementation loaded in VM.
         Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME)
         Security.insertProviderAt(BouncyCastleProvider(), 1)
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        MultiDex.install(this)
+        super.attachBaseContext(base)
     }
 
 }
