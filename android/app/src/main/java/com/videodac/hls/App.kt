@@ -6,7 +6,7 @@ import androidx.multidex.MultiDexApplication
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import java.security.Security
 
-class App : MultiDexApplication() {
+class App:MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
@@ -33,9 +33,5 @@ class App : MultiDexApplication() {
         Security.insertProviderAt(BouncyCastleProvider(), 1)
     }
 
-    override fun attachBaseContext(base: Context?) {
-        MultiDex.install(this)
-        super.attachBaseContext(base)
-    }
 
 }

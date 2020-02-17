@@ -20,3 +20,12 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep public class * extends android.app.Application
+
+# BouncyCastle rules
+-keep class org.bouncycastle.**
+-dontwarn org.bouncycastle.jce.provider.X509LDAPCertStoreSpi
+-dontwarn org.bouncycastle.x509.util.LDAPStoreHelper
+
+-keep class androidx.core.app.CoreComponentFactory { *; }
+
+-keep class com.videodac.hls.App

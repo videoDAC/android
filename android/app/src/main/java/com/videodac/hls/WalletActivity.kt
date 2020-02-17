@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.os.Handler
 import android.view.View
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
@@ -115,9 +117,9 @@ class WalletActivity : AppCompatActivity() {
                         closeActivity(this, null)
                     } else {
                         hideLoadingUi()
-                        wallet_balance.text = getString(R.string.livestream_credits, balanceInEther, getString(R.string.eth_txt))
+                        wallet_balance.text = getString(R.string.livestream_credits, balanceInEther)
                         wallet_address.text = walletPublicKey
-                        creator_fee.text = getString(R.string.creator_fee, String.format("%.4f", streamingFeeInEth), getString(R.string.eth_txt_per_minute))
+                        creator_fee.text = getString(R.string.creator_fee, String.format("%.4f", streamingFeeInEth))
                         // set the qr code for the address too
                         qr_code.setImageBitmap(QRCode.from(walletPublicKey).withHint(EncodeHintType.MARGIN, 1).bitmap())
                     }
@@ -135,11 +137,19 @@ class WalletActivity : AppCompatActivity() {
         loader.visibility = View.GONE
 
         welcome_title.visibility = View.VISIBLE
+        tv_name.visibility = View.VISIBLE
         wallet_address.visibility = View.VISIBLE
+        wallet_balance_unit.visibility = View.VISIBLE
         creator_fee.visibility = View.VISIBLE
+        creator_fee_unit.visibility = View.VISIBLE
         wallet_balance.visibility = View.VISIBLE
         tap_instructions.visibility = View.VISIBLE
         qr_code.visibility = View.VISIBLE
+
+        // start animation
+        tv_name.blink()
+        wallet_balance_unit.blink()
+        creator_fee_unit.blink()
     }
 
     private fun showLoadingUi() {
@@ -147,8 +157,11 @@ class WalletActivity : AppCompatActivity() {
         loader.visibility = View.VISIBLE
 
         welcome_title.visibility = View.GONE
+        tv_name.visibility = View.GONE
         wallet_address.visibility = View.GONE
+        wallet_balance_unit.visibility = View.GONE
         creator_fee.visibility = View.GONE
+        creator_fee_unit.visibility = View.GONE
         wallet_balance.visibility = View.GONE
         tap_instructions.visibility = View.GONE
         qr_code.visibility = View.GONE
@@ -165,6 +178,22 @@ class WalletActivity : AppCompatActivity() {
         }, delay.toLong())
 
         super.onResume();
+    }
+
+    private fun View.blink(
+        times: Int = Animation.INFINITE,
+        duration: Long = 800L,
+        offset: Long = 200L,
+        minAlpha: Float = 0.0f,
+        maxAlpha: Float = 1.0f
+       // repeatMode: Int = Animation.INFINITE
+    ) {
+        startAnimation(AlphaAnimation(minAlpha, maxAlpha).also {
+            it.duration = duration
+            it.startOffset = offset
+           // it.repeatMode = repeatMode
+            it.repeatCount = times
+        })
     }
 
     override fun onPause() {
