@@ -6,10 +6,10 @@
     <string name="infura_url">https://goerli.infura.io/v3/1b159090386c48bbb7828f1b346dcc11</string>
     <string name="loading_burner_wallet">Loading wallet, please wait…</string>
     <string name="loading_stream">Loading stream, please wait…</string>
-    <string name="livestream_credits">Viewing credit balance: %1$s</string>
+    <string name="livestream_credits">Viewing credit balance:</string>
     <string name="eth_txt">ETH (Rinkeby)</string>
     <string name="welcome_title">Welcome to</string>
-    <string name="creator_fee">Pay direct to creator: %1$s</string>
+    <string name="creator_fee">Pay direct to creator:</string>
     <string name="eth_txt_per_minute">ETH per minute</string>
     <string name="tap_instructions">Tap screen to copy this \nwallet address to clipboard</string>
     <string name="tv_name">Görli TV</string>
