@@ -146,10 +146,6 @@ class WalletActivity : AppCompatActivity() {
         tap_instructions.visibility = View.VISIBLE
         qr_code.visibility = View.VISIBLE
 
-        // start animation
-        tv_name.blink()
-        wallet_balance_unit.blink()
-        creator_fee_unit.blink()
     }
 
     private fun showLoadingUi() {
@@ -180,21 +176,6 @@ class WalletActivity : AppCompatActivity() {
         super.onResume();
     }
 
-    private fun View.blink(
-        times: Int = Animation.INFINITE,
-        duration: Long = 800L,
-        offset: Long = 200L,
-        minAlpha: Float = 0.0f,
-        maxAlpha: Float = 1.0f
-       // repeatMode: Int = Animation.INFINITE
-    ) {
-        startAnimation(AlphaAnimation(minAlpha, maxAlpha).also {
-            it.duration = duration
-            it.startOffset = offset
-           // it.repeatMode = repeatMode
-            it.repeatCount = times
-        })
-    }
 
     override fun onPause() {
         handler!!.removeCallbacks(runnable!!) //stop handler when activity not visible

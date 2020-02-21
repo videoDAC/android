@@ -38,7 +38,7 @@ object Utils {
     }
 
     @JvmStatic
-    internal fun getWeb3(activity: AppCompatActivity) = Web3j.build(HttpService(activity.getString(R.string.rinkeby_infura_url)))
+    internal fun getWeb3(activity: AppCompatActivity) = Web3j.build(HttpService(activity.getString(R.string.infura_url)))
 
     @JvmStatic
     internal fun closeActivity(activity: AppCompatActivity, userAddress: String?) {
