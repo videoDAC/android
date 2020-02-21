@@ -52,7 +52,7 @@ class VideoActivity : AppCompatActivity() {
     // streaming vars
     var handler: Handler? = Handler()
     var runnable: Runnable? = null
-    var delay = 60 * 1000 //Delay for 5 seconds.  One second = 1000 milliseconds.
+    var delay = 60 * 1000 //Delay for 60 seconds.  One second = 1000 milliseconds.
 
     // shared preferences
     private var PRIVATE_MODE = 0
@@ -185,6 +185,7 @@ class VideoActivity : AppCompatActivity() {
         if (::player.isInitialized) {
             releasePlayer()
         }
+        handler!!.removeCallbacks(runnable!!) //stop handler when activity not visible
     }
 
     public override fun onDestroy() {
@@ -192,5 +193,6 @@ class VideoActivity : AppCompatActivity() {
         if (::player.isInitialized) {
             releasePlayer()
         }
+        handler!!.removeCallbacks(runnable!!) //stop handler when activity not visible
     }
 }

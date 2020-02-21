@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/welcome_title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:layout_marginTop="20dp"
@@ -24,8 +24,25 @@
         android:text="@string/welcome_title" />
 
     <TextView
-        android:id="@+id/wallet_balance"
+        android:id="@+id/tv_name"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/welcome_title"
+        android:layout_toEndOf="@id/welcome_title"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:textSize="25sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/akkurat"
+        android:text="@string/tv_name"
+         />
+
+
+    <TextView
+        android:id="@+id/wallet_balance"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:layout_marginTop="100dp"
@@ -36,8 +53,22 @@
         android:text="@string/wallet_balance"/>
 
     <TextView
-        android:id="@+id/creator_fee"
+        android:id="@+id/wallet_balance_unit"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/wallet_balance"
+        android:layout_toEndOf="@id/wallet_balance"
+        android:textSize="25sp"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/akkurat"
+        android:text="@string/go_eth_unit"/>
+
+    <TextView
+        android:id="@+id/creator_fee"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:layout_marginTop="200dp"
@@ -46,6 +77,20 @@
         android:textColor="@android:color/white"
         android:fontFamily="@font/akkurat"
         android:text="@string/creator_fee"/>
+
+    <TextView
+        android:id="@+id/creator_fee_unit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/creator_fee"
+        android:layout_toEndOf="@id/creator_fee"
+        android:textSize="25sp"
+        android:layout_marginTop="200dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/akkurat"
+        android:text="@string/go_eth_unit"/>
 
     <TextView
         android:id="@+id/tap_instructions"
