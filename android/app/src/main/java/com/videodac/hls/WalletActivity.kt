@@ -1,6 +1,5 @@
 package com.videodac.hls
 
-
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -35,7 +34,6 @@ import org.web3j.utils.Convert.Unit
 import java.io.File
 import java.math.BigDecimal
 
-
 class WalletActivity : AppCompatActivity() {
     // shared preferences
     private var PRIVATE_MODE = 0
@@ -55,7 +53,7 @@ class WalletActivity : AppCompatActivity() {
         Utils.goFullScreen(this)
         initializeWallet()
 
-        with(root, {
+        with(root_layout, {
             setOnClickListener {
                 closeActivity(this@WalletActivity, walletPublicKey)
             }
@@ -121,7 +119,7 @@ class WalletActivity : AppCompatActivity() {
                         wallet_balance_unit.text = balanceInEther.toString() + " " + getString(R.string.go_eth_unit)
                         wallet_address.text = walletPublicKey
                         creator_fee.text = getString(R.string.creator_fee)
-                        creator_fee_unit.text = String.format("%.4f ", streamingFeeInEth) + getString(R.string.go_eth_unit) +" per minute + gas"
+                        creator_fee_unit.text = String.format("%.4f ", streamingFeeInEth) + getString(R.string.go_eth_unit) + " per minute + gas"
                         // set the qr code for the address too
                         qr_code.setImageBitmap(QRCode.from(walletPublicKey).withHint(EncodeHintType.MARGIN, 1).bitmap())
                     }
