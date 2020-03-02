@@ -2,15 +2,16 @@
 
 This repo contains the native kotlin project for the `videoDAC` template pay-as-you-go livestream viewer app for Android.
 
-# Building
+# Generating an Android APK with the Option to publish to Google Play
 
-To build out the app, please do the following,
+This guide will take you step by step through creating an APK from a template and publishing it on the Google Play store.
 
-1. Open the `android` project in [Android Studio](https://developer.android.com/studio)
-2. Let the project finish syncing gradle and update any dependencies in the project as prompted.
-3. Finally connect your device or start up an emulator and deploy the app to it by going to the menu `Run -> Run 'app'`
+OS:  Linux Ubuntu 18.04
 
-### Settings
-
-- To modify the `STREAM_URL` open the file `VideoActivity.kt` and modify line 35 by entering the new valid hls URL. Then build the project as explained above and deploy the app.
-- To set the streaming fee and recipient address, modify the lines 21 & 22 in `helpers/Utils.kt` and set the variables `streamingFeeInEth` & `recipientAddress`
+1. [Create a Google Play Developer Account](APK/Account/index.md)
+2. [Developer Environment](APK/Prereq/index.md)
+3. [Install Android Studio](APK/Install/index.md)
+4. [Get Your App Template:  Gorli TV](APK/Getapp/index.md)
+5. [Import the App to Android Studio](APK/Import/index.md)
+6. [Setting Key Variables](APK/Variables/index.md)
+7. [Building and Releasing the APK](APK/Genapk/index.md)
