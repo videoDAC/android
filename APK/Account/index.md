@@ -4,7 +4,7 @@
 
 ![Page1](page1.png)
 
-2.  Read and agree to the Goolge Play Developer Distribution agreement.
+2.  Read and agree to the Google Play Developer Distribution agreement.
 
 ![page2](page2.png)
 
