@@ -1,8 +1,8 @@
 # Setting Key Variables
 
-* App name (e.g. Görli TV)
+* App name (e.g. Acme TV)
 * Pay-to address
-* Network, from rinkeby, gorli, ropsten, kovan, mainnet, or a    custom RPC URL
+* Network, from rinkeby, goerli, ropsten, kovan, mainnet, or a    custom RPC URL
 * price-per-minute in network's native ETH
 
 You have imported the App and you are at the following screen where these variables can be set: 
@@ -25,3 +25,4 @@ You have imported the App and you are at the following screen where these variab
 * Save the file.
 
 [Home](../../README.md)
+
