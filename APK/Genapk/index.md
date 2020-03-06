@@ -10,7 +10,7 @@
 
 ![apk2](apk2.png)
 
-4.  The device image whill take some time to download, when it is complete click "Finish":
+4.  The device image will take some time to download, when it is complete click "Finish":
 
 ![apk3](apk3.png)
 
