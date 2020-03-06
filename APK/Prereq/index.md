@@ -26,7 +26,7 @@
         $ git config --global user.email johndoe@example.com
         ```
 
-2.  If you are running a 64-bit version of Ubuntu, you must first install some 32-bit libraries with the following command:
+2.  Android studio is a 32-bit program.  There is not a 64-bit release. If you are running a 64-bit version of Ubuntu, you must first install some 32-bit libraries with the following command:
 
     ```
     $ sudo apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386
