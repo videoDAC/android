@@ -40,7 +40,7 @@
 
 ![Pic](Pic.png)
 
-7.  Select your preference to datashare with Google for user experience improvements.
+7.  Select your preference to data-share with Google for user experience improvements.
 
 8.  The Android Studio Setup Wizard will appear, click "Next":
 
@@ -56,7 +56,7 @@
 
 ![Pic4](Pic4.png)
 
-12.  If you are notifed that your system can run the Android emulator in accelerated mode, follow steps 14-20, otherwise skip to step 21.
+12.  If you are notified that your system can run the Android emulator in accelerated mode, follow steps 14-20 to install KVM, otherwise skip to step 21.  (Installing KVM improves performance of any virtual device you are using for debugging.)
 
 ![Pic5](Pic5.png)
 
@@ -95,7 +95,7 @@
         ```
         $ sudo adduser $USER kvm
 
-20.  Restart your computer and proceed to re-open Android studio:
+20.  Restart your computer and proceed to reopen Android studio:
 
         ```
         $ cd /usr/local/android-studio/bin
@@ -107,6 +107,7 @@
 ![Pic7](Pic7.png)
 
 [Home](../../README.md)
+
 
 
 
