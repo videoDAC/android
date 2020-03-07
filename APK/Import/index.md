@@ -36,7 +36,7 @@ Please note:  These instructions are not all inclusive of possible import errors
 
 10.  Go to File > Close project
 
-11.  Repeat steps one and two and when the project is imported successfully, you will be at this window: 
+11.  Repeat steps 1 and 2, and when the project is imported successfully, navigate to the file `app/res/values/strings.xml`, where you should see:
 
 ![import7](Import7.png)
 
