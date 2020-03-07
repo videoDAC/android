@@ -42,7 +42,7 @@ This will run Android Studio. It may take some time to load, depending on your s
 
 ![image](https://user-images.githubusercontent.com/2212651/76143795-80ca5900-60a0-11ea-8227-e38e936e45e3.png)
 
-If so, keep clicking "Next" and then "Finish", and wait for "Downloading Components"
+If so, keep clicking "Next" and then "Finish", and wait for "Downloading Components", then click "Finish" again :)
 
 ![image](https://user-images.githubusercontent.com/2212651/76143870-e74f7700-60a0-11ea-8f45-f518e7bf1106.png)
 
