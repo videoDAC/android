@@ -35,7 +35,8 @@ OS:  Linux Ubuntu 18.04
 4. [Get the App Template](APK/Getapp/index.md)
 5. [Import the App to Android Studio](APK/Import/index.md)
 6. [Setting Key Variables](APK/Variables/index.md)
-7. [Building and Releasing the APK](APK/Genapk/index.md)
+7. [Generating the APK](APK/Genapk/index.md)
+8. [Releasing the APK](APK/Relapk/index.md)
 
 # User Journey
 
