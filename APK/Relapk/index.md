@@ -1,6 +1,6 @@
 To be completed.
 
-The previous step outputted a apk file signed with the user's own key, managed in Android Studio.
+The previous step outputted a apk file (`app-release.apk`), signed with the user's own key, managed through Android Studio.
 
 So, this process should be about how to do the following in Google Play Console:
 
