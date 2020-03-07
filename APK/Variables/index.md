@@ -1,9 +1,9 @@
 # Setting Key Variables
 
-* App name (e.g. Acme TV)
+* App name (e.g. "My Channel App")
 * Pay-to address
 * Network, from rinkeby, goerli, ropsten, kovan, mainnet, or a    custom RPC URL
-* price-per-minute in network's native ETH
+* price-per-minute in chosen network's native ETH
 * `STREAM_URL` for the video content
 
 You have imported the App and you are at the following screen where these variables can be set (`app/res/values/strings.xml`): 
@@ -17,7 +17,7 @@ You may wish to configure the following values in `strings.xml`:
 * You must set the "infura_url" to choose a network, or this is where you would enter a custom RPC URL.
 
     * To get an infura_rul proceed to https://infura.io and create an account.
-    * Create a new project. 
+    * Create a new project.
     * You can name the project, and then under keys select the endpoint to be the Ethereum network you wish to use.
     * Copy the link that is generated and paste it in the "infura_url" field of the configuration.
 
