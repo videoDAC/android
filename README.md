@@ -14,3 +14,7 @@ To build out the app, please do the following,
 
 - To modify the `STREAM_URL` open the file `VideoActivity.kt` and modify line 35 by entering the new valid hls URL. Then build the project as explained above and deploy the app.
 - To set the streaming fee and recipient address, modify the lines 21 & 22 in `helpers/Utils.kt` and set the variables `streamingFeeInEth` & `recipientAddress`
+
+### Screenshots
+
+You can view the app at different screen size's in the [screenshot](/android/screenshots/) folder.

@@ -18,7 +18,7 @@ object Utils {
 
     internal const val WALLET_CREATED = "WALLET_CREATED"
     internal const val WALLET_PATH = "WALLET_PATH"
-    internal const val streamingFeeInEth = 0.0005
+    internal const val streamingFeeInEth = 0.0002
     internal const val recipientAddress = "0xdac817294c0c87ca4fa1895ef4b972eade99f2fd"
     internal const val walletPassword = "password"
     internal lateinit var walletPublicKey: String
