@@ -1,8 +1,10 @@
-# Get Your App Template: Gorli TV
+# Deploy the App Template: My Channel App
 
-This part of the instructions will vary from situation to situation.  For the purpose of this tutorial, the application that will be turned into an APK is going to be cloned from a Github repository.
+This part of the instructions will vary from situation to situation.
 
-## Gorli TV
+For the purpose of this tutorial, the code that will be used to generate the "My Channel App" APK is going to be cloned from a Github repository.
+
+## My Channel App
 
 1.  Open a terminal window and move to your root directory: 
 
@@ -13,13 +15,13 @@ This part of the instructions will vary from situation to situation.  For the pu
 2.  Create a new folder for cloning the repository: 
 
     ```
-    $ mkdir gorli
+    $ mkdir my_channel
     ```
 
 3.  Move into the gorli directory you just created: 
 
     ```
-    $ cd gorli
+    $ cd my_channel
     ```
 
 4.  Clone the Gorli TV repository: 
@@ -29,4 +31,3 @@ This part of the instructions will vary from situation to situation.  For the pu
     ```
 
 [Home](../../README.md)
-
