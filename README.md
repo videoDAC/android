@@ -69,6 +69,3 @@ This app has been used in the following deployments:
   - Payments in goETH
   - Paying to 0xdac817294c0c87ca4fa1895ef4b972eade99f2fd
   - Sample burner wallet created: https://goerli.etherscan.io/address/0x3d507516c93b05e2d59a70cd90b197addf65ea53
-
-
-
