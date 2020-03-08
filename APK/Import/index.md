@@ -4,7 +4,7 @@ Please note:  These instructions are not all inclusive of possible import errors
 
 1.  With Android Studio open, select "Import Project (Gradle, Eclipse ADT, etc.)":
 
-![Open](../Install/Pic7.png)
+![image](https://user-images.githubusercontent.com/59374467/76162692-2e537000-6166-11ea-8647-741ac87119b4.png)
 
 2.  In your home directory, find the Acme directory you created, expand it, expand the android folder, and select the android option with the Android Studio logo next to it.  Click "OK":
 
@@ -36,8 +36,8 @@ Please note:  These instructions are not all inclusive of possible import errors
 
 10.  Go to File > Close project
 
-11.  Repeat steps 1 and 2, and when the project is imported successfully, navigate to the file `app/res/values/strings.xml`, where you should see:
+11.  Repeat steps 1 and 2, and when the project is imported successfully, you should see:
 
-![import7](Import7.png)
+![Screenshot from 2020-03-08 17-58-10](https://user-images.githubusercontent.com/59374467/76162763-9ace6f00-6166-11ea-8ac4-ef64e3fecc9f.png)
 
 [Home](../../README.md)
