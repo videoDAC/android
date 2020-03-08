@@ -22,7 +22,7 @@ object Utils {
     internal const val recipientAddress = "0xdac817294c0c87ca4fa1895ef4b972eade99f2fd"
     internal const val walletPassword = "password"
     internal lateinit var walletPublicKey: String
-    internal const val STREAM_URL = "http://159.100.251.158:8935/stream/0xdac.m3u8"
+    internal const val STREAM_URL = "http://52.29.226.43:8935/stream/hello_world.m3u8"
 
     @JvmStatic
     internal fun goFullScreen(activity: AppCompatActivity) {
