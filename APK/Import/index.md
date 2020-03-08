@@ -1,6 +1,8 @@
 # Import the App to Android Studio
 
-Please note:  These instructions are not all inclusive of possible import errors that can occur, however, it does cover an example of needing to accept software licenses to install missing libraries. Please refer to https://developer.android.com/studio/intro/update.html#download-with-gradle for any issues relating to the gradle sync or needing to update IDE / SDK tools.
+Please note:  These instructions are not all inclusive of possible import errors that can occur, however, it does cover an example of needing to accept software licenses to install missing libraries.
+
+Please refer to https://developer.android.com/studio/intro/update.html#download-with-gradle for any issues relating to the gradle sync or needing to update IDE / SDK tools.
 
 1.  With Android Studio open, select "Import Project (Gradle, Eclipse ADT, etc.)":
 
@@ -8,7 +10,7 @@ Please note:  These instructions are not all inclusive of possible import errors
 
 2.  In your home directory, find the Acme directory you created, expand it, expand the android folder, and select the android option with the Android Studio logo next to it.  Click "OK":
 
-![import1](Import1.png)
+![image](https://user-images.githubusercontent.com/59374467/76167042-b5fea600-6189-11ea-8b0e-aa3f3a1dc9b3.png)
 
 3.  In the new window that opens you can watch the Gradle sync happen at the bottom row of the window.  Allow it to download all the required dependencies.  This may take several minutes.
 
