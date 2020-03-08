@@ -5,7 +5,7 @@ This repo contains the native Kotlin project for the `videoDAC` template pay-as-
 These instructions include:
 
 - Explanation of a "Template App"
-- Recipe to create and publish your own livestream channel app ("Acme TV")
+- Recipe to create and publish your own livestream channel app ("Acme App")
 - Overview of app's user journey
 - Example deployments of this "Template App"
 
@@ -17,8 +17,8 @@ A "template app" is all the code required for a Livestreamer to generate a file 
 
 The template must be configured with the following:
 
-- App name, e.g. "Acme TV Channel"
-- Pay-to address, i.e. where you would like the app
+- App name, e.g. "Acme Pay-As-You-Go Livestream Player App"
+- "Pay-to" address, i.e. where you would like the app to send payments to
 - Network, from rinkeby, goerli, ropsten, kovan, mainnet, or a custom RPC URL
 - Price-per-minute in network's native ETH
 - `STREAM_URL` which is the stream of `hls` video content which the app should play
@@ -42,21 +42,21 @@ OS:  Linux Ubuntu 18.04
 
 The initial User Journey for a user of the app is:
 
-- **User** installs and launches app
+> **User** installs and launches app
 - App creates new wallet
 - App checks wallet balance with Infura
 - App shows "paywall screen", including
   - 0 balance (new wallet)
   - price-per-minute
   - App's ETH address
-- **User** taps screen
+> **User** taps screen
 - App closes
 - Android notifies User that App's ETH address is stored to clipboard
-- **User** sends ETH to app's ETH address
-- **User** launches app
+> **User** sends ETH to app's ETH address
+> **User** launches app
 - App checks wallet balance with Infura
 - App shows livestream video content
-- **User** watches livestream video content
+> **User** watches livestream video content
 - App pays to Livestreamer's ETH address
   - Payment made every minute until `( balance < price-per-minute )`
 
@@ -68,4 +68,4 @@ This app has been used in the following deployments:
   - [App published on Google Play](https://play.google.com/store/apps/details?id=com.videodac.hls)
   - Payments in goETH
   - Paying to 0xdac817294c0c87ca4fa1895ef4b972eade99f2fd
-  - Sample burner wallet created: https://goerli.etherscan.io/address/0x3d507516c93b05e2d59a70cd90b197addf65ea53
+  - Here is an example of [an address used by the app to pay per minute of content](https://goerli.etherscan.io/address/0x3d507516c93b05e2d59a70cd90b197addf65ea53).
