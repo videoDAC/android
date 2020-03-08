@@ -48,10 +48,6 @@ To change this text, open `app/res/value/strings.xml`:
 * price-per-minute in chosen network's native ETH
 * `STREAM_URL` for the video content
 
-You have imported the App and you are at the following screen where these variables can be set (`app/res/values/strings.xml`): 
-
-![import7](../Import/Import7.png)
-
 For example, you may wish to configure the following values in `strings.xml`:
 
 * App name can be set in the "app_name" field.
