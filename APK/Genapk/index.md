@@ -8,7 +8,7 @@
 
 3.  Expand the Java folder, expand the com folder and right click on the folder after com.  It should be called com.videodac.  Select "refactor" and select "rename."
 
-[Image](apk9.png)
+![Image](apk9.png)
 
 4.  Choose "Rename Package"
 
