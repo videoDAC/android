@@ -69,9 +69,3 @@ This app has been used in the following deployments:
   - Payments in goETH
   - Paying to 0x4b4E19E18EbADdFB57DC1f07E07268b827A0EC18
   - Here is an example of [an address used by the app to pay per minute of content](https://goerli.etherscan.io/address/0x5ed294120886b2fdbde04064231efe3e8c3aee7b).
-
-- Gorli TV
-  - [App published on Google Play](https://play.google.com/store/apps/details?id=com.videodac.hls)
-  - Payments in goETH
-  - Paying to 0xdac817294c0c87ca4fa1895ef4b972eade99f2fd
-  - Here is an example of [an address used by the app to pay per minute of content](https://goerli.etherscan.io/address/0x3d507516c93b05e2d59a70cd90b197addf65ea53).
