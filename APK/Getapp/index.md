@@ -1,10 +1,10 @@
-# Fetch the App Template: Acme Pay-As-You-Go Livestream Player App
+# Fetch the App Template: Acme Pay-to-play Streaming App
 
 This part of the instructions will vary from situation to situation.
 
 For the purpose of this tutorial, the code that will be used to generate the "Acme" APK is going to be cloned from a Github repository.
 
-## Acme Pay-As-You-Go Livestream Player App
+## Acme Pay-To-Play Streaming App
 
 1.  Open a terminal window and move to your root directory: 
 
@@ -18,7 +18,7 @@ For the purpose of this tutorial, the code that will be used to generate the "Ac
     $ mkdir acme
     ```
 
-3.  Move into the gorli directory you just created: 
+3.  Move into the `acme` directory you just created: 
 
     ```
     $ cd acme
