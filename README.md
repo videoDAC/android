@@ -1,6 +1,6 @@
 # Intro
 
-This repo contains the native Kotlin project for the `videoDAC` template pay-as-you-go livestream viewer app for Android.
+This repo contains the `videoDAC` template pay-to-play streaming app for Android.
 
 These instructions include:
 
@@ -13,15 +13,37 @@ Please submit any issues or pull requests to this repository.
 
 # What do you mean "Template App"?
 
-A "template app" is all the code required for a Livestreamer to generate a file (`.apk`) which can be installed directly onto any Android device, or which can be published to Android distribution channels (e.g. Google Play Store).
+A "template app" is all the code required for the publisher of a stream to generate a file (`.apk`) which can be installed directly onto any Android device, or which can be published to Android distribution channels (e.g. Google Play Store, F-droid).
 
 The template must be configured with the following:
 
-- App name, e.g. "Acme Pay-As-You-Go Livestream Player App"
-- "Pay-to" address, i.e. where you would like the app to send payments to
-- Network, from rinkeby, goerli, ropsten, kovan, mainnet, or a custom RPC URL
-- Price-per-minute in network's native ETH
-- `STREAM_URL` which is the stream of `hls` video content which the app should play
+- **App name** e.g. "Acme Pay-to-play Streaming App", and copy
+- **"Pay-to" address** i.e. where you would like to receive payment
+- **Price-per-minute** in network's native ETH token
+- **`RPC URL`** for publishing transactions on Ethereum testnets and mainnet
+- **`STREAM_URL`** which is the stream of A/V content to be played in the app
+
+# User Journey
+
+The initial User Journey for a user of the app is:
+
+> **User** installs and launches app
+- App creates own new wallet, checks balance with Infura
+- App shows "paywall screen", including
+  - Wallet's 0 balance (new wallet)
+  - **Price-per-minute**
+  - App's own ETH address + QR Code
+  - App-specific copy
+> **User** taps screen
+- App closes
+- Android notifies User that App's ETH address is stored to clipboard
+> **User** sends enough ETH to app's ETH address
+> **User** launches app
+- App checks wallet balance with Infura
+- App shows livestream video content
+> **User** watches livestream video content
+- App pays to Livestreamer's ETH address
+  - Payment made every minute until `( balance < price-per-minute )`
 
 # Generating an Android APK with the Option to publish to Google Play
 
@@ -37,28 +59,6 @@ OS:  Linux Ubuntu 18.04
 6. [Setting Key Variables](APK/Variables/index.md)
 7. [Generating the APK](APK/Genapk/index.md)
 8. [Releasing the APK](APK/Relapk/index.md)
-
-# User Journey
-
-The initial User Journey for a user of the app is:
-
-> **User** installs and launches app
-- App creates new wallet
-- App checks wallet balance with Infura
-- App shows "paywall screen", including
-  - 0 balance (new wallet)
-  - price-per-minute
-  - App's ETH address
-> **User** taps screen
-- App closes
-- Android notifies User that App's ETH address is stored to clipboard
-> **User** sends ETH to app's ETH address
-> **User** launches app
-- App checks wallet balance with Infura
-- App shows livestream video content
-> **User** watches livestream video content
-- App pays to Livestreamer's ETH address
-  - Payment made every minute until `( balance < price-per-minute )`
 
 # Example Deployments
 
