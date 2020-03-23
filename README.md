@@ -19,7 +19,7 @@ The template must be configured with the following:
 
 - **App name** e.g. "Acme Pay-to-play Streaming App", and copy
 - **"Pay-to" address** i.e. where you would like to receive payment
-- **Price-per-minute** in network's native ETH token
+- **Price-per-minute** in network's native ETH token (can be zero for free-to-play app)
 - **`RPC URL`** for publishing transactions on Ethereum testnets and mainnet
 - **`STREAM_URL`** which is the stream of A/V content to be played in the app
 
