@@ -107,7 +107,7 @@ If so, keep clicking "Next" and then "Finish", and wait for "Downloading Compone
 
 21.  Restart your computer and proceed to reopen Android studio:
 
-        ```
+        ```https://github.com/videoDAC/android/blob/master/README.md#generating-an-android-apk-with-the-option-to-publish-to-google-play
         $ cd /usr/local/android-studio/bin
         $ ./studio.sh
         ```
@@ -116,4 +116,4 @@ If so, keep clicking "Next" and then "Finish", and wait for "Downloading Compone
 
 ![Pic7](Pic7.png)
 
-[Home](../../README.md)
+[Home](../../README.md#generating-an-android-apk-with-the-option-to-publish-to-google-play)
