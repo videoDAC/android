@@ -1,0 +1,3 @@
+rootProject.name='Livestream to Earn'
+include ':app'
+include ':app:broadcaster'
