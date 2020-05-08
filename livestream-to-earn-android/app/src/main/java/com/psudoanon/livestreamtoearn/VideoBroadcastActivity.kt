@@ -53,7 +53,7 @@ class VideoBroadcastActivity : AppCompatActivity(), View.OnClickListener {
     private var privateKeyDec:         BigInteger?           = null
     private var mLiveVideoBroadcaster: LiveVideoBroadcaster? = null
 
-    private val INFURA_URL            = "https://mainnet.infura.io/v3/9a1db80dbf7f4e4fa036a38f2618c71a"
+    private val INFURA_URL            = "https://mainnet.infura.io/v3/"
     private val RTMP_BASE_URL         = "rtmp://192.168.1.151:1935/0x%s"
     private val PUBLIC_ADDRESS_KEY    = "public_address"
     private val PRIVATE_HEX_KEY       = "private"
