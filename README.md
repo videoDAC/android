@@ -1,6 +1,6 @@
 # Intro
 
-This repo contains the `videoDAC` template pay-to-play streaming app for Android.
+This repo contains the `videoDAC` template pay-to-play stream consumer app for Android.
 
 These instructions include:
 
