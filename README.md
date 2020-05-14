@@ -27,22 +27,36 @@ The template must be configured with the following:
 
 The initial User Journey for a user of the app is:
 
-> **User** installs and launches app
-- App creates own new wallet, checks balance with Infura
-- App shows "paywall screen", including
-  - Wallet's 0 balance (new wallet)
-  - **Price-per-minute**
-  - App's own ETH address + QR Code
-  - App-specific copy
-> **User** taps screen
-- App closes
-- Android notifies User that App's ETH address is stored to clipboard
-> **User** sends enough ETH to app's ETH address
-> **User** launches app
-- App checks wallet balance with Infura
-- App shows livestream video content
-> **User** watches livestream video content
-- App pays to Livestreamer's ETH address
+- **User** installs and launches app
+  - App creates own new wallet, checks balance with Infura
+  - App shows "paywall screen", including
+    - Wallet's 0 balance (new wallet)
+    - **Price-per-minute**
+    - App's own ETH address + QR Code
+    - App-specific copy
+
+![Screenshot_20200514-232110](https://user-images.githubusercontent.com/59374467/81968276-ccb5f300-9639-11ea-9b0e-0b1c7dd41c27.png)
+
+- **User** taps screen
+  - App closes
+  - Android notifies User that App's ETH address is stored to clipboard
+
+![Screenshot_20200514-232319](https://user-images.githubusercontent.com/59374467/81968364-eeaf7580-9639-11ea-989c-0f6d85d80b15.png)
+
+- **User** sends enough ETH to app's ETH address
+  - This can be done in any app.
+
+- **User** launches app
+  - App checks wallet balance with Infura
+
+![Screenshot_20200514-232732](https://user-images.githubusercontent.com/59374467/81968815-9167f400-963a-11ea-94a9-5db498882865.png)
+
+  - App shows livestream video content (currently a test signal)
+
+![Screenshot_20200514-232737](https://user-images.githubusercontent.com/59374467/81968828-95941180-963a-11ea-97f6-1f2ff988d9ee.png)
+
+- **User** watches livestream video content
+  - App pays to Livestreamer's ETH address
   - Payment made every minute until `( balance < price-per-minute )`
 
 # Generating an Android APK with the Option to publish to Google Play
