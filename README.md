@@ -1,4 +1,4 @@
-# Intro
+# Introduction
 
 This repo contains the `videoDAC` template pay-to-play stream consumer app for Android.
 
@@ -57,7 +57,11 @@ The initial User Journey for a user of the app is:
 
 - **User** watches livestream video content
   - App pays to Livestreamer's ETH address
-  - Payment made every minute until `( balance < price-per-minute )`
+  - Payment made every minute
+
+- App shows "paywall screen" when balance is < price-per-minute:
+
+![Screenshot_20200514-235811](https://user-images.githubusercontent.com/59374467/81971634-063d2d00-963f-11ea-958c-59e833ee92c9.png)
 
 # Generating an Android APK with the Option to publish to Google Play
 
