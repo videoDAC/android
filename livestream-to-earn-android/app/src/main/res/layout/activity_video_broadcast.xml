@@ -14,22 +14,6 @@
         android:visibility="gone"
         android:layout_gravity="center" />
 
-    <Button
-        android:id="@+id/streamButton"
-        style="@style/Base.Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="49dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:text="Start Stream"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
-
 
     <TextView
         android:id="@+id/balanceView"
@@ -42,16 +26,5 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/flashButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@null"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_flash_on_24px" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

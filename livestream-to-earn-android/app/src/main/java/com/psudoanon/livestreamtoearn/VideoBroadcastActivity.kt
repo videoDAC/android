@@ -1,13 +1,22 @@
 package com.psudoanon.livestreamtoearn
 
+import android.annotation.SuppressLint
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.*
+import android.content.pm.ActivityInfo
 import android.hardware.Camera
 import android.icu.text.IDNA
 import android.opengl.GLSurfaceView
 import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.*
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import com.psudoanon.broadcaster.LiveVideoBroadcaster
 import com.psudoanon.broadcaster.OnEventListener
@@ -43,8 +52,6 @@ class VideoBroadcastActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var wallet:          WalletFile
     private lateinit var mGLView:         GLSurfaceView
     private lateinit var mBalanceView:    TextView
-    private lateinit var mSettingsBtn:    ImageButton
-    private lateinit var mStreamButton:   Button
     private lateinit var mWeb3Connection: Web3j
 
     private var privateKeyHex:         String?               = null
@@ -53,11 +60,14 @@ class VideoBroadcastActivity : AppCompatActivity(), View.OnClickListener {
     private var privateKeyDec:         BigInteger?           = null
     private var mLiveVideoBroadcaster: LiveVideoBroadcaster? = null
 
-    private val INFURA_URL            = "https://mainnet.infura.io/v3/"
+    private val INFURA_URL            = "https://mainnet.infura.io/v3/9a1db80dbf7f4e4fa036a38f2618c71a"
     private val RTMP_BASE_URL         = "rtmp://192.168.1.151:1935/0x%s"
     private val PUBLIC_ADDRESS_KEY    = "public_address"
     private val PRIVATE_HEX_KEY       = "private"
     private val WALLET_PASSWORD       = "changeme"
+    private val N_CHANNEL_ID          = "LSTE_NOTIFICATION_CHANNEL"
+    private val N_CHANNEL_NAME        = "Livestream to Earn"
+    private val N_CHANNEL_DESC        = "Livestream to Earn Notification Channel"
     private val DESIRED_AUDIO_BITRATE = 128  * 1024
     private val DESIRED_VIDEO_BITRATE = 1000 * 1024
     private val I_FRAME_INTERVAL_SEC  = 1
@@ -109,16 +119,21 @@ class VideoBroadcastActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        this.setupNotificationChannel()
+
+        this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        this.supportActionBar?.hide()
+        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.activity_video_broadcast)
 
         mGLView = findViewById<GLSurfaceView>(R.id.cameraPerview).also { it.setOnClickListener(this) }
         mGLView.setEGLContextClientVersion(2)
 
-        mStreamButton = findViewById<Button>(R.id.streamButton).also { it.setOnClickListener(this) }
-        mSettingsBtn = findViewById<ImageButton>(R.id.flashButton).also { it.setOnClickListener(this) }
         mBalanceView = findViewById(R.id.balanceView)
 
         mBalanceView.text = "Fetching balance..."
@@ -152,7 +167,16 @@ class VideoBroadcastActivity : AppCompatActivity(), View.OnClickListener {
             }
 
         }, 0, TIMER_INTERVAL)
+    }
 
+    override fun onResume() {
+        super.onResume()
+        Handler().postDelayed({
+            if (!live) {
+                toggleBroadcasting()
+                toggleFlash()
+            }
+        }, 1000)
     }
 
     override fun onStart() {
@@ -167,7 +191,6 @@ class VideoBroadcastActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.streamButton -> toggleBroadcasting()
             R.id.cameraPerview -> {
                 if (live) {
                     mLiveVideoBroadcaster!!.stopBroadcasting()
@@ -176,9 +199,17 @@ class VideoBroadcastActivity : AppCompatActivity(), View.OnClickListener {
                 finishAffinity()
                 exitProcess(0)
             }
-            R.id.flashButton -> {
-                toggleFlash()
+        }
+    }
+
+    private fun setupNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(N_CHANNEL_ID, N_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT).apply {
+                description = N_CHANNEL_DESC
             }
+
+            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
         }
     }
 
@@ -187,6 +218,15 @@ class VideoBroadcastActivity : AppCompatActivity(), View.OnClickListener {
         val clip = ClipData.newPlainText("key", getPrivateKey())
 
         clipboard.setPrimaryClip(clip)
+        val notification = NotificationCompat.Builder(this, N_CHANNEL_ID)
+                                            .setSmallIcon(R.drawable.ic_flash_on_24px)
+                                            .setContentTitle("Livestream to Earn")
+                                            .setContentText("Private key copied to clipboard")
+                                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        with(NotificationManagerCompat.from(this)) {
+            notify(0, notification.build())
+        }
     }
 
     private fun toggleBroadcasting() {
@@ -198,12 +238,10 @@ class VideoBroadcastActivity : AppCompatActivity(), View.OnClickListener {
                     showLongToast(String.format("Broadcasting to %s", streamUrl))
                     mLiveVideoBroadcaster!!.startBroadcasting(streamUrl)
 
-                    mStreamButton.text = "Stop Stream"
                     live = true
                 } else {
                     showLongToast("Broadcast stopped")
                     mLiveVideoBroadcaster!!.stopBroadcasting()
-                    mStreamButton.text = "Start Stream"
                     live = false
                 }
             } else {
@@ -217,11 +255,9 @@ class VideoBroadcastActivity : AppCompatActivity(), View.OnClickListener {
     private fun toggleFlash() {
         if (!flashOn) {
             mLiveVideoBroadcaster?.startFlash()
-            mSettingsBtn.setImageResource(R.drawable.ic_flash_off_24px)
             flashOn = true
         } else {
             mLiveVideoBroadcaster?.stopFlash()
-            mSettingsBtn.setImageResource(R.drawable.ic_flash_on_24px)
             flashOn = false
         }
     }
