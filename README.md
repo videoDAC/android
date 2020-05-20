@@ -1,11 +1,11 @@
 # Introduction
 
-This repo contains the `videoDAC` template pay-to-play stream consumer app for Android.
+This repo contains the `videoDAC` template pay-to-play stream Consumer app for Android.
 
 These instructions include:
 
 - Explanation of a "Template App"
-- Recipe to create and publish your own livestream channel app ("Acme App")
+- Recipe to create and publish your own single-channel livestream app ("Acme App")
 - Overview of app's user journey
 - Example deployments of this "Template App"
 
