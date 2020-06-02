@@ -1,7 +1,0 @@
-<resources>
-    <dimen name="text_size">16sp</dimen>
-    <dimen name="qr_right_margin">15dp</dimen>
-    <dimen name="qr_code_size">200dp</dimen>
-    <dimen name="wallet_address_width">200dp</dimen>
-    <dimen name="wallet_address_height">95dp</dimen>
-</resources>
