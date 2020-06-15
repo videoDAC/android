@@ -52,8 +52,6 @@ dependencies {
     // exoplayer
     implementation 'com.google.android.exoplayer:exoplayer:2.10.7'
 
-    // web3 java
-    implementation ('org.web3j:core:4.2.0-android')
 
     // rx java
     implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
@@ -73,6 +71,43 @@ dependencies {
 
     // Firebase SDK for Crashlytics.
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
+
+    // kethereum
+    implementation "com.github.komputing.kethereum:abi:$kethereum_version"
+    implementation "com.github.komputing.kethereum:abi_filter:$kethereum_version"
+    implementation "com.github.komputing.kethereum:model:$kethereum_version"
+    implementation "com.github.komputing.kethereum:crypto:$kethereum_version"
+    implementation "com.github.komputing.kethereum:bip32:$kethereum_version"
+    implementation "com.github.komputing.kethereum:bip39:$kethereum_version"
+    implementation "com.github.komputing.kethereum:bip39_wordlist_en:$kethereum_version"
+
+    implementation "com.github.komputing.kethereum:blockscout:$kethereum_version"
+    implementation "com.github.komputing.kethereum:etherscan:$kethereum_version"
+
+    implementation "com.github.komputing.kethereum:ens:$kethereum_version"
+    implementation "com.github.komputing.kethereum:erc20:$kethereum_version"
+    implementation "com.github.komputing.kethereum:erc55:$kethereum_version"
+    implementation "com.github.komputing.kethereum:eip137:$kethereum_version"
+    implementation "com.github.komputing.kethereum:eip155:$kethereum_version"
+    implementation "com.github.komputing.kethereum:eip191:$kethereum_version"
+    implementation "com.github.komputing.kethereum:erc681:$kethereum_version"
+    implementation "com.github.komputing.kethereum:erc831:$kethereum_version"
+    implementation "com.github.komputing.kethereum:erc1328:$kethereum_version"
+    implementation "com.github.komputing.kethereum:extensions_kotlin:$kethereum_version"
+    implementation "com.github.komputing.kethereum:extensions_transactions:$kethereum_version"
+    implementation "com.github.komputing.kethereum:keccak_shortcut:$kethereum_version"
+    implementation "com.github.komputing.kethereum:method_signatures:$kethereum_version"
+    implementation "com.github.komputing.kethereum:etherscan:$kethereum_version"
+    implementation "com.github.komputing.kethereum:rlp:$kethereum_version"
+    implementation "com.github.komputing.kethereum:rpc:$kethereum_version"
+    implementation "com.github.komputing.kethereum:rpc_min3:$kethereum_version"
+    implementation "com.github.komputing.kethereum:wallet:$kethereum_version"
+    implementation "com.github.komputing.kethereum:types:$kethereum_version"
+    implementation "com.github.komputing.kethereum:keystore:$kethereum_version"
+    implementation "com.github.komputing.kethereum:metadata:$kethereum_version"
+    implementation "com.github.komputing.kethereum:userdoc:$kethereum_version"
+
+    implementation "com.github.komputing:kbip44:0.1"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
