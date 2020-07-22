@@ -10,9 +10,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 import com.videodac.hls.R
+import org.kethereum.crypto.createEthereumKeyPair
+import org.kethereum.keystore.api.InitializingFileKeyStore
+import org.kethereum.keystore.api.KeyStore
+import org.kethereum.model.ECKeyPair
+import org.kethereum.model.PrivateKey
+import org.kethereum.model.PublicKey
+import org.komputing.khex.model.HexString
 
 import org.web3j.protocol.Web3j
 import org.web3j.protocol.http.HttpService
+import java.io.File
 
 object Utils {
 
@@ -23,6 +31,10 @@ object Utils {
     internal const val walletPassword = "password"
     internal lateinit var walletPublicKey: String
     internal const val STREAM_URL = "http://52.29.226.43:8935/stream/hello_world.m3u8"
+
+    // burner wallet configs
+    const val ACCOUNT_TYPE_NONE = "none"
+    const val DEFAULT_PASSWORD = "default"
 
     @JvmStatic
     internal fun goFullScreen(activity: AppCompatActivity) {
@@ -51,6 +63,23 @@ object Utils {
         }
         // finish activity
         activity.finish()
+    }
+
+    @JvmStatic
+    internal fun createBurnerWallet(context: Context) {
+        val currentSpec = AccountKeySpec(ACCOUNT_TYPE_NONE)
+        val keyStore by lazy { InitializingFileKeyStore(File(context.filesDir, "keystore")) }
+
+        val importKey = currentSpec.initPayload?.let {
+            val split = it.split("/")
+            val privateKey = PrivateKey(HexString(split.first()))
+            val publicKey = PublicKey(HexString(split.last()))
+            ECKeyPair(privateKey, publicKey)
+        }
+
+        val key = importKey ?: createEthereumKeyPair()
+
+        keyStore.addKey(key, DEFAULT_PASSWORD, true)
     }
 
 }

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.wycliffeassociates:jdenticon-kotlin:1.0@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.wycliffeassociates/jdenticon-kotlin/1.0/bef6d08e2a0d98170cf447efafffaabe9eefe0bd/jdenticon-kotlin-1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.wycliffeassociates/jdenticon-kotlin/1.0/9c0ac802a8928e2726957eb950d380706ebb0186/jdenticon-kotlin-1.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.wycliffeassociates/jdenticon-kotlin/1.0/9c0ac802a8928e2726957eb950d380706ebb0186/jdenticon-kotlin-1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

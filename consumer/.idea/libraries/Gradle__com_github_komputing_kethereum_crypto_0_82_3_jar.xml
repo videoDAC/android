@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.komputing.kethereum:crypto:0.82.3@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.komputing.kethereum/crypto/0.82.3/5b31df6bfba22729b11d1a8652c243314bd4a1e5/crypto-0.82.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.komputing.kethereum/crypto/0.82.3/1387071d927755089ebad230b9f4951b9f4f92cf/crypto-0.82.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
