@@ -77,14 +77,15 @@ object Utils {
 
     @JvmStatic
     internal fun resolveChannelENSName(address: String, web3j: Web3j) :String {
-        val ens = EnsResolver(web3j, 300 /* sync threshold, seconds */)
+        val ens = EnsResolver(web3j)
         var name = ""
 
         try {
             name = ens.reverseResolve(address)
             // Check to be sure the reverse record is correct.
+            val reverseAddress = ens.resolve(name)
             when {
-                address !== ens.resolve(name) -> {
+                address != reverseAddress -> {
                     name = ""
                 }
             }

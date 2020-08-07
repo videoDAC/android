@@ -1,5 +1,6 @@
 package com.videodac.hls.services
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import retrofit2.Response
 import retrofit2.http.GET
@@ -11,7 +12,7 @@ interface ThreeBox {
     suspend fun getProfile(@Query("address")userAddress: String): Response<JsonObject>
 
 
-    @GET("/list-spaces?address={userAddress}&name=livepeer")
-    suspend fun getProfileFromLivepeerSpace(@Query("userAddress")userAddress: String): Response<JsonObject>
+    @GET("/list-spaces?name=livepeer")
+    suspend fun getProfileFromLivepeerSpace(@Query("address")userAddress: String): Response<JsonArray>
 
 }

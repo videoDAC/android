@@ -16,4 +16,7 @@ object StatusHelper {
     @JvmStatic
     internal var threeBoxNames : HashMap<String, String> = HashMap ()
 
+    @JvmStatic
+    internal var ensNames : HashMap<String, String> = HashMap ()
+
 }

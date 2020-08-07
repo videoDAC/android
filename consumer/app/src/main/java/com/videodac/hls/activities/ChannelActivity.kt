@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.videodac.hls.R
 import com.videodac.hls.adapters.ChannelAdapter
 import com.videodac.hls.helpers.StatusHelper.channels
+import com.videodac.hls.helpers.StatusHelper.ensNames
 import com.videodac.hls.helpers.StatusHelper.threeBoxAvatarUris
 import com.videodac.hls.helpers.StatusHelper.threeBoxNames
 import com.videodac.hls.helpers.ThreeBoxHelper.threeBox
@@ -20,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import org.json.JSONObject
 
 class ChannelActivity : AppCompatActivity() {
@@ -70,13 +72,14 @@ class ChannelActivity : AppCompatActivity() {
 
     private  fun getChannelENSNames() {
         lifecycleScope.launch(Dispatchers.IO) {
-            for ((index, it) in channels.withIndex()) {
+            ensNames.clear()
+            for ( it in channels) {
 
                 if (Utils.isValidETHAddress(it)!!){
 
                     val ensName = Utils.resolveChannelENSName(it, web3!!)
                     if (ensName.isNotEmpty()) {
-                        channels[index] = ensName
+                        ensNames[it] = ensName
                     }
                 }
             }
@@ -97,12 +100,16 @@ class ChannelActivity : AppCompatActivity() {
             for (it in channels) {
 
                 if (Utils.isValidETHAddress(it)!!){
-                    val threeBoxRes = threeBox!!.getProfile(it)
+                    val threeBoxRes = threeBox!!.getProfileFromLivepeerSpace(it)
 
                     if(threeBoxRes.isSuccessful) {
-                        val threeBoxObj = JSONObject(threeBoxRes.body().toString())
+                        val threeBoxObj = JSONArray(threeBoxRes.body().toString())
 
-                        // get the 3box profile name
+                        if(threeBoxObj.length() > 0) {
+                            threeBoxNames[it] = threeBoxObj[0].toString()
+                        }
+
+                       /* // get the 3box profile name
                         val name = threeBoxObj.getString(getString(R.string.three_box_name_key))
 
                         // add it to the hashmap with the
@@ -125,7 +132,7 @@ class ChannelActivity : AppCompatActivity() {
                             threeBoxAvatarUris[it] = getString(R.string.ipfs_base_url) + imageHash
 
                         }
-
+*/
                     }
                 }
             }

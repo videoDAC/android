@@ -19,6 +19,7 @@ import com.lelloman.identicon.view.GithubIdenticonView
 import com.videodac.hls.GlideApp
 import com.videodac.hls.R
 import com.videodac.hls.activities.VideoActivity
+import com.videodac.hls.helpers.StatusHelper.ensNames
 import com.videodac.hls.helpers.StatusHelper.threeBoxAvatarUris
 import com.videodac.hls.helpers.StatusHelper.threeBoxNames
 import com.videodac.hls.helpers.Utils
@@ -35,12 +36,24 @@ class ChannelAdapter(private val channels: MutableList<String>, private val acti
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // only load valid ETH addresses
         val channel = channels[position]
-        holder.realChannelAddress.text = channel
+
         if(Utils.isValidETHAddress(channel)!!) {
 
-            val channelName = threeBoxNames[channel]
+            holder.realChannelAddress.text = channel
 
-            if (!channelName.isNullOrEmpty()) {
+            val channelName = threeBoxNames[channel]
+            val ensName = ensNames[channel]
+
+
+            if(!ensName.isNullOrEmpty()) {
+                holder.channelAddress.text = ensName
+
+                // then show the identicon
+                holder.channelIdenticon.visibility = View.VISIBLE
+                val hash = Numeric.toBigInt(Hash.sha3(channel.toLowerCase(Locale.ROOT).toByteArray()))
+                holder.channelIdenticon.hash = hash.toInt()
+
+            } else if (!channelName.isNullOrEmpty()) {
                 holder.channelAddress.text = channelName
 
                 val userImageUri = threeBoxAvatarUris[channel]
@@ -66,7 +79,8 @@ class ChannelAdapter(private val channels: MutableList<String>, private val acti
 
                 }
 
-            } else{
+            }
+            else{
                 holder.channelAddress.text = channel
 
                 // then show the identicon
@@ -75,11 +89,7 @@ class ChannelAdapter(private val channels: MutableList<String>, private val acti
                 holder.channelIdenticon.hash = hash.toInt()
             }
 
-        } else {
-            // if its not a valid ETH address then its most likely an ENS name
-            holder.channelAddress.text = channel
         }
-
 
 
     }
