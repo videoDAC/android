@@ -1,15 +1,35 @@
 <resources>
-    <string name="app_name">Görli TV</string>
+    <string name="app_name">HimPrdshLiveTV</string>
     <string name="wallet_balance">This app\'s balance:</string>
     <string name="wallet_address">0xdac817294c0c87ca4fa1895ef4b972eade99f2fd</string>
     <string name="qr_code">Qr Code</string>
-    <string name="infura_url">https://goerli.infura.io/v3/1b159090386c48bbb7828f1b346dcc11</string>
+    <string name="infura_url">https://rinkeby.infura.io/v3/2f1d95e69d874612a271a0c5745961d0</string>
     <string name="loading_burner_wallet">Loading wallet, please wait…</string>
     <string name="loading_stream">Loading stream, please wait…</string>
     <string name="livestream_credits">Viewing credit balance:</string>
     <string name="welcome_title">Welcome to</string>
-    <string name="creator_fee">Pay to Görli TV to watch:</string>
+    <string name="creator_fee">Pay to HimPrdshLiveTV to watch:</string>
     <string name="tap_instructions">Tap to copy this app\'s\naddress to clipboard</string>
-    <string name="tv_name">Görli TV</string>
-    <string name="go_eth_unit">göETH</string>
+    <string name="tv_name">HimPrdshLiveTV</string>
+    <string name="go_eth_unit">RinkebyETH</string>
+    <string name="channel_header">Choose channel…</string>
+    <string name="no_channels">No Channels Available</string>
+
+     <!-- URLS -->
+    <string name="status_base_url">http://89.145.161.141:7935/</string>
+    <string name="streaming_url">http://89.145.161.141:8935/stream/%s.m3u8</string>
+    <string name="gas_price_base_url">https://ethgasstation.info/</string>
+    <string name="three_box_base_url">https://ipfs.3box.io/</string>
+    <string name="ipfs_base_url">https://ipfs.infura.io/ipfs/</string>
+
+    <!-- Channel Details -->
+    <string name="sample_channel">0x3be017ff0f949e247110173E862bBE2D39ca04A1</string>
+    <string name="channel_icon_desc">Channel Icon</string>
+    <string name="manifest_key">Manifests</string>
+
+    <!-- Three Box -->
+    <string name="three_box_name_key">name</string>
+    <string name="three_box_image_key">image</string>
+    <string name="three_box_content_url_key">contentUrl</string>
+    <string name="three_box_content_hash">/</string>
 </resources>

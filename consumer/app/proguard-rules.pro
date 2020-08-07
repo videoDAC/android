@@ -21,11 +21,25 @@
 #-renamesourcefileattribute SourceFile
 -keep public class * extends android.app.Application
 
-# BouncyCastle rules
--keep class org.bouncycastle.**
+-dontwarn java8.util.**
+-dontwarn jnr.posix.**
+-dontwarn com.kenai.**
+
+#-keep class org.bouncycastle.**
 -dontwarn org.bouncycastle.jce.provider.X509LDAPCertStoreSpi
 -dontwarn org.bouncycastle.x509.util.LDAPStoreHelper
 
--keep class androidx.core.app.CoreComponentFactory { *; }
+# Web3j
+-keep class org.** { *; }
+
+-keep class * extends org.web3j.abi.TypeReference
+-keep class * extends org.web3j.abi.datatypes.Type
+
+#-dontwarn java.lang.SafeVarargs
+-dontwarn org.slf4j.**
 
 -keep class com.videodac.hls.App
+
+# Glide
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep class com.bumptech.glide.GeneratedAppGlideModuleImpl

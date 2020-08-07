@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+
+    <com.lelloman.identicon.view.GithubIdenticonView
+        android:id="@+id/channel_identicon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:hash="654984321" />
+
+    <ImageView
+        android:id="@+id/channel_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:contentDescription="@string/channel_icon_desc" />
+
+
+    <TextView
+        android:id="@+id/channel_address"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:layout_toRightOf="@id/channel_icon"
+        android:layout_toEndOf="@id/channel_icon"
+        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
+        android:paddingTop="20dp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/akkurat"
+        android:text="@string/sample_channel"
+        android:ellipsize="middle"
+        android:textSize="40sp"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/real_channel_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+</RelativeLayout>

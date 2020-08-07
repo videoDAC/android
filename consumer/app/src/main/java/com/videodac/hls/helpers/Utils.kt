@@ -4,37 +4,47 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
+import android.util.Log
+
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
 import com.videodac.hls.R
-import org.kethereum.crypto.createEthereumKeyPair
-import org.kethereum.keystore.api.InitializingFileKeyStore
-import org.kethereum.keystore.api.KeyStore
-import org.kethereum.model.ECKeyPair
-import org.kethereum.model.PrivateKey
-import org.kethereum.model.PublicKey
-import org.komputing.khex.model.HexString
 
+
+import org.web3j.crypto.Hash
+import org.web3j.ens.EnsResolutionException
+import org.web3j.ens.EnsResolver
 import org.web3j.protocol.Web3j
 import org.web3j.protocol.http.HttpService
-import java.io.File
+import org.web3j.utils.Numeric
+import java.math.BigInteger
+import java.util.*
+import java.util.regex.Pattern
+
 
 object Utils {
 
     internal const val WALLET_CREATED = "WALLET_CREATED"
     internal const val WALLET_PATH = "WALLET_PATH"
+    internal const val CHANNEL_ADDRESS = "CHANNEL_ADDRESS"
     internal const val streamingFeeInEth = 0.0002
-    internal const val recipientAddress = "0xdac817294c0c87ca4fa1895ef4b972eade99f2fd"
     internal const val walletPassword = "password"
-    internal lateinit var walletPublicKey: String
-    internal const val STREAM_URL = "http://52.29.226.43:8935/stream/hello_world.m3u8"
 
-    // burner wallet configs
-    const val ACCOUNT_TYPE_NONE = "none"
-    const val DEFAULT_PASSWORD = "default"
+
+    // we set a default gas price of 40 gwei
+    internal var gasPrice = BigInteger.valueOf(40_000_000_000L)
+    internal val gasLimit = BigInteger.valueOf(12_500_000L)
+
+
+    internal var walletPublicKey: String = ""
+
+
+    // regex patterns
+    private val ignoreCaseAddrPattern: Pattern = Pattern.compile("(?i)^(0x)?[0-9a-f]{40}$")
+    private val lowerCaseAddrPattern: Pattern = Pattern.compile("^(0x)?[0-9a-f]{40}$")
+    private val upperCaseAddrPattern: Pattern = Pattern.compile("^(0x)?[0-9A-F]{40}$")
 
     @JvmStatic
     internal fun goFullScreen(activity: AppCompatActivity) {
@@ -50,7 +60,7 @@ object Utils {
     }
 
     @JvmStatic
-    internal fun getWeb3(activity: AppCompatActivity) = Web3j.build(HttpService(activity.getString(R.string.infura_url)))
+    internal fun getWeb3(context: Context) = Web3j.build(HttpService(context.getString(R.string.infura_url)))
 
     @JvmStatic
     internal fun closeActivity(activity: AppCompatActivity, userAddress: String?) {
@@ -66,20 +76,76 @@ object Utils {
     }
 
     @JvmStatic
-    internal fun createBurnerWallet(context: Context) {
-        val currentSpec = AccountKeySpec(ACCOUNT_TYPE_NONE)
-        val keyStore by lazy { InitializingFileKeyStore(File(context.filesDir, "keystore")) }
+    internal fun resolveChannelENSName(address: String, web3j: Web3j) :String {
+        val ens = EnsResolver(web3j, 300 /* sync threshold, seconds */)
+        var name = ""
 
-        val importKey = currentSpec.initPayload?.let {
-            val split = it.split("/")
-            val privateKey = PrivateKey(HexString(split.first()))
-            val publicKey = PublicKey(HexString(split.last()))
-            ECKeyPair(privateKey, publicKey)
+        try {
+            name = ens.reverseResolve(address)
+            // Check to be sure the reverse record is correct.
+            when {
+                address !== ens.resolve(name) -> {
+                    name = ""
+                }
+            }
+
+        }
+        catch(e: EnsResolutionException){
+            println(e.message)
+            Log.e("ENS RESOLVER","Node does not Provide an access to a valid public ENS resolver")
+        }
+        catch(re: RuntimeException) {
+            println(re.message)
+            Log.e("ENS RESOLVER","Unable to execute Ethereum request")
         }
 
-        val key = importKey ?: createEthereumKeyPair()
-
-        keyStore.addKey(key, DEFAULT_PASSWORD, true)
+        return name
     }
+
+    @JvmStatic
+    /**
+     * Verify that a hex account string is a valid Ethereum address.
+     *
+     * @param address given address in HEX
+     * @return is this a valid address
+     */
+    internal fun isValidETHAddress(address: String): Boolean? {
+        /*
+         * check basic address requirements, i.e. is not empty and contains
+         * the valid number and type of characters
+         */
+        return if (address.isEmpty() || !ignoreCaseAddrPattern.matcher(address).find()) {
+            false
+        } else if (lowerCaseAddrPattern.matcher(address).find() || upperCaseAddrPattern.matcher(address).find()) {
+            // if it's all small caps or caps return true
+            true
+        } else {
+            // if it is mixed caps it is a checksum address and needs to be validated
+            validateChecksumAddress(address)
+        }
+    }
+
+    private fun validateChecksumAddress(ethAddress: String): Boolean? {
+        val address = ethAddress.replace("0x", "")
+        val hash: String = Numeric.toHexStringNoPrefix(Hash.sha3(address.toLowerCase(Locale.ROOT).toByteArray()))
+        for (i in 0..39) {
+            if (Character.isLetter(address[i])) {
+                // each uppercase letter should correlate with a first bit of 1 in the hash
+                // char with the same index, and each lowercase letter with a 0 bit
+                val charInt = hash[i].toString().toInt(16)
+                when {
+                    Character.isUpperCase(address[i]) && charInt <= 7
+                            || Character.isLowerCase(address[i]) && charInt > 7
+                    -> {
+                        return false
+                    }
+                }
+            }
+        }
+        return true
+    }
+
+
+
 
 }
