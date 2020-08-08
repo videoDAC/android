@@ -64,13 +64,14 @@ class WalletActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.video_dac_wallet)
 
+        // check if
+        installTls12()
+
         // setup bouncy castle for the wallet
         setupBouncyCastle()
 
 
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-           installTls12()
-        }
+
 
         // get the prefs
         sharedPref = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
