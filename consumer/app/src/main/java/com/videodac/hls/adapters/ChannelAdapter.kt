@@ -2,6 +2,7 @@ package com.videodac.hls.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -11,10 +12,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.github.ybq.android.spinkit.SpinKitView
 import com.lelloman.identicon.view.GithubIdenticonView
 import com.videodac.hls.GlideApp
 import com.videodac.hls.R
@@ -59,24 +62,28 @@ class ChannelAdapter(private val channels: MutableList<String>, private val acti
                 val userImageUri = threeBoxAvatarUris[channel]
 
                 if (!userImageUri.isNullOrEmpty()) {
+
+                    // then hide the identicon
+                    holder.channelIdenticon.visibility = View.GONE
+                    holder.imgLoading.visibility = View.VISIBLE
+
                     GlideApp
                         .with(activity)
                         .load(userImageUri)
                         .centerCrop()
                         .listener(object: RequestListener<Drawable> {
                             override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Drawable>, isFirstResource: Boolean): Boolean {
+                                holder.imgLoading.visibility = View.GONE
+                                holder.channelIdenticon.visibility = View.VISIBLE
                                 return false
                             }
 
                             override fun onResourceReady(resource: Drawable, model: Any, target: Target<Drawable>, dataSource: DataSource, isFirstResource: Boolean): Boolean {
+                                holder.imgLoading.visibility = View.GONE
                                 return false
                             }
 
                         }).into(holder.channelIcon).clearOnDetach()
-
-                    // then hide the identicon
-                    holder.channelIdenticon.visibility = View.GONE
-
                 }
 
             }
@@ -104,6 +111,7 @@ class ChannelAdapter(private val channels: MutableList<String>, private val acti
         val realChannelAddress = v.findViewById(R.id.real_channel_address) as TextView
         val channelIcon = v.findViewById (R.id.channel_icon) as ImageView
         val channelIdenticon = v.findViewById(R.id.channel_identicon) as GithubIdenticonView
+        val imgLoading = v.findViewById(R.id.img_loader) as SpinKitView
 
         init {
             v.setOnClickListener(this)

@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 import net.glxn.qrgen.android.QRCode
+import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.json.JSONObject
 
 import org.web3j.crypto.WalletUtils
@@ -43,6 +44,7 @@ import org.web3j.utils.Convert.Unit
 import java.io.File
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.security.Security
 
 class WalletActivity : AppCompatActivity() {
 
@@ -59,6 +61,11 @@ class WalletActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.video_dac_wallet)
+
+        // setup bouncy castle for the wallet
+        setupBouncyCastle()
+
+        // get the prefs
         sharedPref = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
 
         // go to full screen
@@ -204,6 +211,11 @@ class WalletActivity : AppCompatActivity() {
 
         lifecycleScope.launch(Dispatchers.IO) {
 
+
+            withContext(Dispatchers.Main) {
+                hideLoadingUi()
+            }
+
             // finally start a loop to check if the user balance is sufficient to show the channel list
             var checkingBal = true
 
@@ -217,9 +229,6 @@ class WalletActivity : AppCompatActivity() {
                 // if client has no error, proceed to check the wallet balance
                 if(!clientVersion.hasError()) {
 
-                    withContext(Dispatchers.Main) {
-                        hideLoadingUi()
-                    }
 
                     val balanceInWei = web3!!.ethGetBalance(walletPublicKey, DefaultBlockParameterName.LATEST).send().balance.toString()
                     val balanceInEther = Convert.fromWei(balanceInWei, Unit.ETHER)
@@ -274,5 +283,26 @@ class WalletActivity : AppCompatActivity() {
         tap_instructions.visibility = View.GONE
         qr_code.visibility = View.GONE
     }
+
+    private fun setupBouncyCastle() {
+        val provider =
+            Security.getProvider(BouncyCastleProvider.PROVIDER_NAME)
+                ?: // Web3j will set up the provider lazily when it's first used.
+                return
+        when (provider.javaClass) {
+            BouncyCastleProvider::class.java -> { // BC with same package name, shouldn't happen in real life.
+                return
+            }
+            // Android registers its own BC provider. As it might be outdated and might not include
+            // all needed ciphers, we substitute it with a known BC bundled in the app.
+            // Android's BC has its package rewritten to "com.android.org.bouncycastle" and because
+            // of that it's possible to have another BC implementation loaded in VM.
+            else -> {
+                Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME)
+                Security.insertProviderAt(BouncyCastleProvider(), 1)
+            }
+        }
+    }
+
 
 }

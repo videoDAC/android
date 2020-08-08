@@ -15,4 +15,8 @@ interface ThreeBox {
     @GET("/list-spaces?name=livepeer")
     suspend fun getProfileFromLivepeerSpace(@Query("address")userAddress: String): Response<JsonArray>
 
+
+    @GET("/space?name=livepeer")
+    suspend fun getSpaceDetails(@Query("address")userAddress: String): Response<JsonObject>
+
 }

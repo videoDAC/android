@@ -21,8 +21,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.json.JSONArray
 import org.json.JSONObject
+import java.security.Security
 
 class ChannelActivity : AppCompatActivity() {
 
@@ -100,14 +102,19 @@ class ChannelActivity : AppCompatActivity() {
             for (it in channels) {
 
                 if (Utils.isValidETHAddress(it)!!){
-                    val threeBoxRes = threeBox!!.getProfileFromLivepeerSpace(it)
+                    val threeBoxRes = threeBox!!.getSpaceDetails(it)
 
                     if(threeBoxRes.isSuccessful) {
-                        val threeBoxObj = JSONArray(threeBoxRes.body().toString())
+                        val threeBoxObj = JSONObject(threeBoxRes.body().toString())
 
-                        if(threeBoxObj.length() > 0) {
-                            threeBoxNames[it] = threeBoxObj[0].toString()
-                        }
+                        val name = threeBoxObj.getString(getString(R.string.three_box_name_key))
+                        threeBoxNames[it] = name
+
+                        // then finally get the associated ipfs url hash
+                        val imageHash = threeBoxObj.getString("image")
+
+                        // finally add it to the hashmap
+                        threeBoxAvatarUris[it] = getString(R.string.ipfs_base_url) + imageHash
 
                        /* // get the 3box profile name
                         val name = threeBoxObj.getString(getString(R.string.three_box_name_key))
@@ -143,5 +150,6 @@ class ChannelActivity : AppCompatActivity() {
         }
 
     }
+
 
 }

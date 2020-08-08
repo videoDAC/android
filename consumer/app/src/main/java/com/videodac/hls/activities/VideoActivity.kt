@@ -60,7 +60,7 @@ class VideoActivity : AppCompatActivity() {
     lateinit var recipientAddress: String
 
     // stream funds every second
-    private val loopDelay = 1000L
+    private val loopDelay = 60000L
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -121,9 +121,14 @@ class VideoActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             var streamingFunds = true
 
+            var count = 0
+
             while(streamingFunds) {
 
-                delay(loopDelay)
+                if(count > 0){
+                    delay(loopDelay)
+
+                }
 
                 val clientVersion = web3!!.web3ClientVersion().send()
 
@@ -164,6 +169,8 @@ class VideoActivity : AppCompatActivity() {
                         ).show()
                     }
                 }
+
+              count++
 
             }
 
