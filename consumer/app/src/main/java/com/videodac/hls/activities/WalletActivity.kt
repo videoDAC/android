@@ -1,7 +1,11 @@
 package com.videodac.hls.activities
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.util.Log
@@ -9,9 +13,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.google.android.gms.common.GooglePlayServicesRepairableException
+import com.google.android.gms.security.ProviderInstaller
 import com.google.zxing.EncodeHintType
-
 import com.videodac.hls.R
 import com.videodac.hls.helpers.GasOracleHelper.gasOracle
 import com.videodac.hls.helpers.StatusHelper.channels
@@ -25,22 +31,18 @@ import com.videodac.hls.helpers.Utils.streamingFeeInEth
 import com.videodac.hls.helpers.Utils.walletPassword
 import com.videodac.hls.helpers.Utils.walletPublicKey
 import com.videodac.hls.helpers.WebThreeHelper.web3
-
 import kotlinx.android.synthetic.main.video_dac_wallet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
 import net.glxn.qrgen.android.QRCode
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.json.JSONObject
-
 import org.web3j.crypto.WalletUtils
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.utils.Convert
 import org.web3j.utils.Convert.Unit
-
 import java.io.File
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -65,6 +67,11 @@ class WalletActivity : AppCompatActivity() {
         // setup bouncy castle for the wallet
         setupBouncyCastle()
 
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+           installTls12()
+        }
+
         // get the prefs
         sharedPref = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
 
@@ -79,6 +86,37 @@ class WalletActivity : AppCompatActivity() {
                 closeActivity(this@WalletActivity, walletPublicKey)
             }
         })
+    }
+
+    private fun Context.installTls12() {
+        try {
+            ProviderInstaller.installIfNeeded(this)
+        } catch (e: GooglePlayServicesRepairableException) {
+            // Prompt the user to install/update/enable Google Play services.
+            GoogleApiAvailability.getInstance()
+                .showErrorNotification(this, e.connectionStatusCode)
+
+            AlertDialog.Builder(this@WalletActivity)
+                .setTitle(getString(R.string.google_play_error_title))
+                .setMessage(getString(R.string.google_play_error))
+                .setCancelable(false)
+                .setPositiveButton("ok") { _, _ ->
+                    finish()
+                }.show()
+        } catch (ge: GooglePlayServicesNotAvailableException) {
+            // Indicates a non-recoverable error: let the user know.
+            GoogleApiAvailability.getInstance()
+                .showErrorNotification(this, ge.errorCode)
+
+
+            AlertDialog.Builder(this@WalletActivity)
+                .setTitle(getString(R.string.google_play_error_title))
+                .setMessage(getString(R.string.google_play_services_not_available_error))
+                .setCancelable(false)
+                .setPositiveButton("ok") { _, _ ->
+                    finish()
+                }.show()
+        }
     }
 
     private fun initializeWallet() {
@@ -223,6 +261,8 @@ class WalletActivity : AppCompatActivity() {
 
                 delay(loopDelay)
 
+                Log.d("starting get balance", "no balance yet")
+
                 // get the web3 client version
                 val clientVersion = web3!!.web3ClientVersion().send()
 
@@ -233,7 +273,9 @@ class WalletActivity : AppCompatActivity() {
                     val balanceInWei = web3!!.ethGetBalance(walletPublicKey, DefaultBlockParameterName.LATEST).send().balance.toString()
                     val balanceInEther = Convert.fromWei(balanceInWei, Unit.ETHER)
 
-                    if (balanceInEther > BigDecimal.valueOf(streamingFeeInEth)) {
+                    Log.d("Getting balance", "has gotten balance")
+
+                    if (balanceInEther >= BigDecimal.valueOf(streamingFeeInEth)) {
                         startActivity(Intent(this@WalletActivity, ChannelActivity::class.java))
                         closeActivity(this@WalletActivity, null)
                     }
