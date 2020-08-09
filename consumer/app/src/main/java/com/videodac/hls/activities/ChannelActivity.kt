@@ -11,6 +11,7 @@ import com.videodac.hls.R
 import com.videodac.hls.adapters.ChannelAdapter
 import com.videodac.hls.helpers.StatusHelper.channels
 import com.videodac.hls.helpers.StatusHelper.ensNames
+import com.videodac.hls.helpers.StatusHelper.isChannelsInitialized
 import com.videodac.hls.helpers.StatusHelper.threeBoxAvatarUris
 import com.videodac.hls.helpers.StatusHelper.threeBoxNames
 import com.videodac.hls.helpers.ThreeBoxHelper.threeBox
@@ -37,26 +38,28 @@ class ChannelActivity : AppCompatActivity() {
         // go to full screen
         Utils.goFullScreen(this)
 
+        if(isChannelsInitialized()){
 
-        if(channels.isNullOrEmpty()) {
+            if(channels.isNullOrEmpty()) {
 
-            channel_header.visibility = View.GONE
-            channel_list.visibility = View.GONE
+                hideChannels(true)
 
-            no_channels.visibility = View.VISIBLE
+            } else {
+
+                hideChannels(false)
+
+                // get tht initial channel list
+                initChannelList()
+                getChannelENSNames()
+                getThreeBoxProfiles()
+            }
 
         } else {
-
-            channel_header.visibility = View.VISIBLE
-            channel_list.visibility = View.VISIBLE
-
-            no_channels.visibility = View.GONE
-
-            // get tht initial channel list
-            initChannelList()
-            getChannelENSNames()
-            getThreeBoxProfiles()
+            hideChannels(true)
         }
+
+
+
 
     }
 
@@ -107,47 +110,43 @@ class ChannelActivity : AppCompatActivity() {
                     if(threeBoxRes.isSuccessful) {
                         val threeBoxObj = JSONObject(threeBoxRes.body().toString())
 
-                        val name = threeBoxObj.getString(getString(R.string.three_box_name_key))
-                        threeBoxNames[it] = name
-
-                        // then finally get the associated ipfs url hash
-                        val imageHash = threeBoxObj.getString("image")
-
-                        // finally add it to the hashmap
-                        threeBoxAvatarUris[it] = getString(R.string.ipfs_base_url) + imageHash
-
-                       /* // get the 3box profile name
-                        val name = threeBoxObj.getString(getString(R.string.three_box_name_key))
-
-                        // add it to the hashmap with the
-                        threeBoxNames[it] = name
-
-                        // then try to retrieve the image
-                        val imageArray = threeBoxObj.getJSONArray(getString(R.string.three_box_image_key))
-
-                        if (imageArray.length() > 0 ){
-                            // get the first image object
-                            val imageObj = JSONObject(imageArray[0].toString())
-
-                            // then get the associated content url object
-                            val imageHashObj = JSONObject(imageObj.getString(getString(R.string.three_box_content_url_key)))
+                        if(!threeBoxObj.isNull(getString(R.string.three_box_name_key))){
+                            val name = threeBoxObj.getString(getString(R.string.three_box_name_key))
+                            threeBoxNames[it] = name
 
                             // then finally get the associated ipfs url hash
-                            val imageHash = imageHashObj.getString(getString(R.string.three_box_content_hash))
+                            val imageHash = threeBoxObj.getString(getString(R.string.three_box_image_key))
 
                             // finally add it to the hashmap
                             threeBoxAvatarUris[it] = getString(R.string.ipfs_base_url) + imageHash
-
                         }
-*/
+
+                        withContext(Dispatchers.Main) {
+                            adapter!!.notifyDataSetChanged()
+                        }
+                    } else{
+                        hideChannels(true)
                     }
                 }
             }
 
-            withContext(Dispatchers.Main) {
-                adapter!!.notifyDataSetChanged()
-            }
+
         }
+
+    }
+
+    private fun hideChannels(hide: Boolean) {
+
+        if (hide){
+            channel_header.visibility = View.GONE
+            channel_list.visibility = View.GONE
+            no_channels.visibility = View.VISIBLE
+        } else {
+            channel_header.visibility = View.VISIBLE
+            channel_list.visibility = View.VISIBLE
+            no_channels.visibility = View.GONE
+        }
+
 
     }
 

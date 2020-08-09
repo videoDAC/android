@@ -19,4 +19,7 @@ object StatusHelper {
     @JvmStatic
     internal var ensNames : HashMap<String, String> = HashMap ()
 
+
+    internal fun isChannelsInitialized() = ::channels.isInitialized
+
 }

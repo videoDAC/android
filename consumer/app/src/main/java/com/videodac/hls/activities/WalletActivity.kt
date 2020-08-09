@@ -2,10 +2,8 @@ package com.videodac.hls.activities
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.util.Log
@@ -32,10 +30,7 @@ import com.videodac.hls.helpers.Utils.walletPassword
 import com.videodac.hls.helpers.Utils.walletPublicKey
 import com.videodac.hls.helpers.WebThreeHelper.web3
 import kotlinx.android.synthetic.main.video_dac_wallet.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import net.glxn.qrgen.android.QRCode
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.json.JSONObject
@@ -59,7 +54,6 @@ class WalletActivity : AppCompatActivity() {
     // the balance check delay
     private val loopDelay = 2000L
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.video_dac_wallet)
@@ -69,9 +63,6 @@ class WalletActivity : AppCompatActivity() {
 
         // setup bouncy castle for the wallet
         setupBouncyCastle()
-
-
-
 
         // get the prefs
         sharedPref = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
@@ -248,6 +239,10 @@ class WalletActivity : AppCompatActivity() {
     @Suppress("BlockingMethodInNonBlockingContext")
     private fun checkWalletBalance() {
 
+
+        CoroutineScope(Dispatchers.IO).launch {
+
+        }
         lifecycleScope.launch(Dispatchers.IO) {
 
 
