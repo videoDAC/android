@@ -20,6 +20,6 @@ object StatusHelper {
     internal var ensNames : HashMap<String, String> = HashMap ()
 
 
-    internal fun isChannelsInitialized() = ::channels.isInitialized
+    internal val areChannelsInitialized: Boolean by lazy { ::channels.isInitialized }
 
 }

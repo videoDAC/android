@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.videodac.hls.R
 import com.videodac.hls.adapters.ChannelAdapter
+import com.videodac.hls.helpers.StatusHelper.areChannelsInitialized
 import com.videodac.hls.helpers.StatusHelper.channels
 import com.videodac.hls.helpers.StatusHelper.ensNames
-import com.videodac.hls.helpers.StatusHelper.isChannelsInitialized
 import com.videodac.hls.helpers.StatusHelper.threeBoxAvatarUris
 import com.videodac.hls.helpers.StatusHelper.threeBoxNames
 import com.videodac.hls.helpers.ThreeBoxHelper.threeBox
@@ -19,13 +19,12 @@ import com.videodac.hls.helpers.Utils
 import com.videodac.hls.helpers.WebThreeHelper.web3
 import kotlinx.android.synthetic.main.channels.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.bouncycastle.jce.provider.BouncyCastleProvider
-import org.json.JSONArray
+
 import org.json.JSONObject
-import java.security.Security
+
 
 class ChannelActivity : AppCompatActivity() {
 
@@ -38,7 +37,7 @@ class ChannelActivity : AppCompatActivity() {
         // go to full screen
         Utils.goFullScreen(this)
 
-        if(isChannelsInitialized()){
+        if(areChannelsInitialized){
 
             if(channels.isNullOrEmpty()) {
 
