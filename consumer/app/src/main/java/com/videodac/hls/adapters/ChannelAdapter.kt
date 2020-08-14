@@ -42,21 +42,12 @@ class ChannelAdapter(private val channels: MutableList<String>, private val acti
 
         if(Utils.isValidETHAddress(channel)!!) {
 
-            holder.realChannelAddress.text = channel
+             holder.realChannelAddress.text = channel
 
-            val channelName = threeBoxNames[channel]
-            val ensName = ensNames[channel]
+             val channelName = threeBoxNames[channel]
+             val ensName = ensNames[channel]
 
-
-            if(!ensName.isNullOrEmpty()) {
-                holder.channelAddress.text = ensName
-
-                // then show the identicon
-                holder.channelIdenticon.visibility = View.VISIBLE
-                val hash = Numeric.toBigInt(Hash.sha3(channel.toLowerCase(Locale.ROOT).toByteArray()))
-                holder.channelIdenticon.hash = hash.toInt()
-
-            } else if (!channelName.isNullOrEmpty()) {
+             if (!channelName.isNullOrEmpty()) {
                 holder.channelAddress.text = channelName
 
                 val userImageUri = threeBoxAvatarUris[channel]
@@ -86,7 +77,15 @@ class ChannelAdapter(private val channels: MutableList<String>, private val acti
                         }).into(holder.channelIcon).clearOnDetach()
                 }
 
-            }
+            } else if(!ensName.isNullOrEmpty()) {
+                 holder.channelAddress.text = ensName
+
+                 // then show the identicon
+                 holder.channelIdenticon.visibility = View.VISIBLE
+                 val hash =
+                     Numeric.toBigInt(Hash.sha3(channel.toLowerCase(Locale.ROOT).toByteArray()))
+                 holder.channelIdenticon.hash = hash.toInt()
+             }
             else{
                 holder.channelAddress.text = channel
 

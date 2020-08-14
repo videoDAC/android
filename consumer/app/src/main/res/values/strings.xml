@@ -3,7 +3,7 @@
     <string name="wallet_balance">This app\'s balance:</string>
     <string name="wallet_address">0xdac817294c0c87ca4fa1895ef4b972eade99f2fd</string>
     <string name="qr_code">Qr Code</string>
-    <string name="infura_url">https://rinkeby.infura.io/v3/2f1d95e69d874612a271a0c5745961d0</string>
+    <string name="infura_url">https://mainnet.infura.io/v3/2f1d95e69d874612a271a0c5745961d0</string>
     <string name="loading_burner_wallet">Loading wallet, please wait…</string>
     <string name="loading_stream">Loading stream, please wait…</string>
     <string name="livestream_credits">Viewing credit balance:</string>
@@ -11,7 +11,7 @@
     <string name="creator_fee">Pay to HimPrdshLiveTV to watch:</string>
     <string name="tap_instructions">Tap to copy this app\'s\naddress to clipboard</string>
     <string name="tv_name">HimPrdshLiveTV</string>
-    <string name="go_eth_unit">RinkebyETH</string>
+    <string name="go_eth_unit">ETH</string>
     <string name="channel_header">Choose channel…</string>
     <string name="no_channels">No Channels Available</string>
 

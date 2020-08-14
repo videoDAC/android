@@ -40,29 +40,29 @@ class ChannelActivity : AppCompatActivity() {
         // go to full screen
         Utils.goFullScreen(this)
 
-
         if(channels.isNullOrEmpty()) {
 
             channel_header.visibility = View.GONE
             channel_list.visibility = View.GONE
-
             no_channels.visibility = View.VISIBLE
 
         } else {
 
             channel_header.visibility = View.VISIBLE
             channel_list.visibility = View.VISIBLE
-
             no_channels.visibility = View.GONE
 
-            // get tht initial channel list
+            // get the initial channel list
             initChannelList()
-            getChannelENSNames()
-            getThreeBoxProfiles()
+
+            // then fetch the ENS names and 3box profiles
+            lifecycleScope.launch(Dispatchers.IO) {
+                getThreeBoxProfiles()
+                getChannelENSNames()
+            }
         }
 
     }
-
 
     private fun initChannelList() {
         val mRecyclerView = findViewById<RecyclerView>(R.id.channel_list)
@@ -75,68 +75,68 @@ class ChannelActivity : AppCompatActivity() {
         adapter!!.notifyDataSetChanged()
     }
 
-    private  fun getChannelENSNames() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            ensNames.clear()
-            for ( it in channels) {
+    private suspend fun getChannelENSNames() {
+        // clear the hashmap first
+        ensNames.clear()
 
-                if (Utils.isValidETHAddress(it)!!){
+        for ( it in channels) {
 
-                    val ensName = Utils.resolveChannelENSName(it, web3!!)
-                    if (ensName.isNotEmpty()) {
-                        ensNames[it] = ensName
-                    }
-                }
-            }
+            if (Utils.isValidETHAddress(it)!!){
 
-            withContext(Dispatchers.Main) {
-                adapter!!.notifyDataSetChanged()
-            }
-        }
-    }
+                val ensName = Utils.resolveChannelENSName(it, web3!!)
 
-    private fun getThreeBoxProfiles() {
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            // clear the hashmaps first
-            threeBoxAvatarUris.clear()
-            threeBoxNames.clear()
-
-            for (it in channels) {
-
-                if (Utils.isValidETHAddress(it)!!){
-                    val threeBoxRes = threeBox!!.getSpaceDetails(it)
-
-                    if(threeBoxRes.isSuccessful) {
-
-                        try {
-                            val threeBoxObj = JSONObject(threeBoxRes.body().toString())
-
-                            val name = threeBoxObj.getString(getString(R.string.three_box_name_key))
-                            threeBoxNames[it] = name
-
-                            // then finally get the associated ipfs url hash
-                            val imageHash = threeBoxObj.getString("image")
-
-                            // finally add it to the hashmap
-                            threeBoxAvatarUris[it] = getString(R.string.ipfs_base_url) + imageHash
-
-                        }
-                        catch (je: JSONException){
-                            Log.d(TAG, je.localizedMessage)
-                        }
-
-
-                    }
-                }
-            }
-
-            withContext(Dispatchers.Main) {
-                adapter!!.notifyDataSetChanged()
+                if (ensName.isNotEmpty()) ensNames[it] = ensName
             }
         }
 
+        withContext(Dispatchers.Main) {
+            adapter!!.notifyDataSetChanged()
+        }
     }
+
+    private suspend fun getThreeBoxProfiles() {
+
+        // clear the hashmaps first
+        threeBoxAvatarUris.clear()
+        threeBoxNames.clear()
+
+        for (it in channels) {
+
+            if (Utils.isValidETHAddress(it)!!){
+                val threeBoxRes = threeBox!!.getSpaceDetails(it)
+
+                if(threeBoxRes.isSuccessful) {
+
+                    try {
+                        val threeBoxObj = JSONObject(threeBoxRes.body().toString())
+
+                        val name = threeBoxObj.getString(getString(R.string.three_box_name_key))
+                        threeBoxNames[it] = name
+
+                        // then finally get the associated ipfs url hash
+                        val imageHash = threeBoxObj.getString("image")
+
+                        // finally add it to the hashmap
+                        threeBoxAvatarUris[it] = getString(R.string.ipfs_base_url) + imageHash
+
+                    }
+                    catch (je: JSONException){
+                        Log.d(TAG, je.localizedMessage)
+                    }
+
+
+                }
+            }
+        }
+
+        withContext(Dispatchers.Main) {
+            adapter!!.notifyDataSetChanged()
+        }
+
+
+    }
+
+
 
 
 }

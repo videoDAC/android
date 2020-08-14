@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 import com.videodac.hls.R
+import kotlinx.coroutines.delay
 
 import org.web3j.crypto.Hash
 import org.web3j.ens.EnsResolutionException
@@ -29,18 +30,15 @@ object Utils {
     internal const val WALLET_CREATED = "WALLET_CREATED"
     internal const val WALLET_PATH = "WALLET_PATH"
     internal const val CHANNEL_ADDRESS = "CHANNEL_ADDRESS"
-    internal var streamingFeeInEth = 0.0002
-    internal var walletBalanceLeft: BigDecimal = BigDecimal(0)
+    internal var streamingFeeInEth = 0.0
+    internal var walletBalanceLeft = BigDecimal(0)
     internal const val walletPassword = "password"
-
 
     // we set a default gas price of 40 gwei
     internal var gasPrice = BigInteger.valueOf(40_000_000_000L)
     internal val gasLimit = BigInteger.valueOf(12_500_000L)
 
-
     internal var walletPublicKey: String = ""
-
 
     // regex patterns
     private val ignoreCaseAddrPattern: Pattern = Pattern.compile("(?i)^(0x)?[0-9a-f]{40}$")
@@ -77,7 +75,8 @@ object Utils {
     }
 
     @JvmStatic
-    internal fun resolveChannelENSName(address: String, web3j: Web3j) :String {
+    internal suspend fun resolveChannelENSName(address: String, web3j: Web3j) :String {
+
         val ens = EnsResolver(web3j)
         var name = ""
 
@@ -86,7 +85,7 @@ object Utils {
             // Check to be sure the reverse record is correct.
             val reverseAddress = ens.resolve(name)
             when {
-                address != reverseAddress -> {
+                address.trim().toLowerCase(Locale.ROOT) != reverseAddress.trim().toLowerCase(Locale.ROOT) -> {
                     name = ""
                 }
             }
