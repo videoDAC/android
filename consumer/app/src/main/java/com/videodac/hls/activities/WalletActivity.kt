@@ -2,10 +2,10 @@ package com.videodac.hls.activities
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
+
 import android.content.Intent
 import android.content.SharedPreferences
-import android.os.Build
+
 import android.os.Bundle
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.util.Log
@@ -28,6 +28,7 @@ import com.videodac.hls.helpers.Utils.WALLET_PATH
 import com.videodac.hls.helpers.Utils.closeActivity
 import com.videodac.hls.helpers.Utils.gasPrice
 import com.videodac.hls.helpers.Utils.streamingFeeInEth
+import com.videodac.hls.helpers.Utils.walletBalanceLeft
 import com.videodac.hls.helpers.Utils.walletPassword
 import com.videodac.hls.helpers.Utils.walletPublicKey
 import com.videodac.hls.helpers.WebThreeHelper.web3
@@ -69,9 +70,6 @@ class WalletActivity : AppCompatActivity() {
 
         // setup bouncy castle for the wallet
         setupBouncyCastle()
-
-
-
 
         // get the prefs
         sharedPref = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
@@ -277,6 +275,7 @@ class WalletActivity : AppCompatActivity() {
                     Log.d("Getting balance", "has gotten balance")
 
                     if (balanceInEther >= BigDecimal.valueOf(streamingFeeInEth)) {
+                        walletBalanceLeft  = balanceInEther
                         startActivity(Intent(this@WalletActivity, ChannelActivity::class.java))
                         closeActivity(this@WalletActivity, null)
                     }
