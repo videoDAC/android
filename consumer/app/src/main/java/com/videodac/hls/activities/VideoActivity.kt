@@ -1,6 +1,6 @@
 package com.videodac.hls.activities
 
-
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -9,8 +9,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
@@ -19,28 +21,30 @@ import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoListener
+
 import com.videodac.hls.R
 import com.videodac.hls.helpers.Utils.CHANNEL_ADDRESS
 import com.videodac.hls.helpers.Utils.WALLET_PATH
 import com.videodac.hls.helpers.Utils.closeActivity
-
 import com.videodac.hls.helpers.Utils.goFullScreen
 import com.videodac.hls.helpers.Utils.streamingFeeInEth
+import com.videodac.hls.helpers.Utils.walletBalanceLeft
 import com.videodac.hls.helpers.Utils.walletPassword
 import com.videodac.hls.helpers.Utils.walletPublicKey
 import com.videodac.hls.helpers.WebThreeHelper.web3
+
 import kotlinx.android.synthetic.main.video.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 import org.web3j.crypto.WalletUtils
 import org.web3j.protocol.core.DefaultBlockParameterName
-
 import org.web3j.tx.Transfer
-
 import org.web3j.utils.Convert
 import org.web3j.utils.Convert.Unit
+
 import java.io.IOException
 import java.math.BigDecimal
 
@@ -116,11 +120,15 @@ class VideoActivity : AppCompatActivity() {
         playerView.visibility = View.VISIBLE
     }
 
+    @SuppressLint("SetTextI18n")
     private fun payStreamingFee() {
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            var streamingFunds = true
+        // set the initial balance
+        wallet_balance_left.text = String.format("%.4f ", walletBalanceLeft) + "ETH"
 
+        lifecycleScope.launch(Dispatchers.IO) {
+
+            var streamingFunds = true
             var count = 0
 
             while(streamingFunds) {
@@ -143,10 +151,14 @@ class VideoActivity : AppCompatActivity() {
                         Log.d(TAG, "Streamed $streamingFeeInEth to $recipientAddress")
 
                         val balanceWei = web3!!.ethGetBalance(credentials.address, DefaultBlockParameterName.LATEST).send()
-                        val balanceInEther = Convert.fromWei(balanceWei.balance.toString(), Unit.ETHER)
+                        walletBalanceLeft = Convert.fromWei(balanceWei.balance.toString(), Unit.ETHER)
+
+                        withContext(Dispatchers.Main) {
+                            wallet_balance_left.text = String.format("%.4f ", walletBalanceLeft) + " ETH"
+                        }
 
                         // finally stop playing the video if the balance is lesser than the streaming fee
-                        if (balanceInEther < BigDecimal.valueOf(streamingFeeInEth)) {
+                        if (walletBalanceLeft < BigDecimal.valueOf(streamingFeeInEth)) {
                             streamingFunds = false
                             startActivity(Intent(this@VideoActivity, WalletActivity::class.java))
                             closeActivity(this@VideoActivity, null)
@@ -158,6 +170,15 @@ class VideoActivity : AppCompatActivity() {
                 } catch (ex: InterruptedException) {
                     Log.e(TAG, ex.message!!)
                 }
+                catch (re: RuntimeException){
+                    if (streamingFeeInEth != 0.0) {
+                        streamingFunds = false
+                        startActivity(Intent(this@VideoActivity, WalletActivity::class.java))
+                        closeActivity(this@VideoActivity, null)
+                    }
+
+                }
+
 
                 withContext(Dispatchers.Main) {
 

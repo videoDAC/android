@@ -35,4 +35,5 @@
     <string name="google_play_error">Sorry this app requires the latest version of google play to work well, so please install or update it to continue</string>
     <string name="google_play_error_title">Google Play Error!</string>
     <string name="google_play_services_not_available_error">This app will not continue because google play services are not available in this device, please install them to continue!</string>
+    <string name="wallet_balance_left">0.0002 ETH</string>
 </resources>

@@ -5,13 +5,12 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
 import android.util.Log
-
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.videodac.hls.R
 
+import com.videodac.hls.R
 
 import org.web3j.crypto.Hash
 import org.web3j.ens.EnsResolutionException
@@ -19,17 +18,19 @@ import org.web3j.ens.EnsResolver
 import org.web3j.protocol.Web3j
 import org.web3j.protocol.http.HttpService
 import org.web3j.utils.Numeric
+import java.math.BigDecimal
+
 import java.math.BigInteger
 import java.util.*
 import java.util.regex.Pattern
-
 
 object Utils {
 
     internal const val WALLET_CREATED = "WALLET_CREATED"
     internal const val WALLET_PATH = "WALLET_PATH"
     internal const val CHANNEL_ADDRESS = "CHANNEL_ADDRESS"
-    internal const val streamingFeeInEth = 0.0002
+    internal var streamingFeeInEth = 0.0002
+    internal var walletBalanceLeft: BigDecimal = BigDecimal(0)
     internal const val walletPassword = "password"
 
 
@@ -145,10 +146,5 @@ object Utils {
         }
         return true
     }
-
-
-
-
-
 
 }

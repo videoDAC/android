@@ -35,6 +35,23 @@
         android:fontFamily="@font/akkurat"
         android:text="@string/loading_stream" />
 
+    <TextView
+        android:id="@+id/wallet_balance_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/loader"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="5dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:background="@android:color/black"
+        android:fontFamily="@font/akkurat"
+        android:text="@string/wallet_balance_left"
+         />
+
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/loader"
         style="@style/SpinKitView.CubeGrid"

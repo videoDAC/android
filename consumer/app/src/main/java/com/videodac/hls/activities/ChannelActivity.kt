@@ -1,6 +1,7 @@
 package com.videodac.hls.activities
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -23,12 +24,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.security.Security
 
 class ChannelActivity : AppCompatActivity() {
 
     var adapter: ChannelAdapter? = null
+    private val TAG = "CHANNEL_ACTIVITY"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,41 +108,25 @@ class ChannelActivity : AppCompatActivity() {
                     val threeBoxRes = threeBox!!.getSpaceDetails(it)
 
                     if(threeBoxRes.isSuccessful) {
-                        val threeBoxObj = JSONObject(threeBoxRes.body().toString())
 
-                        val name = threeBoxObj.getString(getString(R.string.three_box_name_key))
-                        threeBoxNames[it] = name
+                        try {
+                            val threeBoxObj = JSONObject(threeBoxRes.body().toString())
 
-                        // then finally get the associated ipfs url hash
-                        val imageHash = threeBoxObj.getString("image")
-
-                        // finally add it to the hashmap
-                        threeBoxAvatarUris[it] = getString(R.string.ipfs_base_url) + imageHash
-
-                       /* // get the 3box profile name
-                        val name = threeBoxObj.getString(getString(R.string.three_box_name_key))
-
-                        // add it to the hashmap with the
-                        threeBoxNames[it] = name
-
-                        // then try to retrieve the image
-                        val imageArray = threeBoxObj.getJSONArray(getString(R.string.three_box_image_key))
-
-                        if (imageArray.length() > 0 ){
-                            // get the first image object
-                            val imageObj = JSONObject(imageArray[0].toString())
-
-                            // then get the associated content url object
-                            val imageHashObj = JSONObject(imageObj.getString(getString(R.string.three_box_content_url_key)))
+                            val name = threeBoxObj.getString(getString(R.string.three_box_name_key))
+                            threeBoxNames[it] = name
 
                             // then finally get the associated ipfs url hash
-                            val imageHash = imageHashObj.getString(getString(R.string.three_box_content_hash))
+                            val imageHash = threeBoxObj.getString("image")
 
                             // finally add it to the hashmap
                             threeBoxAvatarUris[it] = getString(R.string.ipfs_base_url) + imageHash
 
                         }
-*/
+                        catch (je: JSONException){
+                            Log.d(TAG, je.localizedMessage)
+                        }
+
+
                     }
                 }
             }
