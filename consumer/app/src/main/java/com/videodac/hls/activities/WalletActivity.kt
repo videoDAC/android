@@ -234,7 +234,11 @@ class WalletActivity : AppCompatActivity() {
 
                 while (keys.hasNext()) {
                     val key = keys.next()
-                    channels.add(key)
+
+                    if(Utils.isValidETHAddress(key)!!){
+                        channels.add(key)
+                    }
+
                 }
             }
 
