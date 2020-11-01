@@ -9,19 +9,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-
+import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
-import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoListener
-
 import com.videodac.hls.R
 import com.videodac.hls.helpers.Utils.CHANNEL_ADDRESS
 import com.videodac.hls.helpers.Utils.WALLET_PATH
@@ -32,19 +30,16 @@ import com.videodac.hls.helpers.Utils.walletBalanceLeft
 import com.videodac.hls.helpers.Utils.walletPassword
 import com.videodac.hls.helpers.Utils.walletPublicKey
 import com.videodac.hls.helpers.WebThreeHelper.web3
-
 import kotlinx.android.synthetic.main.video.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
 import org.web3j.crypto.WalletUtils
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.tx.Transfer
 import org.web3j.utils.Convert
 import org.web3j.utils.Convert.Unit
-
 import java.io.IOException
 import java.math.BigDecimal
 
@@ -52,7 +47,6 @@ import java.math.BigDecimal
 class VideoActivity : AppCompatActivity() {
 
     private lateinit var player: SimpleExoPlayer
-    private lateinit var mediaDataSourceFactory: DataSource.Factory
 
     // shared preferences
     private var PRIVATE_MODE = 0
@@ -76,20 +70,31 @@ class VideoActivity : AppCompatActivity() {
 
     private fun initializePlayer() {
         player = ExoPlayerFactory.newSimpleInstance(this)
-        mediaDataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "video_dac"))
+        val factory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "Exo Player"))
 
         recipientAddress = intent.extras!!.getString(CHANNEL_ADDRESS)!!
         val channelUrl = getString(R.string.streaming_url, recipientAddress)
 
 
-        val mediaSource = HlsMediaSource.Factory(mediaDataSourceFactory).createMediaSource(Uri.parse(channelUrl))
+        val mediaSource = HlsMediaSource.Factory(factory).createMediaSource(Uri.parse(channelUrl))
 
         with(player, {
             prepare(mediaSource, false, false)
             playWhenReady = true
             addVideoListener(object : VideoListener {
-                override fun onVideoSizeChanged(width: Int, height: Int, unappliedRotationDegrees: Int, pixelWidthHeightRatio: Float) {
-                    Log.d("VIDEO_DAC", String.format("play video listener video size changed, WIDTH IS %1\$2s , HEIGHT IS %2\$2s", width.toString(), height.toString()))
+                override fun onVideoSizeChanged(
+                    width: Int,
+                    height: Int,
+                    unappliedRotationDegrees: Int,
+                    pixelWidthHeightRatio: Float
+                ) {
+                    Log.d(
+                        "VIDEO_DAC", String.format(
+                            "play video listener video size changed, WIDTH IS %1\$2s , HEIGHT IS %2\$2s",
+                            width.toString(),
+                            height.toString()
+                        )
+                    )
                 }
 
                 override fun onRenderedFirstFrame() {
@@ -135,7 +140,6 @@ class VideoActivity : AppCompatActivity() {
 
                 if(count > 0){
                     delay(loopDelay)
-
                 }
 
                 val clientVersion = web3!!.web3ClientVersion().send()
@@ -145,13 +149,23 @@ class VideoActivity : AppCompatActivity() {
                     val walletPath = sharedPref.getString(WALLET_PATH, "")
                     val credentials = WalletUtils.loadCredentials(walletPassword, walletPath)
 
-                    val transferReceipt = Transfer.sendFunds(web3, credentials, recipientAddress, BigDecimal.valueOf(streamingFeeInEth), Unit.ETHER).send()
+                    val transferReceipt = Transfer.sendFunds(
+                        web3, credentials, recipientAddress, BigDecimal.valueOf(
+                            streamingFeeInEth
+                        ), Unit.ETHER
+                    ).send()
 
                     if(transferReceipt.isStatusOK) {
                         Log.d(TAG, "Streamed $streamingFeeInEth to $recipientAddress")
 
-                        val balanceWei = web3!!.ethGetBalance(credentials.address, DefaultBlockParameterName.LATEST).send()
-                        walletBalanceLeft = Convert.fromWei(balanceWei.balance.toString(), Unit.ETHER)
+                        val balanceWei = web3!!.ethGetBalance(
+                            credentials.address,
+                            DefaultBlockParameterName.LATEST
+                        ).send()
+                        walletBalanceLeft = Convert.fromWei(
+                            balanceWei.balance.toString(),
+                            Unit.ETHER
+                        )
 
                         withContext(Dispatchers.Main) {
                             wallet_balance_left.text = String.format("%.4f ", walletBalanceLeft) + " ETH"
