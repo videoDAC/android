@@ -8,8 +8,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
 import com.videodac.hls.R
 import com.videodac.hls.adapters.ChannelAdapter
+import com.videodac.hls.databinding.ChannelsBinding
 import com.videodac.hls.helpers.StatusHelper.channels
 import com.videodac.hls.helpers.StatusHelper.ensNames
 import com.videodac.hls.helpers.StatusHelper.threeBoxAvatarUris
@@ -17,40 +19,43 @@ import com.videodac.hls.helpers.StatusHelper.threeBoxNames
 import com.videodac.hls.helpers.ThreeBoxHelper.threeBox
 import com.videodac.hls.helpers.Utils
 import com.videodac.hls.helpers.WebThreeHelper.web3
-import kotlinx.android.synthetic.main.channels.*
+
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.bouncycastle.jce.provider.BouncyCastleProvider
-import org.json.JSONArray
+
 import org.json.JSONException
 import org.json.JSONObject
-import java.security.Security
 
 class ChannelActivity : AppCompatActivity() {
 
     var adapter: ChannelAdapter? = null
     private val TAG = "CHANNEL_ACTIVITY"
 
+    // view binding
+    private lateinit var binding: ChannelsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.channels)
+
+        // inflate binding
+        binding = ChannelsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // go to full screen
         Utils.goFullScreen(this)
 
         if(channels.isNullOrEmpty()) {
 
-            channel_header.visibility = View.GONE
-            channel_list.visibility = View.GONE
-            no_channels.visibility = View.VISIBLE
+            binding.channelHeader.visibility = View.GONE
+            binding.channelList.visibility = View.GONE
+            binding.noChannels.visibility = View.VISIBLE
 
         } else {
 
-            channel_header.visibility = View.VISIBLE
-            channel_list.visibility = View.VISIBLE
-            no_channels.visibility = View.GONE
+            binding.channelHeader.visibility = View.VISIBLE
+            binding.channelList.visibility = View.VISIBLE
+            binding.noChannels.visibility = View.GONE
 
             // get the initial channel list
             initChannelList()
@@ -81,7 +86,7 @@ class ChannelActivity : AppCompatActivity() {
 
         for ( it in channels) {
 
-            if (Utils.isValidETHAddress(it)!!){
+            if (Utils.isValidETHAddress(it)){
 
                 val ensName = Utils.resolveChannelENSName(it, web3!!)
 
@@ -102,7 +107,7 @@ class ChannelActivity : AppCompatActivity() {
 
         for (it in channels) {
 
-            if (Utils.isValidETHAddress(it)!!){
+            if (Utils.isValidETHAddress(it)){
                 val threeBoxRes = threeBox!!.getSpaceDetails(it)
 
                 if(threeBoxRes.isSuccessful) {
@@ -121,7 +126,7 @@ class ChannelActivity : AppCompatActivity() {
 
                     }
                     catch (je: JSONException){
-                        Log.d(TAG, je.localizedMessage)
+                        Log.d(TAG, je.localizedMessage!!)
                     }
 
 

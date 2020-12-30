@@ -11,16 +11,17 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.google.android.exoplayer2.C
+
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoListener
+
 import com.videodac.hls.R
+import com.videodac.hls.databinding.VideoBinding
 import com.videodac.hls.helpers.Utils.CHANNEL_ADDRESS
 import com.videodac.hls.helpers.Utils.WALLET_PATH
 import com.videodac.hls.helpers.Utils.closeActivity
@@ -30,7 +31,7 @@ import com.videodac.hls.helpers.Utils.walletBalanceLeft
 import com.videodac.hls.helpers.Utils.walletPassword
 import com.videodac.hls.helpers.Utils.walletPublicKey
 import com.videodac.hls.helpers.WebThreeHelper.web3
-import kotlinx.android.synthetic.main.video.*
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -60,10 +61,17 @@ class VideoActivity : AppCompatActivity() {
     // stream funds every second
     private val loopDelay = 60000L
 
+    // binding
+    private lateinit var binding: VideoBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.video)
+
+        // inflate binding
+        binding = VideoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         goFullScreen(this)
         sharedPref = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
     }
@@ -105,12 +113,12 @@ class VideoActivity : AppCompatActivity() {
 
         })
 
-        playerView.setShutterBackgroundColor(Color.TRANSPARENT)
-        playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-        playerView.player = player
-        playerView.requestFocus()
+        binding.playerView.setShutterBackgroundColor(Color.TRANSPARENT)
+        binding.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+        binding.playerView.player = player
+        binding.playerView.requestFocus()
 
-        with(rootVideoView, {
+        with(binding.rootVideoView, {
             setOnClickListener {
                 closeActivity(this@VideoActivity, walletPublicKey)
             }
@@ -119,17 +127,17 @@ class VideoActivity : AppCompatActivity() {
     }
 
     private fun showPlayer() {
-        loading_text.visibility = View.GONE
-        loader.visibility = View.GONE
-        loader_view.visibility = View.GONE
-        playerView.visibility = View.VISIBLE
+        binding.loadingText.visibility = View.GONE
+        binding.loader.visibility = View.GONE
+        binding.loaderView.visibility = View.GONE
+        binding.playerView.visibility = View.VISIBLE
     }
 
     @SuppressLint("SetTextI18n")
     private fun payStreamingFee() {
 
         // set the initial balance
-        wallet_balance_left.text = String.format("%.4f ", walletBalanceLeft) + "ETH"
+        binding.walletBalanceLeft.text = String.format("%.4f ", walletBalanceLeft) + "ETH"
 
         lifecycleScope.launch(Dispatchers.IO) {
 
@@ -168,7 +176,7 @@ class VideoActivity : AppCompatActivity() {
                         )
 
                         withContext(Dispatchers.Main) {
-                            wallet_balance_left.text = String.format("%.4f ", walletBalanceLeft) + " ETH"
+                            binding.walletBalanceLeft.text = String.format("%.4f ", walletBalanceLeft) + " ETH"
                         }
 
                         // finally stop playing the video if the balance is lesser than the streaming fee

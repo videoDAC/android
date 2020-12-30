@@ -40,7 +40,7 @@ class ChannelAdapter(
         // only load valid ETH addresses
         val channel = channels[position]
 
-        if(Utils.isValidETHAddress(channel)!!) {
+        if(Utils.isValidETHAddress(channel)) {
 
              holder.realChannelAddress.text = channel
 
@@ -151,7 +151,7 @@ class ChannelAdapter(
 
         override fun onClick(v: View?) {
 
-            if(Utils.isValidETHAddress(realChannelAddress.text.toString())!!) {
+            if(Utils.isValidETHAddress(realChannelAddress.text.toString())) {
                 activity.startActivity(
                     Intent(activity, VideoActivity::class.java).putExtra(
                         CHANNEL_ADDRESS,
