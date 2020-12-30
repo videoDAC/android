@@ -1,5 +1,3 @@
 <resources>
     <string name="app_name">Publisher</string>
-
-    <string name="infura_url">https://mainnet.infura.io/v3/1b159090386c48bbb7828f1b346dcc11</string>
 </resources>

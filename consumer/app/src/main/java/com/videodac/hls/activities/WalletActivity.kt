@@ -2,8 +2,10 @@ package com.videodac.hls.activities
 
 import android.app.AlertDialog
 import android.content.Context
+
 import android.content.Intent
 import android.content.SharedPreferences
+
 import android.os.Bundle
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.util.Log
@@ -11,12 +13,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.security.ProviderInstaller
 import com.google.zxing.EncodeHintType
 import com.videodac.hls.R
-import com.videodac.hls.databinding.VideoDacWalletBinding
 import com.videodac.hls.helpers.GasOracleHelper.gasOracle
 import com.videodac.hls.helpers.StatusHelper.channels
 import com.videodac.hls.helpers.StatusHelper.status
@@ -30,12 +32,11 @@ import com.videodac.hls.helpers.Utils.walletBalanceLeft
 import com.videodac.hls.helpers.Utils.walletPassword
 import com.videodac.hls.helpers.Utils.walletPublicKey
 import com.videodac.hls.helpers.WebThreeHelper.web3
-
+import kotlinx.android.synthetic.main.video_dac_wallet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
 import net.glxn.qrgen.android.QRCode
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.json.JSONObject
@@ -48,7 +49,6 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.security.Security
 
-
 class WalletActivity : AppCompatActivity() {
 
     // shared preferences
@@ -60,14 +60,10 @@ class WalletActivity : AppCompatActivity() {
     // the balance check delay
     private val loopDelay = 2000L
 
-    // view binding
-    private lateinit var binding: VideoDacWalletBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // inflate binding
-        binding = VideoDacWalletBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.video_dac_wallet)
 
         // check if
         installTls12()
@@ -84,7 +80,7 @@ class WalletActivity : AppCompatActivity() {
         // then init the wallet
         initializeWallet()
 
-        with(binding.rootLayout, {
+        with(root_layout, {
             setOnClickListener {
                 closeActivity(this@WalletActivity, walletPublicKey)
             }
@@ -96,6 +92,8 @@ class WalletActivity : AppCompatActivity() {
             ProviderInstaller.installIfNeeded(this)
         } catch (e: GooglePlayServicesRepairableException) {
             // Prompt the user to install/update/enable Google Play services.
+            GoogleApiAvailability.getInstance()
+                .showErrorNotification(this, e.connectionStatusCode)
 
             AlertDialog.Builder(this@WalletActivity)
                 .setTitle(getString(R.string.google_play_error_title))
@@ -106,6 +104,8 @@ class WalletActivity : AppCompatActivity() {
                 }.show()
         } catch (ge: GooglePlayServicesNotAvailableException) {
             // Indicates a non-recoverable error: let the user know.
+            GoogleApiAvailability.getInstance()
+                .showErrorNotification(this, ge.errorCode)
 
 
             AlertDialog.Builder(this@WalletActivity)
@@ -158,16 +158,14 @@ class WalletActivity : AppCompatActivity() {
         walletPublicKey = credentials.address
 
 
-        binding.walletBalance.text = getString(R.string.livestream_credits)
-        binding.walletBalanceUnit.text = "0 " + getString(R.string.go_eth_unit) // default balance will always be zero
-        binding.walletAddress.text = walletPublicKey
-        binding.creatorFee.text = getString(R.string.creator_fee)
-        binding.creatorFeeUnit.text = String.format("%.4f ", streamingFeeInEth) + getString(R.string.go_eth_unit) + " per minute + gas"
+        wallet_balance.text = getString(R.string.livestream_credits)
+        wallet_balance_unit.text = "0 " + getString(R.string.go_eth_unit) // default balance will always be zero
+        wallet_address.text = walletPublicKey
+        creator_fee.text = getString(R.string.creator_fee)
+        creator_fee_unit.text = String.format("%.4f ", streamingFeeInEth) + getString(R.string.go_eth_unit) + " per minute + gas"
 
         // set the qr code for the address too
-        binding.qrCode.setImageBitmap(
-            QRCode.from(walletPublicKey).withHint(EncodeHintType.MARGIN, 1).bitmap()
-        )
+        qr_code.setImageBitmap(QRCode.from(walletPublicKey).withHint(EncodeHintType.MARGIN, 1).bitmap())
 
         // load the wallet details
         getGasPrice()
@@ -208,7 +206,7 @@ class WalletActivity : AppCompatActivity() {
 
                 withContext(Dispatchers.Main) {
                     Log.d(TAG, totalFeeInEth.toString())
-                    binding.creatorFeeUnit.text = String.format(
+                    creator_fee_unit.text = String.format(
                         "%.4f ",
                         totalFeeInEth
                     ) + getString(R.string.go_eth_unit) + " per minute + gas"
@@ -237,7 +235,7 @@ class WalletActivity : AppCompatActivity() {
                 while (keys.hasNext()) {
                     val key = keys.next()
 
-                    if(Utils.isValidETHAddress(key)){
+                    if(Utils.isValidETHAddress(key)!!){
                         channels.add(key)
                     }
 
@@ -275,10 +273,7 @@ class WalletActivity : AppCompatActivity() {
                 if(!clientVersion.hasError()) {
 
 
-                    val balanceInWei = web3!!.ethGetBalance(
-                        walletPublicKey,
-                        DefaultBlockParameterName.LATEST
-                    ).send().balance.toString()
+                    val balanceInWei = web3!!.ethGetBalance(walletPublicKey, DefaultBlockParameterName.LATEST).send().balance.toString()
                     val balanceInEther = Convert.fromWei(balanceInWei, Unit.ETHER)
 
                     Log.d("Getting balance", "has gotten balance")
@@ -290,16 +285,12 @@ class WalletActivity : AppCompatActivity() {
                     }
                     else {
                         withContext(Dispatchers.Main) {
-                            binding.walletBalanceUnit.text = """$balanceInEther ${getString(R.string.go_eth_unit)}"""
+                            wallet_balance_unit.text = """$balanceInEther ${getString(R.string.go_eth_unit)}"""
                         }
                     }
                 } else{
                     checkingBal = false
-                    Toast.makeText(
-                        this@WalletActivity,
-                        "Unable to instantiate burner wallet, please check you internet connection",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(this@WalletActivity, "Unable to instantiate burner wallet, please check you internet connection", Toast.LENGTH_LONG).show()
                 }
 
             }
@@ -309,35 +300,34 @@ class WalletActivity : AppCompatActivity() {
 
 
     private fun hideLoadingUi() {
-        binding.loadingText.visibility = View.GONE
-        binding.loader.visibility = View.GONE
+        loading_text.visibility = View.GONE
+        loader.visibility = View.GONE
 
-        binding.welcomeTitle.visibility = View.VISIBLE
-        binding.tvName.visibility = View.VISIBLE
-        binding.walletAddress.visibility = View.VISIBLE
-        binding.walletBalanceUnit.visibility = View.VISIBLE
-        binding.creatorFee.visibility = View.VISIBLE
-        binding.creatorFeeUnit.visibility = View.VISIBLE
-        binding.walletBalance.visibility = View.VISIBLE
-        binding.tapInstructions.visibility = View.VISIBLE
-        binding.qrCode.visibility = View.VISIBLE
+        welcome_title.visibility = View.VISIBLE
+        tv_name.visibility = View.VISIBLE
+        wallet_address.visibility = View.VISIBLE
+        wallet_balance_unit.visibility = View.VISIBLE
+        creator_fee.visibility = View.VISIBLE
+        creator_fee_unit.visibility = View.VISIBLE
+        wallet_balance.visibility = View.VISIBLE
+        tap_instructions.visibility = View.VISIBLE
+        qr_code.visibility = View.VISIBLE
 
     }
 
     private fun showLoadingUi() {
+        loading_text.visibility = View.VISIBLE
+        loader.visibility = View.VISIBLE
 
-        binding.loadingText.visibility = View.VISIBLE
-        binding.loader.visibility = View.VISIBLE
-
-        binding.welcomeTitle.visibility = View.GONE
-        binding.tvName.visibility = View.GONE
-        binding.walletAddress.visibility = View.GONE
-        binding.walletBalanceUnit.visibility = View.GONE
-        binding.creatorFee.visibility = View.GONE
-        binding.creatorFeeUnit.visibility = View.GONE
-        binding.walletBalance.visibility = View.GONE
-        binding.tapInstructions.visibility = View.GONE
-        binding.qrCode.visibility = View.GONE
+        welcome_title.visibility = View.GONE
+        tv_name.visibility = View.GONE
+        wallet_address.visibility = View.GONE
+        wallet_balance_unit.visibility = View.GONE
+        creator_fee.visibility = View.GONE
+        creator_fee_unit.visibility = View.GONE
+        wallet_balance.visibility = View.GONE
+        tap_instructions.visibility = View.GONE
+        qr_code.visibility = View.GONE
     }
 
     private fun setupBouncyCastle() {

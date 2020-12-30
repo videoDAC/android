@@ -110,7 +110,7 @@ object Utils {
      * @param address given address in HEX
      * @return is this a valid address
      */
-    internal fun isValidETHAddress(address: String): Boolean {
+    internal fun isValidETHAddress(address: String): Boolean? {
         /*
          * check basic address requirements, i.e. is not empty and contains
          * the valid number and type of characters
@@ -126,7 +126,7 @@ object Utils {
         }
     }
 
-    private fun validateChecksumAddress(ethAddress: String): Boolean {
+    private fun validateChecksumAddress(ethAddress: String): Boolean? {
         val address = ethAddress.replace("0x", "")
         val hash: String = Numeric.toHexStringNoPrefix(Hash.sha3(address.toLowerCase(Locale.ROOT).toByteArray()))
         for (i in 0..39) {

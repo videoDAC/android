@@ -1,8 +1,7 @@
-package com.videodac.publisher.activities
+package com.videodac.publisher
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.videodac.publisher.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
