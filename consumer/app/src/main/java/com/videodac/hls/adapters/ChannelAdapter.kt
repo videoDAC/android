@@ -6,25 +6,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+
 import com.github.ybq.android.spinkit.SpinKitView
 import com.lelloman.identicon.view.GithubIdenticonView
-import com.videodac.hls.GlideApp
+
 import com.videodac.hls.R
 import com.videodac.hls.activities.VideoActivity
+import com.videodac.hls.helpers.Constants.CHANNEL_ADDRESS
 import com.videodac.hls.helpers.StatusHelper.ensNames
 import com.videodac.hls.helpers.StatusHelper.threeBoxAvatarUris
 import com.videodac.hls.helpers.StatusHelper.threeBoxNames
 import com.videodac.hls.helpers.Utils
-import com.videodac.hls.helpers.Utils.CHANNEL_ADDRESS
+
 import org.web3j.crypto.Hash
 import org.web3j.utils.Numeric
 import java.util.*
@@ -40,7 +44,7 @@ class ChannelAdapter(
         // only load valid ETH addresses
         val channel = channels[position]
 
-        if(Utils.isValidETHAddress(channel)!!) {
+        if(Utils.isValidETHAddress(channel)) {
 
              holder.realChannelAddress.text = channel
 
@@ -58,7 +62,7 @@ class ChannelAdapter(
                     holder.channelIdenticon.visibility = View.GONE
                     holder.imgLoading.visibility = View.VISIBLE
 
-                    GlideApp
+                    Glide
                         .with(activity)
                         .load(userImageUri)
                         .centerCrop()
@@ -151,14 +155,14 @@ class ChannelAdapter(
 
         override fun onClick(v: View?) {
 
-            if(Utils.isValidETHAddress(realChannelAddress.text.toString())!!) {
+            if(Utils.isValidETHAddress(realChannelAddress.text.toString())) {
                 activity.startActivity(
                     Intent(activity, VideoActivity::class.java).putExtra(
                         CHANNEL_ADDRESS,
                         realChannelAddress.text.toString()
                     )
                 )
-                Utils.closeActivity(activity, null)
+                Utils.closeActivity(activity, null, null)
             }
         }
     }
