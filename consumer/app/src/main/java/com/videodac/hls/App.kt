@@ -30,10 +30,4 @@ class App : MultiDexApplication() {
         // init the status endpoint
         status = retrofitHelper.getStatusService()
     }
-
-
-
-
-
-
 }
