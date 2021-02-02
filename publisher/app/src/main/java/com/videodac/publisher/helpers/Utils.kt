@@ -10,5 +10,5 @@ object  Utils {
 
     @JvmStatic
     internal fun getWeb3(context: Context) = Web3j.build(HttpService(context.getString(R.string.infura_url)))
-
+    
 }
