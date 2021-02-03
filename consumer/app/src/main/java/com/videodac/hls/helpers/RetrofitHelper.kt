@@ -21,7 +21,7 @@ class RetrofitHelper(private val context: Context) {
     // init the status service
     internal fun getStatusService(): Status {
         return Retrofit.Builder()
-            .baseUrl(context.getString(R.string.status_base_url))
+            .baseUrl(context.getString(R.string.streaming_base_url))
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient())
             .build()

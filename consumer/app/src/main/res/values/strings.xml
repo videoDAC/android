@@ -1,9 +1,6 @@
 <resources>
-    <string name="app_name">HimPrdshLiveTV</string>
-    <string name="wallet_balance">This app\'s balance:</string>
-    <string name="wallet_address">0xdac817294c0c87ca4fa1895ef4b972eade99f2fd</string>
+    <string name="app_name">consumer tv</string>
     <string name="qr_code">Qr Code</string>
-    <string name="infura_url">https://mainnet.infura.io/v3/2f1d95e69d874612a271a0c5745961d0</string>
     <string name="loading_burner_wallet">Loading wallet, please wait…</string>
     <string name="loading_stream">Loading stream, please wait…</string>
     <string name="livestream_credits">Viewing credit balance:</string>
@@ -11,13 +8,19 @@
     <string name="creator_fee">Pay to HimPrdshLiveTV to watch:</string>
     <string name="tap_instructions">Tap to copy this app\'s\naddress to clipboard</string>
     <string name="tv_name">HimPrdshLiveTV</string>
-    <string name="go_eth_unit">ETH</string>
     <string name="channel_header">Choose channel…</string>
     <string name="no_channels">No Channels Available</string>
 
-     <!-- URLS -->
-    <string name="status_base_url">http://89.145.161.141:7935/</string>
-    <string name="streaming_url">http://89.145.161.141:8935/stream/%s.m3u8</string>
+    <!-- Web 3 -->
+    <string name="infura_url">https://mainnet.infura.io/v3/2f1d95e69d874612a271a0c5745961d0</string>
+    <string name="wallet_balance">This app\'s balance:</string>
+    <string name="wallet_address">0xdac817294c0c87ca4fa1895ef4b972eade99f2fd</string>
+    <string name="go_eth_unit">ETH</string>
+
+
+     <!-- Streaming URLS -->
+    <string name="streaming_base_url">http://89.145.161.141:7935/</string>
+    <string name="stream_url">http://89.145.161.141:8935/stream/%s.m3u8</string>
     <string name="gas_price_base_url">https://ethgasstation.info/</string>
     <string name="three_box_base_url">https://ipfs.3box.io/</string>
     <string name="ipfs_base_url">https://ipfs.infura.io/ipfs/</string>
@@ -32,6 +35,8 @@
     <string name="three_box_image_key">image</string>
     <string name="three_box_content_url_key">contentUrl</string>
     <string name="three_box_content_hash">/</string>
+
+    <!-- Google Play Error -->
     <string name="google_play_error">Sorry this app requires the latest version of google play to work well, so please install or update it to continue</string>
     <string name="google_play_error_title">Google Play Error!</string>
     <string name="google_play_services_not_available_error">This app will not continue because google play services are not available in this device, please install them to continue!</string>

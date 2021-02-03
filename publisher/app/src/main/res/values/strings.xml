@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Publisher</string>
     <string name="infura_url">https://mainnet.infura.io/v3/2f1d95e69d874612a271a0c5745961d0</string>
+    <string name="launch_screen_title">live</string>
+    <string name="font_name">akkurat_mono.otf</string>
 </resources>

@@ -11,10 +11,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -28,7 +26,6 @@ import com.videodac.hls.helpers.Utils.goFullScreen
 import com.videodac.hls.helpers.Utils.streamingFeeInEth
 import com.videodac.hls.helpers.Utils.walletBalanceLeft
 import com.videodac.hls.helpers.Utils.walletPassword
-import com.videodac.hls.helpers.Utils.walletPublicKey
 import com.videodac.hls.helpers.WebThreeHelper.web3
 import kotlinx.android.synthetic.main.video.*
 import kotlinx.coroutines.Dispatchers
@@ -73,7 +70,7 @@ class VideoActivity : AppCompatActivity() {
         val factory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "Exo Player"))
 
         recipientAddress = intent.extras!!.getString(CHANNEL_ADDRESS)!!
-        val channelUrl = getString(R.string.streaming_url, recipientAddress)
+        val channelUrl = getString(R.string.stream_url, recipientAddress)
 
 
         val mediaSource = HlsMediaSource.Factory(factory).createMediaSource(Uri.parse(channelUrl))
