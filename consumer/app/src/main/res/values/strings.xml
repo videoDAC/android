@@ -22,7 +22,7 @@
     <string name="wallet_balance">This app\'s balance:</string>
     <string name="wallet_address">0xdac817294c0c87ca4fa1895ef4b972eade99f2fd</string>
     <string name="wallet_payment_unit">ETH</string>
-    <string name="wallet_balance_left">0.0002 ETH</string>
+    <string name="wallet_balance_left">0.0002</string>
     <string name="default_wallet_password">password</string>
 
      <!-- URLS -->

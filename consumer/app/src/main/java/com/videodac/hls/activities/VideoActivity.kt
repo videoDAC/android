@@ -150,7 +150,7 @@ class VideoActivity : AppCompatActivity() {
     private fun payStreamingFee() {
 
         // set the initial balance
-        binding.walletBalanceLeft.text = String.format("%.4f ", walletBalanceLeft) + "ETH"
+        binding.walletBalanceLeft.text = String.format("%.4f ", walletBalanceLeft) + getString(R.string.wallet_payment_unit)
 
         lifecycleScope.launch(Dispatchers.IO) {
 
@@ -189,7 +189,7 @@ class VideoActivity : AppCompatActivity() {
                         )
 
                         withContext(Dispatchers.Main) {
-                            binding.walletBalanceLeft.text = String.format("%.4f ", walletBalanceLeft) + " ETH"
+                            binding.walletBalanceLeft.text = String.format("%.4f ", walletBalanceLeft) + getString(R.string.wallet_payment_unit)
                         }
 
                         // finally stop playing the video if the balance is lesser than the streaming fee
