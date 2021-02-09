@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">Publisher</string>
-    <string name="infura_url">https://mainnet.infura.io/v3/2f1d95e69d874612a271a0c5745961d0</string>
+
     <string name="launch_screen_title">live</string>
     <string name="font_name">akkurat_mono.otf</string>
+
+    <!-- RPC Endpoint -->
+    <string name="infura_url">https://rpc-mumbai.maticvigil.com/v1/2fc198817cfdb343e061665ff554e207f7706f23</string>
+
+
+    <!-- gas price url -->
+    <string name="gas_price_base_url">https://gasstation-mainnet.matic.network/</string>
 </resources>
