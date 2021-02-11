@@ -14,9 +14,8 @@
     <string name="no_channels">No Channels Available</string>
 
     <!-- Web3 -->
-    <string name="rpc_url">https://%s.infura.io/v3/%s</string>
-    <string name="rpc_network">mainnet</string>
-    <string name="rpc_id">1b159090386c48bbb7828f1b346dcc11</string>
+    <string name="rpc_url">https://mainnet.infura.io/v3/1b159090386c48bbb7828f1b346dcc11</string>
+
 
     <!-- Wallet -->
     <string name="wallet_balance">This app\'s balance:</string>

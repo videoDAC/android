@@ -70,7 +70,7 @@ object Utils {
     }
 
     @JvmStatic
-    internal fun getWeb3(context: Context) = build(HttpService(context.getString(R.string.rpc_url,context.getString(R.string.rpc_network),context.getString(R.string.rpc_id))))
+    internal fun getWeb3(context: Context) = build(HttpService(context.getString(R.string.rpc_url)))
 
     @JvmStatic
     internal fun closeActivity(activity: AppCompatActivity, userAddress: String?, reason: String?) {
