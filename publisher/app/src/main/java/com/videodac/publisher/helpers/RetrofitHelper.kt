@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit
 class RetrofitHelper(private val context: Context) {
     private val TAG  = Retrofit::class.simpleName
 
-
     // init the gas price oracle
     internal fun getGasOracleService(): GasOracle {
         return Retrofit.Builder()

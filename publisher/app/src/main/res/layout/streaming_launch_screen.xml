@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/real_launch_screen"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginTop="60dp"
+    android:background="@android:color/black"
+    android:focusable="true"
+    android:keepScreenOn="true">
+
+
+    <TextView
+        android:id="@+id/channel_instructions"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/akkurat"
+        android:lineSpacingExtra="20dp"
+        android:text="@string/choose_a_live_stream"
+        android:textSize="32sp"
+        android:textColor="@color/dark_gray"
+        android:layout_centerInParent="true"
+        />
+
+    <FrameLayout
+        android:id="@+id/previewView"
+        android:layout_width="@dimen/camera_preview_size"
+        android:layout_height="@dimen/camera_preview_size"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
+
+    <TextView
+        android:id="@+id/you"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/akkurat"
+        android:text="@string/you_label"
+        android:textSize="32sp"
+        android:textColor="@color/dark_gray"
+        android:layout_marginRight="@dimen/you_label_right_margin"
+        android:layout_marginEnd="@dimen/you_label_right_margin"
+        android:layout_marginBottom="@dimen/you_label_bottom_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        />
+
+</RelativeLayout>

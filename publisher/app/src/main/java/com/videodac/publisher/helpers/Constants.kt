@@ -13,4 +13,8 @@ object Constants {
     // pref vars
     internal const val PRIVATE_MODE = 0
     internal const val PREF_NAME = "publisher-app-prefs"
+
+    //streaming vars
+    internal const val STREAMING_TAG = "STREAMING_TAG"
+
 }

@@ -47,8 +47,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // Avlib
-    implementation(name: 'AVlib2.0.0', ext: 'aar')
+    // livestreaming
+    implementation project(':librestreaming')
 
     // Kotlin
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -81,6 +81,11 @@ dependencies {
 
     // confetti
     implementation 'nl.dionsegijn:konfetti:1.2.6'
+
+    // android spinners
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+
+
 
     // THREADING
 

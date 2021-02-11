@@ -1,13 +1,56 @@
 <resources>
     <string name="app_name">Publisher</string>
 
+    <!-- App Settings -->
+    <string name="loading_burner_wallet">Loading Wallet…</string>
     <string name="launch_screen_title">live</string>
     <string name="font_name">akkurat_mono.otf</string>
 
     <!-- RPC Endpoint -->
-    <string name="infura_url">https://rpc-mumbai.maticvigil.com/v1/2fc198817cfdb343e061665ff554e207f7706f23</string>
 
+    <!-- matic -->
+    <string name="rpc_url">https://rpc-mumbai.maticvigil.com/v1/2fc198817cfdb343e061665ff554e207f7706f23</string>
 
-    <!-- gas price url -->
+    <!-- infura
+    <string name="rpc_url">https://mainnet.infura.io/v3/1b159090386c48bbb7828f1b346dcc11</string>
+    -->
+
+    <!-- Gas Price url -->
     <string name="gas_price_base_url">https://gasstation-mainnet.matic.network/</string>
+
+    <!-- Google Play Error -->
+    <string name="google_play_error">Sorry this app requires the latest version of google play to work well, so please install or update it to continue</string>
+    <string name="google_play_error_title">Google Play Error!</string>
+    <string name="google_play_services_not_available_error">This app will not continue because google play services are not available in this device, please install them to continue!</string>
+
+    <!-- Wallet Settings -->
+    <string name="wallet_public_key">0x69826De274580f49ef8e6e89f84b8eAb6CC9C20B</string>
+    <string name="wallet_balance">Credit: 0.000000000000000000 ETH</string>
+
+
+    <!--Alerts-->
+    <string name="alert_permissions">Please allow camera and audio permissions</string>
+    <string name="alert_permissions_denied_message">We are sorry, but the app can\'t broadcast without the requested permissions!!</string>
+    <string name="alert_multiple_networks">Please, make sure you are connected to action cam via wifi. Enable mobile network for internet connection as well</string>
+    <string name="alert_network_with_internet_connection">Please, make sure your current network connection has internet access</string>
+
+    <!--Errors-->
+    <string name="error_networks">Can\'t find networks. Please enable mobile network and connect to action camera via WIFI.</string>
+    <string name="error_camera">Cannot start camera preview. Check you action camera</string>
+    <string name="error_permissions">Missing permissions</string>
+    <string name="error_server">Server error</string>
+    <string name="error_connection">Connection Error</string>
+    <string name="error_display_not_found">Display capture error</string>
+
+    <!--Common-->
+    <string name="close">Close</string>
+    <string name="ok">OK</string>
+    <string name="you_label">You</string>
+    <string name="choose_a_live_stream">Choose a live stream</string>
+
+    <!-- Streaming Settings -->
+    <string name="rtmp_base_url">rtmp://89.145.161.141:1935/%1$s</string>
+
+
+
 </resources>
