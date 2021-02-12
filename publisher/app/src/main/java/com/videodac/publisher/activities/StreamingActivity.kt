@@ -1,9 +1,12 @@
+@file:Suppress("DEPRECATION")
+
 package com.videodac.publisher.activities
 
 import android.Manifest
 import android.app.Dialog
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.graphics.Paint
 import android.graphics.SurfaceTexture
 import android.hardware.Camera
 import android.hardware.Camera.CameraInfo
@@ -36,48 +39,44 @@ import com.videodac.publisher.R
 import com.videodac.publisher.databinding.StreamingCameraScreenBinding
 import com.videodac.publisher.databinding.StreamingLaunchScreenBinding
 import com.videodac.publisher.databinding.StreamingScreenBinding
-
 import com.videodac.publisher.helpers.CameraPreview
 import com.videodac.publisher.helpers.Constants.PREF_NAME
 import com.videodac.publisher.helpers.Constants.PRIVATE_MODE
 import com.videodac.publisher.helpers.Constants.STREAMING_TAG
 import com.videodac.publisher.helpers.TypefaceSpan
 import com.videodac.publisher.helpers.Utils.getCameraInstance
+import com.videodac.publisher.helpers.Utils.getCurrentChain
 import com.videodac.publisher.helpers.Utils.releasePreviewCamera
 import com.videodac.publisher.helpers.Utils.walletBalance
 import com.videodac.publisher.helpers.Utils.walletPublicKey
 import com.videodac.publisher.ui.AspectTextureView
-import me.lake.librestreaming.client.RESClient
 
+import me.lake.librestreaming.client.RESClient
+import me.lake.librestreaming.core.listener.RESConnectionListener
 import me.lake.librestreaming.core.listener.RESVideoChangeListener
 import me.lake.librestreaming.model.RESConfig
 import me.lake.librestreaming.model.Size
 
-import org.web3j.crypto.Hash
-import org.web3j.utils.Numeric
-
-import java.util.*
-
-@Suppress("DEPRECATION")
-class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVideoChangeListener {
+class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVideoChangeListener, RESConnectionListener {
     // shared pref
     private lateinit var sharedPref: SharedPreferences
 
     // view binding
     private lateinit var mainScreenBinding: StreamingScreenBinding
-    private lateinit var launchLayoutBinding : StreamingLaunchScreenBinding
-    private lateinit var cameraLayoutBinding : StreamingCameraScreenBinding
+    private lateinit var launchLayoutBinding: StreamingLaunchScreenBinding
+    private lateinit var cameraLayoutBinding: StreamingCameraScreenBinding
 
     // permissions
     private var permissionsAlert: Dialog? = null
 
     // streaming
     private lateinit var resClient: RESClient
-    protected var texture: SurfaceTexture? = null
-    protected var sw = 0
-    protected  var sh = 0
+    private var texture: SurfaceTexture? = null
+    private var sw = 0
+    private var sh = 0
     private var isStreaming = false
-
+    private var frontCamOn = false
+    private var flashLightOn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +88,6 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
 
         setContentView(mainScreenBinding.root)
 
-
         // get the prefs
         sharedPref = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
 
@@ -99,14 +97,12 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
 
         // finally init the streaming ui
         showLaunchUI()
-
     }
 
     // setup top toolbar icons
     private fun setupToolbarIcons() {
         val actionBar: ActionBar? = supportActionBar
         if (actionBar != null) {
-
             actionBar.setDisplayHomeAsUpEnabled(true) // switch on the left hand icon
             actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_dehaze_24) // replace with your custom icon
         }
@@ -133,9 +129,9 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
 
             titleTextView.gravity = Gravity.CENTER_HORIZONTAL
             titleTextView.width = resources.displayMetrics.widthPixels
-            titleTextView.textSize = 28f
+            titleTextView.textSize = 24f
 
-            supportActionBar!!.title  = SpannableString(getString(R.string.launch_screen_title)).apply {
+            supportActionBar!!.title  = SpannableString(getString(R.string.live_label)).apply {
                 setSpan(
                     TypefaceSpan(this@StreamingActivity, getString(R.string.font_name)),
                     0,
@@ -143,8 +139,6 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
             }
-
-
         }
     }
 
@@ -152,25 +146,15 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
     private fun showLaunchUI() {
 
         // set the identicon
-        val hash = Numeric.toBigInt(
-            Hash.sha3(
-                walletPublicKey.toLowerCase(Locale.ROOT).toByteArray()
-            )
-        )
-       mainScreenBinding.channelIdenticon.hash = hash.toInt()
-
+       mainScreenBinding.channelIdenticon.setAddress(walletPublicKey)
 
         // set the wallet balance so far
-        val isMaticNetwork = getString(R.string.rpc_url).contains(
-            other = "matic",
-            ignoreCase = true
-        )
-
+        val isMaticNetwork = getCurrentChain(this@StreamingActivity)
         val symbol = if (isMaticNetwork) "MATIC" else "ETH"
         val balFormat = if (isMaticNetwork) "%.16f" else "%.18f"
         val walletBalanceString = String.format(balFormat, walletBalance)
         val creditText = "Credit: $walletBalanceString $symbol"
-        val spanColor1 = ContextCompat.getColor(this, R.color.walletBalance)
+        val spanColor1 = ContextCompat.getColor(this, R.color.greenColor)
         val spanLength = if (isMaticNetwork) 26 else 28
         mainScreenBinding.channelCredit.setText(creditText, BufferType.SPANNABLE)
          (mainScreenBinding.channelCredit.text as Spannable).apply {
@@ -182,7 +166,6 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
 
         // set the wallet public key
         mainScreenBinding.channelAddress.text = walletPublicKey
-
 
         // set the channel instructions
        val spanColor2 = ContextCompat.getColor(this, R.color.light_gray)
@@ -200,12 +183,14 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
         // listen for clicks on the preview ui, release the camera and launch the streaming ui
         launchLayoutBinding.previewView.setOnClickListener {
             releasePreviewCamera()
+            hideStreamingUI()
             showStreamingUI()
         }
 
     }
 
     // show the streaming ui
+    @Suppress("DEPRECATED_IDENTITY_EQUALS")
     private fun showStreamingUI() {
 
         // hide the launch screen
@@ -219,12 +204,12 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
         val rtmpaddr = getString(R.string.rtmp_base_url, walletPublicKey)
         resClient = RESClient()
         val resConfig = RESConfig.obtain()
-        resConfig.filterMode = RESConfig.FilterMode.SOFT
-        resConfig.targetVideoSize = Size(1440, 810)
-        resConfig.bitRate = 750 * 1024
-        resConfig.videoFPS = 20
-        resConfig.videoGOP = 1
-        resConfig.renderingMode = RESConfig.RenderingMode.OpenGLES
+        resConfig.targetVideoSize = Size(
+            getString(R.string.video_width).toInt(),
+            getString(R.string.video_height).toInt()
+        )
+        resConfig.bitRate = getString(R.string.video_bitrate).toInt()
+        resConfig.videoFPS = getString(R.string.video_fps).toInt()
         resConfig.defaultCamera = CameraInfo.CAMERA_FACING_BACK
         val frontDirection: Int
         val backDirection: Int
@@ -254,16 +239,92 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
         val s = resClient.videoSize
         val aspectRatio = s.width.toDouble() / s.height
         mainScreenBinding.streamingScreen.livestreamView.setAspectRatio(
-            AspectTextureView.MODE_OUTSIDE,
+            AspectTextureView.MODE_FITXY,
             aspectRatio
         )
+
         Log.d(STREAMING_TAG, "version=" + resClient.vertion)
 
+        // update the rest of the UI
+        val isMaticNetwork = getCurrentChain(this@StreamingActivity)
+        val price = if (isMaticNetwork) getString(
+            R.string.matic_price_label, getString(R.string.matic_price), getString(
+                R.string.price_label
+            )
+        ) else  getString(
+            R.string.eth_price_label,
+            getString(R.string.eth_price),
+            getString(R.string.price_label)
+        )
+        mainScreenBinding.streamingScreen.youIdenticon.setAddress(walletPublicKey)
+        mainScreenBinding.streamingScreen.streamingPrice.text = price
+        mainScreenBinding.streamingScreen.streamingPriceInstruction.text = getString(
+            R.string.set_your_price, getString(
+                R.string.price_label
+            )
+        )
+        mainScreenBinding.streamingScreen.streamingPriceInstruction.paintFlags = mainScreenBinding.streamingScreen.streamingPriceInstruction.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        mainScreenBinding.streamingScreen.broadcasterIdenticon.setAddress(getString(R.string.broadcaster_address))
+        mainScreenBinding.streamingScreen.youFooterIdenticon.setAddress(getString(R.string.you_address))
+        mainScreenBinding.streamingScreen.swapCam.setOnClickListener {
+            toggleCamIcon()
+            resClient.swapCamera()
+        }
+
+        mainScreenBinding.streamingScreen.flashLight.setOnClickListener {
+            toggleFlashLightIcon()
+            resClient.toggleFlashLight()
+        }
+
+
+        // listen for video changes
         resClient.setVideoChangeListener(this)
 
+        // start streaming and set the streaming flag to true
         resClient.startStreaming()
         isStreaming = true
+    }
 
+    // toggle cam icon on switch
+    private fun toggleCamIcon() {
+        if (frontCamOn) {
+            frontCamOn = false
+            mainScreenBinding.streamingScreen.swapCam.background = ContextCompat.getDrawable(
+                this@StreamingActivity,
+                R.drawable.ic_baseline_cameraswitch_off_24
+            )
+            if (flashLightOn) {
+                flashLightOn = false
+                mainScreenBinding.streamingScreen.flashLight.background = ContextCompat.getDrawable(
+                    this@StreamingActivity,
+                    R.drawable.ic_baseline_flash_on_24
+                )
+            }
+        }
+        else {
+            frontCamOn = true
+            mainScreenBinding.streamingScreen.swapCam.background = ContextCompat.getDrawable(
+                this@StreamingActivity,
+                R.drawable.ic_baseline_cameraswitch_on_24
+            )
+        }
+    }
+    // toggle flashlight icon switch
+    private fun toggleFlashLightIcon() {
+        if (flashLightOn) {
+            flashLightOn = false
+            mainScreenBinding.streamingScreen.flashLight.background = ContextCompat.getDrawable(
+                this@StreamingActivity,
+                R.drawable.ic_baseline_flash_on_24
+            )
+        }
+        else {
+            flashLightOn = true
+            mainScreenBinding.streamingScreen.flashLight.background = ContextCompat.getDrawable(
+                this@StreamingActivity,
+                R.drawable.ic_baseline_flash_off_24
+            )
+        }
     }
 
     // hide the streamming ui
@@ -271,15 +332,17 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
         // stop streaming first
         if (isStreaming) {
             resClient.stopStreaming()
-            resClient.destroy()
+         //
         }
-
 
         // hide the launch screen
         mainScreenBinding.launchScreen.realLaunchScreen.visibility = View.VISIBLE
 
         // then show the streaming screen
         mainScreenBinding.streamingScreen.realStreamingScreen.visibility = View.GONE
+
+        // set streaming to false
+        isStreaming = false
 
         // then finally show the launch screen
         showLaunchUI()
@@ -342,9 +405,8 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
     override fun onPause() {
         super.onPause()
         if(isStreaming) {
-            hideStreamingUI()
-        } else{
-            releasePreviewCamera()
+            isStreaming = false
+            finish()
         }
     }
 
@@ -390,15 +452,49 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
         return false
     }
 
-    override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
-
-    }
+    override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {}
 
     override fun onVideoSizeChanged(width: Int, height: Int) {
         mainScreenBinding.streamingScreen.livestreamView.setAspectRatio(
-            AspectTextureView.MODE_INSIDE,
+            AspectTextureView.MODE_FITXY,
             width.toDouble() / height
         )
     }
 
+    override fun onOpenConnectionResult(result: Int) {
+        /**
+         * result==0 success
+         * result!=0 failed
+         */
+
+        if (result == 0) {
+            Log.d(STREAMING_TAG, "server IP = " + resClient.serverIpAddr)
+
+            Toast.makeText(this, "connection started", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "connection failed", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    override fun onWriteError(errno: Int) {
+        /**
+         * failed to write data,maybe restart.
+         */
+
+        if (errno == 9) {
+            resClient.stopStreaming()
+            resClient.startStreaming()
+            Toast.makeText(this, "Re-connecting to rtmp server", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    override fun onCloseConnectionResult(result: Int) {
+        /**
+         * result==0 success
+         * result!=0 failed
+         */
+
+    }
 }

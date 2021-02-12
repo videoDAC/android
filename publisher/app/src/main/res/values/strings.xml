@@ -1,12 +1,10 @@
 <resources>
-    <string name="app_name">Publisher</string>
 
     <!-- App Settings -->
     <string name="loading_burner_wallet">Loading Wallet…</string>
-    <string name="launch_screen_title">live</string>
     <string name="font_name">akkurat_mono.otf</string>
 
-    <!-- RPC Endpoint -->
+    <!-- RPC Endpoints -->
 
     <!-- matic -->
     <string name="rpc_url">https://rpc-mumbai.maticvigil.com/v1/2fc198817cfdb343e061665ff554e207f7706f23</string>
@@ -42,15 +40,29 @@
     <string name="error_connection">Connection Error</string>
     <string name="error_display_not_found">Display capture error</string>
 
-    <!--Common-->
+    <!--Common Labels-->
     <string name="close">Close</string>
     <string name="ok">OK</string>
     <string name="you_label">You</string>
+    <string name="live_label">live</string>
     <string name="choose_a_live_stream">Choose a live stream</string>
 
     <!-- Streaming Settings -->
+    <string name="app_name">Publisher</string>
     <string name="rtmp_base_url">rtmp://89.145.161.141:1935/%1$s</string>
-
+    <string name="eth_price">0.000567</string>
+    <string name="matic_price">0.0001</string>
+    <string name="eth_price_label">%1s ETH %2s</string>
+    <string name="matic_price_label">%1s MATIC %2s</string>
+    <string name="set_your_price">set your price %1s</string>
+    <string name="price_label">per minute</string>
+    <string name="broadcaster_label">LIVE! stream broadcasted by:</string>
+    <string name="broadcaster_address">0xdac817294c0c87ca4fa1895ef4b972eade99f2fd</string>
+    <string name="you_address">0x0000000000000000000000000000000000000000</string>
+    <string name="video_width">900</string>
+    <string name="video_height">900</string>
+    <string name="video_bitrate">1024000</string>
+    <string name="video_fps">20</string>
 
 
 </resources>

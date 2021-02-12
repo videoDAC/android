@@ -9,12 +9,10 @@
     android:focusable="true"
     android:keepScreenOn="true">
 
-    <com.lelloman.identicon.view.GithubIdenticonView
+    <com.videodac.publisher.ui.BlockiesIdenticon
         android:id="@+id/channel_identicon"
         android:layout_width="@dimen/channel_identicon_size"
-        android:layout_height="@dimen/channel_identicon_size"
-        android:layout_marginLeft="@dimen/channel_identicon_left_margin"
-        android:layout_marginStart="@dimen/channel_identicon_left_margin" />
+        android:layout_height="@dimen/channel_identicon_size" />
 
     <TextView
         android:id="@+id/channel_credit"
@@ -54,5 +52,7 @@
         android:id="@+id/streaming_screen"
         layout="@layout/streaming_camera_screen"
         />
+
+
 
 </RelativeLayout>

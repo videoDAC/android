@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="wallet_text_padding_left">55dp</dimen>
+    <dimen name="channel_identicon_size">45dp</dimen>
+    <dimen name="wallet_text_padding_left">50dp</dimen>
     <dimen name="wallet_text_height">20dp</dimen>
-    <dimen name="channel_identicon_size">40dp</dimen>
-    <dimen name="channel_identicon_left_margin">10dp</dimen>
     <dimen name="camera_preview_size">120dp</dimen>
     <dimen name="you_label_right_margin">20dp</dimen>
     <dimen name="you_label_bottom_margin">5dp</dimen>
+    <dimen name="live_label">24sp</dimen>
+    <dimen name="cam_control">30dp</dimen>
+    <dimen name="cam_control_left_padding">20dp</dimen>
+    <dimen name="cam_control_margin_top">10dp</dimen>
+    <dimen name="you_labels_left_padding">120dp</dimen>
+    <dimen name="you_identicon_size">110dp</dimen>
 </resources>

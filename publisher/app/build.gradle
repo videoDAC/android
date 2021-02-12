@@ -75,16 +75,12 @@ dependencies {
 
     // Permissions
     implementation 'com.github.quickpermissions:quickpermissions-kotlin:0.4.0'
-
-    // Identicons
-    implementation 'com.github.lelloman:android-identicons:v11'
-
+    
     // confetti
     implementation 'nl.dionsegijn:konfetti:1.2.6'
 
     // android spinners
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
-
 
 
     // THREADING
@@ -106,7 +102,6 @@ dependencies {
     // JSON Parsing
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-
 
     // Testing
     testImplementation 'junit:junit:4.13.1'

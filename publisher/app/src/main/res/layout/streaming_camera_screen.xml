@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/real_streaming_screen"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_marginTop="60dp"
+    android:layout_marginTop="45dp"
     android:visibility="gone"
     android:focusable="true"
     android:keepScreenOn="true">
@@ -11,13 +12,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0px"
-            android:layout_weight="10"
+            android:layout_weight="11"
             android:background="@android:color/black">
 
             <FrameLayout
@@ -28,69 +29,183 @@
                     android:id="@+id/livestream_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
+
             </FrameLayout>
 
-            <SeekBar
-                android:id="@+id/sb_zoom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:indeterminate="false"
-                android:padding="10dp" />
+            <ImageButton
+                android:id="@+id/swap_cam"
+                android:scaleType="fitXY"
+                android:layout_width="@dimen/cam_control"
+                android:layout_height="@dimen/cam_control"
+                android:layout_marginTop="@dimen/cam_control_margin_top"
+                android:cropToPadding="false"
+                android:paddingLeft="@dimen/cam_control_left_padding"
+                android:paddingStart="@dimen/cam_control_left_padding"
+                android:background="@drawable/ic_baseline_cameraswitch_off_24"
+                tools:ignore="ContentDescription,RtlSymmetry" />
+
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:text="volume"/>
-                <SeekBar
-                    android:id="@+id/sb_volume"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:indeterminate="false"
-                    android:padding="10dp" />
+                    android:layout_marginTop="@dimen/cam_control_margin_top"
+                    android:textColor="@color/greenColor"
+                    android:fontFamily="@font/akkurat"
+                    android:gravity="center_horizontal"
+                    android:textSize="@dimen/live_label"
+                    android:text="@string/live_label"/>
             </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/flash_light"
+                android:scaleType="fitXY"
+                android:layout_width="@dimen/cam_control"
+                android:layout_height="@dimen/cam_control"
+                android:layout_marginTop="@dimen/cam_control_margin_top"
+                android:layout_gravity="end"
+                android:cropToPadding="false"
+                android:paddingLeft="@dimen/cam_control_left_padding"
+                android:paddingStart="@dimen/cam_control_left_padding"
+                android:background="@drawable/ic_baseline_flash_on_24"
+                tools:ignore="ContentDescription,RtlSymmetry" />
+
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="6"
-            android:orientation="vertical"
-            android:paddingBottom="5dp">
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btn_toggle"
-                android:layout_height="0px"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Start" />
+            <RelativeLayout
+                android:id="@+id/price_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/btn_swap"
-                android:layout_height="0px"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Swap" />
-            <Button
-                android:id="@+id/btn_flash"
-                android:layout_height="0px"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Flash" />
-            <Button
-                android:id="@+id/btn_screenshot"
-                android:layout_height="0px"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Screenshot" />
+                <com.videodac.publisher.ui.BlockiesIdenticon
+                    android:id="@+id/you_identicon"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:layout_width="@dimen/you_identicon_size"
+                    android:layout_height="@dimen/you_identicon_size" />
+
+                <TextView
+                    android:id="@+id/you_label"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/you_labels_left_padding"
+                    android:paddingStart="@dimen/you_labels_left_padding"
+                    android:textColor="@color/greenColor"
+                    android:fontFamily="@font/akkurat"
+                    android:text="@string/you_label"
+                    android:textSize="46sp"
+                    tools:ignore="RtlSymmetry" />
+
+                <TextView
+                    android:id="@+id/streaming_price"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/you_labels_left_padding"
+                    android:paddingStart="@dimen/you_labels_left_padding"
+                    android:textColor="@color/greenColor"
+                    android:fontFamily="@font/akkurat"
+                    android:text="@string/price_label"
+                    android:textSize="12sp"
+                    android:layout_below="@id/you_label"
+                    tools:ignore="RtlSymmetry" />
+
+                <TextView
+                    android:id="@+id/streaming_price_instruction"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="@dimen/you_labels_left_padding"
+                    android:paddingStart="@dimen/you_labels_left_padding"
+                    android:textColor="@color/dark_gray"
+                    android:fontFamily="@font/akkurat"
+                    android:text="@string/set_your_price"
+                    android:textSize="12sp"
+                    android:layout_below="@id/streaming_price"
+                    tools:ignore="RtlSymmetry" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/broadcaster_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <com.videodac.publisher.ui.BlockiesIdenticon
+                    android:id="@+id/broadcaster_identicon"
+                    android:padding="0dp"
+                    android:layout_margin="0dp"
+                    android:layout_width="@dimen/channel_identicon_size"
+                    android:layout_height="@dimen/channel_identicon_size" />
+
+                <TextView
+                    android:id="@+id/broadcaster_instruction"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="@dimen/wallet_text_padding_left"
+                    android:paddingStart="@dimen/wallet_text_padding_left"
+                    android:textColor="@color/greenColor"
+                    android:fontFamily="@font/akkurat"
+                    android:text="@string/broadcaster_label"
+                    android:textSize="8sp"
+                    tools:ignore="RtlSymmetry,SmallSp" />
+
+                <TextView
+                    android:id="@+id/broadcaster_address"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="@dimen/wallet_text_padding_left"
+                    android:paddingStart="@dimen/wallet_text_padding_left"
+                    android:textColor="@color/greenColor"
+                    android:fontFamily="@font/akkurat"
+                    android:text="@string/broadcaster_address"
+                    android:textSize="8sp"
+                    android:layout_below="@id/broadcaster_instruction"
+                    tools:ignore="RtlSymmetry,SmallSp" />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/you_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <com.videodac.publisher.ui.BlockiesIdenticon
+                    android:id="@+id/you_footer_identicon"
+                    android:layout_width="@dimen/camera_preview_size"
+                    android:layout_height="@dimen/camera_preview_size"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"/>
+
+                <TextView
+                    android:id="@+id/you"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/akkurat"
+                    android:text="@string/you_label"
+                    android:textSize="32sp"
+                    android:textColor="@color/dark_gray"
+                    android:layout_marginRight="@dimen/you_label_right_margin"
+                    android:layout_marginEnd="@dimen/you_label_right_margin"
+                    android:layout_marginBottom="@dimen/you_label_bottom_margin"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    />
+
+            </RelativeLayout>
+
         </LinearLayout>
     </LinearLayout>
 
