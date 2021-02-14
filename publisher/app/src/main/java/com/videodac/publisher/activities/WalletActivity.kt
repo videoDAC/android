@@ -66,8 +66,6 @@ class WalletActivity  : AppCompatActivity() {
 
         }
 
-
-
     }
 
     // check if user has the latest google play apk installed

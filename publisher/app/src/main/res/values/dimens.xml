@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="channel_identicon_size">45dp</dimen>
-    <dimen name="wallet_text_padding_left">50dp</dimen>
+    <dimen name="wallet_text_padding_left">55dp</dimen>
     <dimen name="wallet_text_height">20dp</dimen>
     <dimen name="camera_preview_size">120dp</dimen>
     <dimen name="you_label_right_margin">20dp</dimen>

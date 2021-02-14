@@ -4,37 +4,30 @@ package com.videodac.publisher.activities
 
 import android.Manifest
 import android.app.Dialog
+import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Paint
 import android.graphics.SurfaceTexture
 import android.hardware.Camera
 import android.hardware.Camera.CameraInfo
-import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
-import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
-import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
 import android.view.TextureView.SurfaceTextureListener
-import android.view.View
-import android.widget.TextView
+import android.widget.ImageButton
 import android.widget.TextView.BufferType
 import android.widget.Toast
-
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.livinglifetechway.quickpermissions_kotlin.util.QuickPermissionsOptions
 import com.livinglifetechway.quickpermissions_kotlin.util.QuickPermissionsRequest
-
 import com.videodac.publisher.R
 import com.videodac.publisher.databinding.StreamingCameraScreenBinding
 import com.videodac.publisher.databinding.StreamingLaunchScreenBinding
@@ -43,19 +36,18 @@ import com.videodac.publisher.helpers.CameraPreview
 import com.videodac.publisher.helpers.Constants.PREF_NAME
 import com.videodac.publisher.helpers.Constants.PRIVATE_MODE
 import com.videodac.publisher.helpers.Constants.STREAMING_TAG
-import com.videodac.publisher.helpers.TypefaceSpan
 import com.videodac.publisher.helpers.Utils.getCameraInstance
 import com.videodac.publisher.helpers.Utils.getCurrentChain
 import com.videodac.publisher.helpers.Utils.releasePreviewCamera
 import com.videodac.publisher.helpers.Utils.walletBalance
 import com.videodac.publisher.helpers.Utils.walletPublicKey
 import com.videodac.publisher.ui.AspectTextureView
-
 import me.lake.librestreaming.client.RESClient
 import me.lake.librestreaming.core.listener.RESConnectionListener
 import me.lake.librestreaming.core.listener.RESVideoChangeListener
 import me.lake.librestreaming.model.RESConfig
 import me.lake.librestreaming.model.Size
+
 
 class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVideoChangeListener, RESConnectionListener {
     // shared pref
@@ -92,59 +84,39 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
         sharedPref = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
 
         // setup the toolbar icons
-        setupToolbarIcons()
-        centerActionBarTitle()
+        showActionBar()
 
         // finally init the streaming ui
         showLaunchUI()
     }
 
-    // setup top toolbar icons
-    private fun setupToolbarIcons() {
-        val actionBar: ActionBar? = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true) // switch on the left hand icon
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_dehaze_24) // replace with your custom icon
+    // setup custom toolbar with icons
+    private fun showActionBar() {
+        val inflator = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val v = inflator.inflate(R.layout.streaming_header, null)
+        val actionBar = supportActionBar
+        actionBar!!.setDisplayHomeAsUpEnabled(false)
+        actionBar.setDisplayShowHomeEnabled(false)
+        actionBar.setDisplayShowCustomEnabled(true)
+        actionBar.setDisplayShowTitleEnabled(false)
+        actionBar.navigationMode = ActionBar.NAVIGATION_MODE_STANDARD
+        actionBar.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        actionBar.customView = v
+
+        val closeButton = findViewById<View>(R.id.close_btn) as ImageButton
+        val homeButton = findViewById<View>(R.id.home_btn) as ImageButton
+
+        homeButton.setOnClickListener {
+           startActivity(Intent(this@StreamingActivity, InfoActivity::class.java))
+            finish()
         }
-    }
-
-    // center the toolbar title
-    private fun centerActionBarTitle() {
-        val titleId: Int = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            resources.getIdentifier("action_bar_title", "id", "android")
-        } else {
-            // This is the id is from your app's generated R class when ActionBarActivity is used
-            // for SupportActionBar
-            1
-        }
-
-        // Final check for non-zero invalid id
-        if (titleId > 0) {
-            val titleTextView = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                findViewById<View>(titleId) as TextView
-            } else {
-                val toolbar = findViewById<View>(R.id.action_bar) as Toolbar
-                toolbar.getChildAt(0) as TextView
-            }
-
-            titleTextView.gravity = Gravity.CENTER_HORIZONTAL
-            titleTextView.width = resources.displayMetrics.widthPixels
-            titleTextView.textSize = 24f
-
-            supportActionBar!!.title  = SpannableString(getString(R.string.live_label)).apply {
-                setSpan(
-                    TypefaceSpan(this@StreamingActivity, getString(R.string.font_name)),
-                    0,
-                    length,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-            }
+        closeButton.setOnClickListener {
+            finish()
         }
     }
 
     // show the launch UI
     private fun showLaunchUI() {
-
         // set the identicon
        mainScreenBinding.channelIdenticon.setAddress(walletPublicKey)
 
@@ -192,7 +164,6 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
     // show the streaming ui
     @Suppress("DEPRECATED_IDENTITY_EQUALS")
     private fun showStreamingUI() {
-
         // hide the launch screen
         mainScreenBinding.launchScreen.realLaunchScreen.visibility = View.GONE
 
@@ -201,7 +172,7 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
         mainScreenBinding.streamingScreen.livestreamView.surfaceTextureListener = this
 
         // init the other streaming params
-        val rtmpaddr = getString(R.string.rtmp_base_url, walletPublicKey)
+        val rtmpAddress = getString(R.string.rtmp_base_url, walletPublicKey)
         resClient = RESClient()
         val resConfig = RESConfig.obtain()
         resConfig.targetVideoSize = Size(
@@ -229,7 +200,7 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
             resConfig.frontCameraDirectionMode =
                 (if (frontDirection == 90) RESConfig.DirectionMode.FLAG_DIRECTION_ROATATION_180 else RESConfig.DirectionMode.FLAG_DIRECTION_ROATATION_0) or RESConfig.DirectionMode.FLAG_DIRECTION_FLIP_HORIZONTAL
         }
-        resConfig.rtmpAddr = rtmpaddr
+        resConfig.rtmpAddr = rtmpAddress
         if (!resClient.prepare(resConfig)) {
             Log.e(STREAMING_TAG, "prepare,failed!!")
             Toast.makeText(this, "RESClient prepare failed", Toast.LENGTH_LONG).show()
@@ -416,23 +387,6 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
             hideStreamingUI()
         } else{
             releasePreviewCamera()
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
-        return when (item.itemId) {
-            R.id.close_activity -> {
-                finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 

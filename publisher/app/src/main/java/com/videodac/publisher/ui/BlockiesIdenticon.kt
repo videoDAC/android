@@ -12,13 +12,13 @@ import com.videodac.publisher.R
  */
 class BlockiesIdenticon : View {
 
-    private val DEFAULT_RADIUS = 1f
+    private val DEFAULT_RADIUS = 0f
     private var mData: BlockiesData
     private var mColor: Paint? = null
     private var mBackground: Paint? = null
     private var mSpot: Paint? = null
     private val mBlock = RectF()
-    private var cornerRadius = 20f
+    private var cornerRadius = 0f
     private var mShadowPaint: Paint? = null
     private var mBrightPaint: Paint? = null
     var isHasShadow = false
@@ -72,8 +72,7 @@ class BlockiesIdenticon : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val clipPath = Path()
-        val radius = 10.0f
-        val padding = radius / 2
+        val padding = 0f
         val w = this.width
         val h = this.height
         clipPath.addRoundRect(

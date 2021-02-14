@@ -63,6 +63,7 @@
     <string name="video_height">900</string>
     <string name="video_bitrate">1024000</string>
     <string name="video_fps">20</string>
+    <string name="home_button">home button</string>
 
 
 </resources>

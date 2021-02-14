@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/real_streaming_screen"
     android:layout_width="fill_parent"
@@ -43,7 +44,6 @@
                 android:paddingStart="@dimen/cam_control_left_padding"
                 android:background="@drawable/ic_baseline_cameraswitch_off_24"
                 tools:ignore="ContentDescription,RtlSymmetry" />
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -89,8 +89,6 @@
 
                 <com.videodac.publisher.ui.BlockiesIdenticon
                     android:id="@+id/you_identicon"
-                    android:padding="0dp"
-                    android:layout_margin="0dp"
                     android:layout_width="@dimen/you_identicon_size"
                     android:layout_height="@dimen/you_identicon_size" />
 
@@ -142,8 +140,6 @@
 
                 <com.videodac.publisher.ui.BlockiesIdenticon
                     android:id="@+id/broadcaster_identicon"
-                    android:padding="0dp"
-                    android:layout_margin="0dp"
                     android:layout_width="@dimen/channel_identicon_size"
                     android:layout_height="@dimen/channel_identicon_size" />
 
@@ -207,6 +203,7 @@
             </RelativeLayout>
 
         </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

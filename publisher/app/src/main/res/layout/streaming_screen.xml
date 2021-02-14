@@ -9,6 +9,7 @@
     android:focusable="true"
     android:keepScreenOn="true">
 
+
     <com.videodac.publisher.ui.BlockiesIdenticon
         android:id="@+id/channel_identicon"
         android:layout_width="@dimen/channel_identicon_size"
