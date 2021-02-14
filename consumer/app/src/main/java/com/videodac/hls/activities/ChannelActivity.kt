@@ -88,7 +88,7 @@ class ChannelActivity : AppCompatActivity() {
 
             if (Utils.isValidETHAddress(it)){
 
-                val ensName = Utils.resolveChannelENSName(it, web3!!)
+                val ensName = Utils.resolveChannelENSName(it)
 
                 if (ensName.isNotEmpty()) ensNames[it] = ensName
             }

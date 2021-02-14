@@ -2,7 +2,6 @@ package com.videodac.hls
 
 import androidx.multidex.MultiDexApplication
 
-
 import com.videodac.hls.helpers.GasOracleHelper.gasOracle
 import com.videodac.hls.helpers.RetrofitHelper
 import com.videodac.hls.helpers.StatusHelper.status

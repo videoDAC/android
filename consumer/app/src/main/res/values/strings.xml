@@ -14,20 +14,21 @@
     <string name="no_channels">No Channels Available</string>
 
     <!-- Web3 -->
-    <string name="rpc_url">https://mainnet.infura.io/v3/1b159090386c48bbb7828f1b346dcc11</string>
+    <string name="rpc_url">https://rpc-mumbai.maticvigil.com/v1/2fc198817cfdb343e061665ff554e207f7706f23</string>
 
 
     <!-- Wallet -->
     <string name="wallet_balance">This app\'s balance:</string>
     <string name="wallet_address">0xdac817294c0c87ca4fa1895ef4b972eade99f2fd</string>
-    <string name="wallet_payment_unit">ETH</string>
+    <string name="wallet_payment_unit">MATIC</string>
     <string name="wallet_balance_left">0.0002</string>
     <string name="default_wallet_password">password</string>
+    <string name="streaming_fee">0.0001</string>
 
      <!-- URLS -->
     <string name="livestream_base_url">http://89.145.161.141:7935/</string>
     <string name="streaming_url">http://89.145.161.141:8935/stream/%s.m3u8</string>
-    <string name="gas_price_base_url">https://ethgasstation.info/</string>
+    <string name="gas_price_base_url">https://gasstation-mainnet.matic.network/</string>
     <string name="three_box_base_url">https://ipfs.3box.io/</string>
     <string name="ipfs_base_url">https://ipfs.infura.io/ipfs/</string>
 

@@ -30,7 +30,6 @@ import com.videodac.hls.helpers.Constants.WALLET_PATH
 
 import com.videodac.hls.helpers.Utils.closeActivity
 import com.videodac.hls.helpers.Utils.goFullScreen
-import com.videodac.hls.helpers.Utils.streamingFeeInEth
 import com.videodac.hls.helpers.Utils.walletBalanceLeft
 import com.videodac.hls.helpers.WebThreeHelper.web3
 
@@ -61,6 +60,7 @@ class VideoActivity : AppCompatActivity() {
     lateinit var recipientAddress: String
 
     // stream funds every second
+    private lateinit var streamingFee: String
     private val loopDelay = 60000L
 
     // view binding
@@ -76,6 +76,9 @@ class VideoActivity : AppCompatActivity() {
 
         goFullScreen(this, LANDSCAPE_ORIENTATION)
         sharedPref = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
+
+        // set the streaming price
+        streamingFee = getString(R.string.streaming_fee)
     }
 
     private fun initializePlayer() {
@@ -172,12 +175,12 @@ class VideoActivity : AppCompatActivity() {
 
                     val transferReceipt = Transfer.sendFunds(
                         web3, credentials, recipientAddress, BigDecimal.valueOf(
-                            streamingFeeInEth
+                            streamingFee.toDouble()
                         ), Unit.ETHER
                     ).send()
 
                     if(transferReceipt.isStatusOK) {
-                        Log.d(TAG, "Streamed $streamingFeeInEth to $recipientAddress")
+                        Log.d(TAG, "Streamed $streamingFee to $recipientAddress")
 
                         val balanceWei = web3!!.ethGetBalance(
                             credentials.address,
@@ -193,7 +196,7 @@ class VideoActivity : AppCompatActivity() {
                         }
 
                         // finally stop playing the video if the balance is lesser than the streaming fee
-                        if (walletBalanceLeft < BigDecimal.valueOf(streamingFeeInEth)) {
+                        if (walletBalanceLeft < BigDecimal.valueOf(streamingFee.toDouble())) {
                             streamingFunds = false
 
                             closeStream(null,"You have run out of streaming funds, please topup!")
@@ -206,7 +209,7 @@ class VideoActivity : AppCompatActivity() {
                     Log.e(TAG, ex.message!!)
                 }
                 catch (re: RuntimeException){
-                    if (streamingFeeInEth != 0.0) {
+                    if (streamingFee.toDouble() != 0.0) {
                         streamingFunds = false
 
                         closeStream(null, re.message)

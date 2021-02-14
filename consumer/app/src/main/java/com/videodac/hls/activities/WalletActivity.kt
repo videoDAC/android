@@ -30,7 +30,6 @@ import com.videodac.hls.helpers.Utils
 
 import com.videodac.hls.helpers.Utils.closeActivity
 import com.videodac.hls.helpers.Utils.gasPrice
-import com.videodac.hls.helpers.Utils.streamingFeeInEth
 import com.videodac.hls.helpers.Utils.walletBalanceLeft
 import com.videodac.hls.helpers.Utils.walletPublicKey
 import com.videodac.hls.helpers.WebThreeHelper.web3
@@ -64,6 +63,9 @@ class WalletActivity : AppCompatActivity() {
     // the balance check delay
     private val loopDelay = 2000L
 
+    // streaming fee
+    private lateinit var streamingFee: String
+
     // view binding
     private lateinit var binding: WalletBinding
 
@@ -74,6 +76,9 @@ class WalletActivity : AppCompatActivity() {
         // setup binding
         binding = WalletBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // set the streaming price
+        streamingFee = getString(R.string.streaming_fee)
 
         // check if
         installTls12()
@@ -165,7 +170,7 @@ class WalletActivity : AppCompatActivity() {
         binding.walletBalanceUnit.text = "0 " + getString(R.string.wallet_payment_unit) // default balance will always be zero
         binding.walletAddress.text = walletPublicKey
         binding.creatorFee.text = getString(R.string.creator_fee, getString(R.string.tv_name))
-        binding.creatorFeeUnit.text = String.format("%.4f ", streamingFeeInEth) + getString(R.string.wallet_payment_unit) + " per minute + gas"
+        binding.creatorFeeUnit.text = String.format("%.4f ", streamingFee.toDouble()) + getString(R.string.wallet_payment_unit) + " per minute + gas"
 
         // set the qr code for the address too
         binding.qrCode.setImageBitmap(QRCode.from(walletPublicKey).withHint(EncodeHintType.MARGIN, 1).bitmap())
@@ -197,7 +202,7 @@ class WalletActivity : AppCompatActivity() {
                 gasPrice = BigInteger.valueOf(fastGasPriceInWei.toLong())
 
                 // then add it to the streaming fee
-                val streamingFeeInWei = Convert.toWei(BigDecimal(streamingFeeInEth), Unit.ETHER)
+                val streamingFeeInWei = Convert.toWei(BigDecimal(streamingFee), Unit.ETHER)
 
                 val totalFeeInWei = fastGasPriceInWei + streamingFeeInWei
 
@@ -278,7 +283,7 @@ class WalletActivity : AppCompatActivity() {
                     Log.d("Getting balance", "has gotten balance")
                     checkingBal = false
                     // check if the user has enough funds to start streaming
-                    if (balanceInEther >= BigDecimal.valueOf(streamingFeeInEth)) {
+                    if (balanceInEther >= BigDecimal.valueOf(streamingFee.toDouble())) {
                         walletBalanceLeft  = balanceInEther
                         startActivity(Intent(this@WalletActivity, ChannelActivity::class.java))
                         closeActivity(this@WalletActivity, null, null)

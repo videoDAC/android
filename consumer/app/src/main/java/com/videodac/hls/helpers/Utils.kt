@@ -30,7 +30,6 @@ import java.util.regex.Pattern
 
 object Utils {
 
-    internal var streamingFeeInEth = 0.000
     internal var walletBalanceLeft = BigDecimal(0)
 
 
@@ -66,11 +65,11 @@ object Utils {
             decorView.systemUiVisibility = uiOptions
         }
 
-
     }
 
     @JvmStatic
     internal fun getWeb3(context: Context) = build(HttpService(context.getString(R.string.rpc_url)))
+
 
     @JvmStatic
     internal fun closeActivity(activity: AppCompatActivity, userAddress: String?, reason: String?) {
@@ -89,10 +88,13 @@ object Utils {
         activity.finish()
     }
 
+    // because ENS only resolves for mainnet addresses, we hardcode it to always point to the infura mainnet nodes
     @JvmStatic
-    internal fun resolveChannelENSName(address: String, web3j: Web3j) :String {
+    internal fun resolveChannelENSName(address: String) :String {
 
-        val ens = EnsResolver(web3j)
+        val  web3ENS = build(HttpService("https://mainnet.infura.io/v3/1b159090386c48bbb7828f1b346dcc11"))
+
+        val ens = EnsResolver(web3ENS)
         var name = ""
 
         try {
