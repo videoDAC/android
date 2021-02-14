@@ -237,16 +237,12 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
         mainScreenBinding.streamingScreen.streamingPriceInstruction.paintFlags = mainScreenBinding.streamingScreen.streamingPriceInstruction.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         mainScreenBinding.streamingScreen.broadcasterIdenticon.setAddress(getString(R.string.broadcaster_address))
         mainScreenBinding.streamingScreen.youFooterIdenticon.setAddress(getString(R.string.you_address))
-        mainScreenBinding.streamingScreen.swapCam.setOnClickListener {
-            toggleCamIcon()
-            resClient.swapCamera()
-        }
+
 
         mainScreenBinding.streamingScreen.flashLight.setOnClickListener {
             toggleFlashLightIcon()
             resClient.toggleFlashLight()
         }
-
 
         // listen for video changes
         resClient.setVideoChangeListener(this)
@@ -256,30 +252,6 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
         isStreaming = true
     }
 
-    // toggle cam icon on switch
-    private fun toggleCamIcon() {
-        if (frontCamOn) {
-            frontCamOn = false
-            mainScreenBinding.streamingScreen.swapCam.background = ContextCompat.getDrawable(
-                this@StreamingActivity,
-                R.drawable.ic_baseline_cameraswitch_off_24
-            )
-            if (flashLightOn) {
-                flashLightOn = false
-                mainScreenBinding.streamingScreen.flashLight.background = ContextCompat.getDrawable(
-                    this@StreamingActivity,
-                    R.drawable.ic_baseline_flash_on_24
-                )
-            }
-        }
-        else {
-            frontCamOn = true
-            mainScreenBinding.streamingScreen.swapCam.background = ContextCompat.getDrawable(
-                this@StreamingActivity,
-                R.drawable.ic_baseline_cameraswitch_on_24
-            )
-        }
-    }
     // toggle flashlight icon switch
     private fun toggleFlashLightIcon() {
         if (flashLightOn) {
