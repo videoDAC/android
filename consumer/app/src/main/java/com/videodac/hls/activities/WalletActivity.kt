@@ -18,11 +18,15 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.security.ProviderInstaller
 import com.google.zxing.EncodeHintType
+
 import com.videodac.hls.R
 import com.videodac.hls.databinding.WalletBinding
 import com.videodac.hls.helpers.Constants.LANDSCAPE_ORIENTATION
+import com.videodac.hls.helpers.Constants.PREF_NAME
+import com.videodac.hls.helpers.Constants.PRIVATE_MODE
 import com.videodac.hls.helpers.Constants.WALLET_CREATED
 import com.videodac.hls.helpers.Constants.WALLET_PATH
+import com.videodac.hls.helpers.Constants.WALLET_TAG
 import com.videodac.hls.helpers.GasOracleHelper.gasOracle
 import com.videodac.hls.helpers.StatusHelper.channels
 import com.videodac.hls.helpers.StatusHelper.status
@@ -55,9 +59,6 @@ import java.security.Security
 class WalletActivity : AppCompatActivity() {
 
     // shared preferences
-    private var PRIVATE_MODE = 0
-    private val PREF_NAME = "video-dac-video_dac_wallet"
-    private val TAG = "WALLET ACTIVITY"
     private lateinit var sharedPref: SharedPreferences
 
     // the balance check delay
@@ -210,7 +211,7 @@ class WalletActivity : AppCompatActivity() {
                 val totalFeeInEth = Convert.fromWei(totalFeeInWei, Unit.ETHER)
 
                 withContext(Dispatchers.Main) {
-                    Log.d(TAG, totalFeeInEth.toString())
+                    Log.d(WALLET_TAG, totalFeeInEth.toString())
                     binding.creatorFeeUnit.text = String.format(
                         "%.4f ",
                         totalFeeInEth

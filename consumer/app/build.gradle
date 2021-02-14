@@ -11,8 +11,8 @@ android {
         applicationId "com.videodac.hls"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 8
-        versionName "8.0"
+        versionCode 9
+        versionName "9.0"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -56,14 +56,13 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.0-beta01'
 
     // google material
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.android.material:material:1.3.0'
 
     // exoplayer
     implementation 'com.google.android.exoplayer:exoplayer:2.10.7'
 
     // web3 java
     implementation 'org.web3j:core:4.6.0-android'
-
 
     // android spinners
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
@@ -95,8 +94,6 @@ dependencies {
     // Photo Viewer
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
 
-    // Identicons
-    implementation 'com.github.lelloman:android-identicons:v11'
 
     // THREADING
 

@@ -19,7 +19,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 
 import com.github.ybq.android.spinkit.SpinKitView
-import com.lelloman.identicon.view.GithubIdenticonView
 
 import com.videodac.hls.R
 import com.videodac.hls.activities.VideoActivity
@@ -28,6 +27,7 @@ import com.videodac.hls.helpers.StatusHelper.ensNames
 import com.videodac.hls.helpers.StatusHelper.threeBoxAvatarUris
 import com.videodac.hls.helpers.StatusHelper.threeBoxNames
 import com.videodac.hls.helpers.Utils
+import com.videodac.hls.ui.BlockiesIdenticon
 
 import org.web3j.crypto.Hash
 import org.web3j.utils.Numeric
@@ -111,7 +111,7 @@ class ChannelAdapter(
                          channel.toLowerCase(Locale.ROOT).toByteArray()
                      )
                  )
-                 holder.channelIdenticon.hash = hash.toInt()
+                 holder.channelIdenticon.setAddress(channel)
              }
             else{
                 holder.channelAddress.text = channel
@@ -123,7 +123,7 @@ class ChannelAdapter(
                         channel.toLowerCase(Locale.ROOT).toByteArray()
                     )
                 )
-                holder.channelIdenticon.hash = hash.toInt()
+                 holder.channelIdenticon.setAddress(channel)
             }
 
         }
@@ -146,7 +146,7 @@ class ChannelAdapter(
         val channelAddress = v.findViewById(R.id.channel_address) as TextView
         val realChannelAddress = v.findViewById(R.id.real_channel_address) as TextView
         val channelIcon = v.findViewById(R.id.channel_icon) as ImageView
-        val channelIdenticon = v.findViewById(R.id.channel_identicon) as GithubIdenticonView
+        val channelIdenticon = v.findViewById(R.id.channel_identicon) as BlockiesIdenticon
         val imgLoading = v.findViewById(R.id.img_loader) as SpinKitView
 
         init {

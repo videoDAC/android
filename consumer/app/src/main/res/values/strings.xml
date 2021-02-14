@@ -16,12 +16,11 @@
     <!-- Web3 -->
     <string name="rpc_url">https://rpc-mumbai.maticvigil.com/v1/2fc198817cfdb343e061665ff554e207f7706f23</string>
 
-
     <!-- Wallet -->
     <string name="wallet_balance">This app\'s balance:</string>
-    <string name="wallet_address">0xdac817294c0c87ca4fa1895ef4b972eade99f2fd</string>
+    <string name="wallet_address_placeholder">0xdac817294c0c87ca4fa1895ef4b972eade99f2fd</string>
     <string name="wallet_payment_unit">MATIC</string>
-    <string name="wallet_balance_left">0.0002</string>
+    <string name="wallet_balance_left_placeholder">0.0002</string>
     <string name="default_wallet_password">password</string>
     <string name="streaming_fee">0.0001</string>
 

@@ -18,7 +18,7 @@
         android:scaleType="centerCrop"
         app:SpinKit_Color="@android:color/white" />
 
-    <com.lelloman.identicon.view.GithubIdenticonView
+    <com.videodac.hls.ui.BlockiesIdenticon
         android:id="@+id/channel_identicon"
         android:layout_width="100dp"
         android:layout_height="100dp" />

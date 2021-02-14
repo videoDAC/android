@@ -131,7 +131,7 @@
         android:layout_marginEnd="@dimen/qr_right_margin"
         android:layout_marginRight="@dimen/qr_right_margin"
         android:fontFamily="@font/akkurat"
-        android:text="@string/wallet_address"
+        android:text="@string/wallet_address_placeholder"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_size"
         app:layout_constraintEnd_toEndOf="parent"

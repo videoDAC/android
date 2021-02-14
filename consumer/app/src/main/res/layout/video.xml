@@ -51,7 +51,7 @@
         android:textColor="@android:color/white"
         android:background="@android:color/black"
         android:fontFamily="@font/akkurat"
-        android:text="@string/wallet_balance_left"
+        android:text="@string/wallet_balance_left_placeholder"
         />
 
     <com.github.ybq.android.spinkit.SpinKitView

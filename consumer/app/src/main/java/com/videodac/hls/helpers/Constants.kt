@@ -8,4 +8,8 @@ object Constants {
     internal const val WALLET_PATH = "WALLET_PATH"
     internal const val CHANNEL_ADDRESS = "CHANNEL_ADDRESS"
 
+    internal const val PRIVATE_MODE = 0
+    internal const val PREF_NAME = "consumer-app"
+    internal const val WALLET_TAG = "WALLET ACTIVITY"
+
 }
