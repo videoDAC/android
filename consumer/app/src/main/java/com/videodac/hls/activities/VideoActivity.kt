@@ -26,7 +26,10 @@ import com.videodac.hls.R
 import com.videodac.hls.databinding.VideoBinding
 import com.videodac.hls.helpers.Constants.CHANNEL_ADDRESS
 import com.videodac.hls.helpers.Constants.LANDSCAPE_ORIENTATION
+import com.videodac.hls.helpers.Constants.PREF_NAME
+import com.videodac.hls.helpers.Constants.PRIVATE_MODE
 import com.videodac.hls.helpers.Constants.WALLET_PATH
+import com.videodac.hls.helpers.Constants.WALLET_TAG
 
 import com.videodac.hls.helpers.Utils.closeActivity
 import com.videodac.hls.helpers.Utils.goFullScreen
@@ -45,16 +48,12 @@ import org.web3j.utils.Convert.Unit
 import java.io.IOException
 import java.math.BigDecimal
 
-
 class VideoActivity : AppCompatActivity() {
 
     private lateinit var player: SimpleExoPlayer
 
     // shared preferences
-    private var PRIVATE_MODE = 0
-    private val PREF_NAME = "video-dac-video_dac_wallet"
     private lateinit var sharedPref: SharedPreferences
-    private val TAG = "VIDEO_DAC_PLAYER"
 
     // recipientAddress
     lateinit var recipientAddress: String
@@ -65,7 +64,6 @@ class VideoActivity : AppCompatActivity() {
 
     // view binding
     private lateinit var binding: VideoBinding
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,11 +82,8 @@ class VideoActivity : AppCompatActivity() {
     private fun initializePlayer() {
         player = ExoPlayerFactory.newSimpleInstance(this)
         val factory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "Exo Player"))
-
         recipientAddress = intent.extras!!.getString(CHANNEL_ADDRESS)!!
         val channelUrl = getString(R.string.streaming_url, recipientAddress)
-
-
         val mediaSource = HlsMediaSource.Factory(factory).createMediaSource(Uri.parse(channelUrl))
 
         with(player, {
@@ -110,7 +105,7 @@ class VideoActivity : AppCompatActivity() {
 
                 override fun onRenderedFirstFrame() {
                     showPlayer()
-                    Log.d(TAG, String.format("First frame rendered"))
+                    Log.d(WALLET_TAG, String.format("First frame rendered"))
                 }
             })
 
@@ -119,7 +114,7 @@ class VideoActivity : AppCompatActivity() {
 
                    if (playbackState == ExoPlayer.STATE_IDLE){
                        //player back ended
-                       Log.d(TAG, String.format("Stream Ended!!"))
+                       Log.d(WALLET_TAG, String.format("Stream Ended!!"))
                        closeStream(null,"The livestream has ended :) ")
                    }
                }
@@ -172,15 +167,16 @@ class VideoActivity : AppCompatActivity() {
                     // open the video_dac_wallet into a Credential object
                     val walletPath = sharedPref.getString(WALLET_PATH, "")
                     val credentials = WalletUtils.loadCredentials(getString(R.string.default_wallet_password), walletPath)
+                    val fee = streamingFee.toDouble()
 
                     val transferReceipt = Transfer.sendFunds(
                         web3, credentials, recipientAddress, BigDecimal.valueOf(
-                            streamingFee.toDouble()
+                            fee
                         ), Unit.ETHER
                     ).send()
 
                     if(transferReceipt.isStatusOK) {
-                        Log.d(TAG, "Streamed $streamingFee to $recipientAddress")
+                        Log.d(WALLET_TAG, "Streamed $streamingFee to $recipientAddress")
 
                         val balanceWei = web3!!.ethGetBalance(
                             credentials.address,
@@ -204,9 +200,9 @@ class VideoActivity : AppCompatActivity() {
 
                     }
                 } catch (io: IOException) {
-                    Log.e(TAG, io.message!!)
+                    Log.e(WALLET_TAG, io.message!!)
                 } catch (ex: InterruptedException) {
-                    Log.e(TAG, ex.message!!)
+                    Log.e(WALLET_TAG, ex.message!!)
                 }
                 catch (re: RuntimeException){
                     if (streamingFee.toDouble() != 0.0) {

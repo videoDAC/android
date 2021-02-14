@@ -70,7 +70,6 @@ class WalletActivity : AppCompatActivity() {
     // view binding
     private lateinit var binding: WalletBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -354,6 +353,5 @@ class WalletActivity : AppCompatActivity() {
             }
         }
     }
-
 
 }
