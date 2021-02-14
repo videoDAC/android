@@ -91,9 +91,6 @@ dependencies {
     // Recycler View
     implementation 'androidx.recyclerview:recyclerview:1.2.0-beta01'
 
-    // Photo Viewer
-    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
-
 
     // THREADING
 
