@@ -167,9 +167,9 @@ class WalletActivity : AppCompatActivity() {
 
         // set the wallet text
         binding.walletBalance.text = getString(R.string.livestream_credits)
-        binding.walletBalanceUnit.text = "0 " + getString(R.string.wallet_payment_unit) // default balance will always be zero
+        binding.walletBalanceUnit.text = String.format("%.4f ", 0f) +  " " + getString(R.string.wallet_payment_unit) // default balance will always be zero
         binding.walletAddress.text = walletPublicKey
-        binding.creatorFee.text = getString(R.string.creator_fee, getString(R.string.tv_name))
+        binding.creatorFee.text = getString(R.string.creator_fee)
         binding.creatorFeeUnit.text = String.format("%.4f ", streamingFee.toDouble()) + getString(R.string.wallet_payment_unit) + " per minute + gas"
 
         // set the qr code for the address too
@@ -194,9 +194,9 @@ class WalletActivity : AppCompatActivity() {
                 val maticGasPrice = gasObj.getInt("fast")
 
                 // then set it globally
-                gasPrice =  maticGasPrice.toBigDecimal() / BigDecimal(10000)
+                val gasPrice =  maticGasPrice.toFloat() / 10000
 
-               val totalFeeInEth = streamingFee.toBigDecimal() + BigDecimal(0.0004)
+                val totalFeeInEth = streamingFee.toFloat() + gasPrice
 
                 withContext(Dispatchers.Main) {
                     Log.d(WALLET_TAG, totalFeeInEth.toString())
