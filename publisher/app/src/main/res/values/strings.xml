@@ -7,7 +7,7 @@
     <!-- RPC Endpoints -->
 
     <!-- matic -->
-    <string name="rpc_url">https://rpc-mumbai.maticvigil.com/v1/2fc198817cfdb343e061665ff554e207f7706f23</string>
+    <string name="rpc_url">https://rpc-mainnet.maticvigil.com/v1/2fc198817cfdb343e061665ff554e207f7706f23</string>
 
     <!-- Gas Price url -->
     <string name="gas_price_base_url">https://gasstation-mainnet.matic.network/</string>
@@ -46,7 +46,7 @@
     <!-- Streaming Settings -->
     <string name="app_name">Publisher</string>
     <string name="rtmp_base_url">rtmp://89.145.161.141:1935/%1$s</string>
-    <string name="streaming_price">0.0001</string>
+    <string name="streaming_price">1</string>
     <string name="matic_price_label">%1s MATIC %2s</string>
     <string name="set_your_price">set your price %1s</string>
     <string name="price_label">per minute</string>
@@ -59,6 +59,5 @@
     <string name="video_fps">20</string>
     <string name="home_button">home button</string>
     <string name="info_instruction_copy">To unload Credit, import the Private Key into an Ethereum wallet.</string>
-
 
 </resources>
