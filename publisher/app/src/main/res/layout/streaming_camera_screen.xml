@@ -10,11 +10,18 @@
     android:focusable="true"
     android:keepScreenOn="true">
 
+    <nl.dionsegijn.konfetti.KonfettiView
+        android:id="@+id/viewKonfetti"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:ignore="UselessParent">
+
+
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -73,7 +80,8 @@
             <RelativeLayout
                 android:id="@+id/price_layout"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="0dp"
+                android:layout_weight="2">
 
                 <com.videodac.publisher.ui.BlockiesIdenticon
                     android:id="@+id/you_identicon"
@@ -109,7 +117,7 @@
                     android:id="@+id/streaming_price_instruction"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="2dp"
                     android:paddingLeft="@dimen/you_labels_left_padding"
                     android:paddingStart="@dimen/you_labels_left_padding"
                     android:textColor="@color/dark_gray"
@@ -124,7 +132,8 @@
             <RelativeLayout
                 android:id="@+id/broadcaster_layout"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="0dp"
+                android:layout_weight="1">
 
                 <com.videodac.publisher.ui.BlockiesIdenticon
                     android:id="@+id/broadcaster_identicon"
@@ -162,12 +171,13 @@
             <RelativeLayout
                 android:id="@+id/you_layout"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="0dp"
+                android:layout_weight="2">
 
                 <com.videodac.publisher.ui.BlockiesIdenticon
                     android:id="@+id/you_footer_identicon"
-                    android:layout_width="@dimen/camera_preview_size"
-                    android:layout_height="@dimen/camera_preview_size"
+                    android:layout_width="@dimen/you_identicon_size"
+                    android:layout_height="@dimen/you_identicon_size"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"/>

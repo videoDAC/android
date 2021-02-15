@@ -15,7 +15,6 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -76,12 +75,11 @@ dependencies {
     // Permissions
     implementation 'com.github.quickpermissions:quickpermissions-kotlin:0.4.0'
     
-    // confetti
+    // Confetti
     implementation 'nl.dionsegijn:konfetti:1.2.6'
 
-    // android spinners
+    // Android spinners
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
-
 
     // THREADING
 

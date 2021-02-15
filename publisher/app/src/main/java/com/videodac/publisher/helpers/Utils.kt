@@ -17,8 +17,10 @@ import java.util.*
 @Suppress("DEPRECATION")
 object  Utils {
 
-    internal var walletPublicKey: String = ""
+    internal var walletAddress: String = ""
+    internal var walletPrivateKey: String = ""
     internal var walletBalance: BigDecimal =  BigDecimal(0)
+    internal var walletFirstPaymentReceived = false
 
     @JvmStatic
     internal fun getWeb3(context: Context) = Web3j.build(HttpService(context.getString(R.string.rpc_url)))
@@ -50,6 +52,8 @@ object  Utils {
             ignoreCase = true
         )
     }
+
+
 
     
 }

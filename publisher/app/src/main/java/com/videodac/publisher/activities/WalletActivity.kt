@@ -7,9 +7,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
@@ -17,21 +15,17 @@ import com.google.android.gms.security.ProviderInstaller
 
 import com.videodac.publisher.R
 import com.videodac.publisher.helpers.Constants
-import com.videodac.publisher.helpers.Constants.WALLET_TAG
-import com.videodac.publisher.helpers.Utils.walletBalance
-import com.videodac.publisher.helpers.Utils.walletPublicKey
-import com.videodac.publisher.helpers.WebThreeHelper
+import com.videodac.publisher.helpers.Constants.WALLET_CREATED
+import com.videodac.publisher.helpers.Constants.WALLET_FIRST_PAYMENT_RECEIVED
+import com.videodac.publisher.helpers.Constants.WALLET_PASSWORD
+import com.videodac.publisher.helpers.Constants.WALLET_PATH
+import com.videodac.publisher.helpers.Utils.walletFirstPaymentReceived
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.web3j.crypto.WalletUtils
-import org.web3j.protocol.core.DefaultBlockParameterName
-import org.web3j.utils.Convert
+
 import java.io.File
-import java.io.IOException
 import java.security.Security
 
 class WalletActivity  : AppCompatActivity() {
@@ -96,122 +90,29 @@ class WalletActivity  : AppCompatActivity() {
     // Initialize a burner wallet to be used for streaming funds to
     private fun initializeWallet() {
 
-        val walletCreated = sharedPref.getBoolean(Constants.WALLET_CREATED, false)
+        val walletCreated = sharedPref.getBoolean(WALLET_CREATED, false)
+        walletFirstPaymentReceived  = sharedPref.getBoolean(WALLET_FIRST_PAYMENT_RECEIVED, false)
 
         if (!walletCreated) {
             // create the burner first
             createWallet()
-            // then load it
-            loadWallet()
-
-        } else {
-            // otherwise just get it
-            loadWallet()
         }
-
+        // otherwise just  go to the main screen
+        startActivity(Intent(this@WalletActivity, StreamingActivity::class.java))
+        finish()
     }
 
     // create a new burner wallet
     private fun createWallet() {
         val path = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.path
-        val fileName = WalletUtils.generateLightNewWalletFile(Constants.WALLET_PASSWORD, File(path))
+        val fileName = WalletUtils.generateLightNewWalletFile(WALLET_PASSWORD, File(path))
         val filePath = "$path/$fileName"
 
         sharedPref.edit().apply {
-            putString(Constants.WALLET_PATH, filePath)
-            putBoolean(Constants.WALLET_CREATED, true)
+            putString(WALLET_PATH, filePath)
+            putBoolean(WALLET_CREATED, true)
             apply()
         }
-    }
-
-    // load an existing wallet
-    private fun loadWallet() {
-
-        val walletPath = sharedPref.getString(Constants.WALLET_PATH, "")
-        val credentials = WalletUtils.loadCredentials(Constants.WALLET_PASSWORD, walletPath)
-
-        // set the wallet public key global var
-        walletPublicKey = credentials.address
-
-        // the check the wallet balance
-        checkWalletBalance()
-
-    }
-
-    // check wallet balance from RPC Endpoint
-    private fun checkWalletBalance() {
-
-        // the balance check delay
-        val loopDelay = 2000L
-
-        lifecycleScope.launch(Dispatchers.IO) {
-
-            // finally start a loop to get the user's balance as per the RPC Endpoint
-            var checkingBal = true
-
-            while (checkingBal) {
-
-                delay(loopDelay)
-
-                try {
-                    // get the web3 client version
-                    val clientVersion = WebThreeHelper.web3!!.web3ClientVersion().send()
-
-                    // if client has no error, proceed to check the wallet balance
-                    if(!clientVersion.hasError()) {
-
-                        val balanceInWei = WebThreeHelper.web3!!.ethGetBalance(
-                            walletPublicKey,
-                            DefaultBlockParameterName.LATEST
-                        ).send().balance.toString()
-                        walletBalance = Convert.fromWei(balanceInWei, Convert.Unit.ETHER)
-
-
-                        Log.d(WALLET_TAG, "wallet balance in WEI is $balanceInWei")
-                        Log.d(WALLET_TAG, "wallet balance in MATIC is $walletBalance")
-                        Log.d(WALLET_TAG, "wallet public key  is $walletPublicKey")
-
-                        checkingBal = false
-
-
-                        startActivity(Intent(this@WalletActivity, StreamingActivity::class.java))
-                        finish()
-
-                    } else{
-                        checkingBal = handleError("Client Error!!!")
-                    }
-
-
-                } catch (io: IOException) {
-                    checkingBal = handleError("IOException: " + io.message!!)
-                } catch (ex: InterruptedException) {
-                    checkingBal = handleError("InterruptedException: " + ex.message!!)
-                }
-                catch (re: RuntimeException){
-                    checkingBal = handleError("RuntimeException: " +re.message!!)
-                }
-
-            }
-        }
-
-    }
-
-    private suspend fun handleError(errorMsg: String?): Boolean {
-
-        Log.e(WALLET_TAG, errorMsg!!)
-
-        withContext(Dispatchers.Main) {
-
-            AlertDialog.Builder(this@WalletActivity)
-                .setTitle("RPC Error!")
-                .setMessage("Unable to connect to the blockchain, please make sure your internet is working and try again!")
-                .setCancelable(false)
-                .setPositiveButton("ok") { _, _ ->
-                    finish()
-                }.show()
-        }
-
-        return false
     }
 
     // setup the correct algo for the wallet
@@ -235,10 +136,9 @@ class WalletActivity  : AppCompatActivity() {
         }
     }
 
-    /** Check if this device has a camera */
+    // Check if this device has a camera
     private fun checkCameraHardware(context: Context): Boolean {
         return context.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
     }
-
 
 }

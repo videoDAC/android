@@ -12,4 +12,6 @@
     <dimen name="cam_control_margin_top">10dp</dimen>
     <dimen name="you_labels_left_padding">120dp</dimen>
     <dimen name="you_identicon_size">110dp</dimen>
+    <dimen name="info_margin_top">30dp</dimen>
+    <dimen name="info_txt_font_size">15sp</dimen>
 </resources>

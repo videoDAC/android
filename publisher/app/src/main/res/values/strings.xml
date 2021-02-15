@@ -9,10 +9,6 @@
     <!-- matic -->
     <string name="rpc_url">https://rpc-mumbai.maticvigil.com/v1/2fc198817cfdb343e061665ff554e207f7706f23</string>
 
-    <!-- infura
-    <string name="rpc_url">https://mainnet.infura.io/v3/1b159090386c48bbb7828f1b346dcc11</string>
-    -->
-
     <!-- Gas Price url -->
     <string name="gas_price_base_url">https://gasstation-mainnet.matic.network/</string>
 
@@ -50,20 +46,19 @@
     <!-- Streaming Settings -->
     <string name="app_name">Publisher</string>
     <string name="rtmp_base_url">rtmp://89.145.161.141:1935/%1$s</string>
-    <string name="eth_price">0.000567</string>
-    <string name="matic_price">0.0001</string>
-    <string name="eth_price_label">%1s ETH %2s</string>
+    <string name="streaming_price">0.0001</string>
     <string name="matic_price_label">%1s MATIC %2s</string>
     <string name="set_your_price">set your price %1s</string>
     <string name="price_label">per minute</string>
     <string name="broadcaster_label">LIVE! stream broadcasted by:</string>
     <string name="broadcaster_address">0xdac817294c0c87ca4fa1895ef4b972eade99f2fd</string>
     <string name="you_address">0x0000000000000000000000000000000000000000</string>
-    <string name="video_width">900</string>
-    <string name="video_height">900</string>
+    <string name="video_width">256</string>
+    <string name="video_height">256</string>
     <string name="video_bitrate">1024000</string>
     <string name="video_fps">20</string>
     <string name="home_button">home button</string>
+    <string name="info_instruction_copy">To unload Credit, import the Private Key into an Ethereum wallet.</string>
 
 
 </resources>

@@ -1,5 +1,4 @@
 @file:Suppress("DEPRECATION")
-
 package com.videodac.publisher.activities
 
 import android.Manifest
@@ -8,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.SurfaceTexture
 import android.hardware.Camera
@@ -25,6 +25,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.livinglifetechway.quickpermissions_kotlin.util.QuickPermissionsOptions
 import com.livinglifetechway.quickpermissions_kotlin.util.QuickPermissionsRequest
@@ -36,18 +37,35 @@ import com.videodac.publisher.helpers.CameraPreview
 import com.videodac.publisher.helpers.Constants.PREF_NAME
 import com.videodac.publisher.helpers.Constants.PRIVATE_MODE
 import com.videodac.publisher.helpers.Constants.STREAMING_TAG
+import com.videodac.publisher.helpers.Constants.WALLET_FIRST_PAYMENT_RECEIVED
+import com.videodac.publisher.helpers.Constants.WALLET_PASSWORD
+import com.videodac.publisher.helpers.Constants.WALLET_PATH
+import com.videodac.publisher.helpers.Constants.WALLET_TAG
 import com.videodac.publisher.helpers.Utils.getCameraInstance
 import com.videodac.publisher.helpers.Utils.getCurrentChain
 import com.videodac.publisher.helpers.Utils.releasePreviewCamera
 import com.videodac.publisher.helpers.Utils.walletBalance
-import com.videodac.publisher.helpers.Utils.walletPublicKey
+import com.videodac.publisher.helpers.Utils.walletFirstPaymentReceived
+import com.videodac.publisher.helpers.Utils.walletPrivateKey
+import com.videodac.publisher.helpers.Utils.walletAddress
+import com.videodac.publisher.helpers.WebThreeHelper.web3
 import com.videodac.publisher.ui.AspectTextureView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.lake.librestreaming.client.RESClient
 import me.lake.librestreaming.core.listener.RESConnectionListener
 import me.lake.librestreaming.core.listener.RESVideoChangeListener
 import me.lake.librestreaming.model.RESConfig
-import me.lake.librestreaming.model.Size
 
+import nl.dionsegijn.konfetti.models.Shape
+
+import org.web3j.crypto.WalletUtils
+import org.web3j.protocol.core.DefaultBlockParameterName
+import org.web3j.utils.Convert
+import java.io.IOException
+import java.math.BigDecimal
 
 class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVideoChangeListener, RESConnectionListener {
     // shared pref
@@ -67,7 +85,6 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
     private var sw = 0
     private var sh = 0
     private var isStreaming = false
-    private var frontCamOn = false
     private var flashLightOn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,6 +99,9 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
 
         // get the prefs
         sharedPref = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
+
+        // load the wallet
+        loadWallet()
 
         // setup the toolbar icons
         showActionBar()
@@ -117,28 +137,6 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
 
     // show the launch UI
     private fun showLaunchUI() {
-        // set the identicon
-       mainScreenBinding.channelIdenticon.setAddress(walletPublicKey)
-
-        // set the wallet balance so far
-        val isMaticNetwork = getCurrentChain(this@StreamingActivity)
-        val symbol = if (isMaticNetwork) "MATIC" else "ETH"
-        val balFormat = if (isMaticNetwork) "%.16f" else "%.18f"
-        val walletBalanceString = String.format(balFormat, walletBalance)
-        val creditText = "Credit: $walletBalanceString $symbol"
-        val spanColor1 = ContextCompat.getColor(this, R.color.greenColor)
-        val spanLength = if (isMaticNetwork) 26 else 28
-        mainScreenBinding.channelCredit.setText(creditText, BufferType.SPANNABLE)
-         (mainScreenBinding.channelCredit.text as Spannable).apply {
-            setSpan(
-                ForegroundColorSpan(spanColor1), 8, spanLength,
-                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-            )
-        }
-
-        // set the wallet public key
-        mainScreenBinding.channelAddress.text = walletPublicKey
-
         // set the channel instructions
        val spanColor2 = ContextCompat.getColor(this, R.color.light_gray)
         launchLayoutBinding.channelInstructions.setText(
@@ -172,10 +170,10 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
         mainScreenBinding.streamingScreen.livestreamView.surfaceTextureListener = this
 
         // init the other streaming params
-        val rtmpAddress = getString(R.string.rtmp_base_url, walletPublicKey)
+        val rtmpAddress = getString(R.string.rtmp_base_url, walletAddress)
         resClient = RESClient()
         val resConfig = RESConfig.obtain()
-        resConfig.targetVideoSize = Size(
+        resConfig.targetVideoSize = me.lake.librestreaming.model.Size(
             getString(R.string.video_width).toInt(),
             getString(R.string.video_height).toInt()
         )
@@ -218,16 +216,13 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
 
         // update the rest of the UI
         val isMaticNetwork = getCurrentChain(this@StreamingActivity)
-        val price = if (isMaticNetwork) getString(
-            R.string.matic_price_label, getString(R.string.matic_price), getString(
+        val price = getString(
+            R.string.matic_price_label, getString(R.string.streaming_price), getString(
                 R.string.price_label
             )
-        ) else  getString(
-            R.string.eth_price_label,
-            getString(R.string.eth_price),
-            getString(R.string.price_label)
         )
-        mainScreenBinding.streamingScreen.youIdenticon.setAddress(walletPublicKey)
+
+        mainScreenBinding.streamingScreen.youIdenticon.setAddress(walletAddress)
         mainScreenBinding.streamingScreen.streamingPrice.text = price
         mainScreenBinding.streamingScreen.streamingPriceInstruction.text = getString(
             R.string.set_your_price, getString(
@@ -275,7 +270,6 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
         // stop streaming first
         if (isStreaming) {
             resClient.stopStreaming()
-         //
         }
 
         // hide the launch screen
@@ -341,6 +335,7 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
 
     override fun onResume() {
         super.onResume()
+
         // Check for permissions and start camera preview
         checkPermissions()
     }
@@ -423,4 +418,149 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
          */
 
     }
+
+    // load an existing wallet
+    private fun loadWallet() {
+
+        val walletPath = sharedPref.getString(WALLET_PATH, "")
+        val credentials = WalletUtils.loadCredentials(WALLET_PASSWORD, walletPath)
+
+        // set the wallet public/private key global var
+        walletAddress = credentials.address
+        walletPrivateKey = credentials.ecKeyPair.privateKey.toString()
+
+        // set the wallet public key
+        mainScreenBinding.channelAddress.text = walletAddress
+
+        // set the identicon
+        mainScreenBinding.channelIdenticon.setAddress(walletAddress)
+
+
+        // set the wallet balance so far
+        val walletBalanceString = "__________________"
+        val creditText = "Credit: ${getString(R.string.matic_price_label, walletBalanceString, "")}"
+        val spanColor1 = ContextCompat.getColor(this, R.color.greenColor)
+        val spanLength =  26
+        mainScreenBinding.channelCredit.setText(creditText, BufferType.SPANNABLE)
+        (mainScreenBinding.channelCredit.text as Spannable).apply {
+            setSpan(
+                ForegroundColorSpan(spanColor1), 8, spanLength,
+                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+        }
+
+        // the check the wallet balance
+        checkWalletBalance()
+
+    }
+
+    // check wallet balance from RPC Endpoint
+    private fun checkWalletBalance() {
+
+        // check the balance after every 2 secs
+        val loopDelay = 2000L
+
+        lifecycleScope.launch(Dispatchers.IO) {
+
+            // finally start a loop to get the user's balance as per the RPC Endpoint
+            var checkingBal = true
+
+            while (checkingBal) {
+
+                delay(loopDelay)
+
+                try {
+                    // get the web3 client version
+                    val clientVersion = web3!!.web3ClientVersion().send()
+
+                    // if client has no error, proceed to check the wallet balance
+                    if(!clientVersion.hasError()) {
+
+                        val balanceInWei = web3!!.ethGetBalance(
+                            walletAddress,
+                            DefaultBlockParameterName.LATEST
+                        ).send().balance.toString()
+                        walletBalance = Convert.fromWei(balanceInWei, Convert.Unit.ETHER)
+
+                        val balFormat = "%.16f"
+                        val walletBalanceString = String.format(balFormat, walletBalance)
+                        val creditText = "Credit: ${getString(R.string.matic_price_label,walletBalanceString,"")}"
+                        val spanColor1 = ContextCompat.getColor(this@StreamingActivity, R.color.greenColor)
+                        val spanLength =  26
+
+                        // update the wallet balance
+                        withContext(Dispatchers.Main) {
+                            mainScreenBinding.channelCredit.setText(creditText, BufferType.SPANNABLE)
+                            (mainScreenBinding.channelCredit.text as Spannable).apply {
+                                setSpan(
+                                    ForegroundColorSpan(spanColor1), 8, spanLength,
+                                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+                                )
+                            }
+
+                            // if this is the first payment received, show the confetti
+                            if (!walletFirstPaymentReceived &&  walletBalance > BigDecimal(0)){
+                                val viewKonfetti = mainScreenBinding.streamingScreen.viewKonfetti
+                                viewKonfetti.bringToFront()
+                                viewKonfetti.build()
+                                    .addColors(Color.YELLOW, Color.GREEN, Color.RED)
+                                    .setDirection(0.0, 359.0)
+                                    .setSpeed(1f, 5f)
+                                    .setFadeOutEnabled(true)
+                                    .setTimeToLive(2000L)
+                                    .addShapes(Shape.Square, Shape.Circle)
+                                    .addSizes(nl.dionsegijn.konfetti.models.Size(12))
+                                    .setPosition(0f, 800f, 0f, -850f)
+                                    .streamFor(300, 5000L)
+
+                                // set the first payment as received
+                                sharedPref.edit().apply {
+                                    walletFirstPaymentReceived = true
+                                    putBoolean(WALLET_FIRST_PAYMENT_RECEIVED, true)
+                                    apply()
+                                }
+
+                            }
+
+                        }
+
+                        Log.d(WALLET_TAG, "wallet balance in WEI is $balanceInWei")
+                        Log.d(WALLET_TAG, "wallet balance in MATIC is $walletBalance")
+
+                    } else{
+                        checkingBal = handleError("Client Error!!!")
+                    }
+
+
+                } catch (io: IOException) {
+                    checkingBal = handleError("IOException: " + io.message!!)
+                } catch (ex: InterruptedException) {
+                    checkingBal = handleError("InterruptedException: " + ex.message!!)
+                }
+                catch (re: RuntimeException){
+                    checkingBal = handleError("RuntimeException: " +re.message!!)
+                }
+
+            }
+        }
+
+    }
+
+    private suspend fun handleError(errorMsg: String?): Boolean {
+
+        Log.e(WALLET_TAG, errorMsg!!)
+        withContext(Dispatchers.Main) {
+
+            android.app.AlertDialog.Builder(this@StreamingActivity)
+                .setTitle("RPC Error!")
+                .setMessage("Unable to connect to the blockchain, please make sure your internet is working and try again!")
+                .setCancelable(false)
+                .setPositiveButton("ok") { _, _ ->
+                    finish()
+                }.show()
+        }
+
+        return false
+    }
+
 }

@@ -8,7 +8,6 @@
     android:focusable="true"
     android:keepScreenOn="true">
 
-
     <include
         android:id="@+id/info_header"
         layout="@layout/info_header"
@@ -29,12 +28,125 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/akkurat"
             android:text="# live"
-            android:textSize="32sp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/info_margin_top"
+            android:fontFamily="@font/akkurat"
+            android:text="## How do I unload Credit?"
+            android:textSize="@dimen/info_txt_font_size"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/info_margin_top"
+            android:fontFamily="@font/akkurat"
+            android:text="You have full control of your Credit at all times."
+            android:textSize="@dimen/info_txt_font_size"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            />
+
+        <TextView
+            android:id="@+id/instruction_1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/info_margin_top"
+            android:fontFamily="@font/akkurat"
+            android:text="@string/info_instruction_copy"
+            android:textSize="@dimen/info_txt_font_size"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            />
+
+        <TextView
+            android:id="@+id/copy_private_key"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/info_margin_top"
+            android:fontFamily="@font/akkurat"
+            android:text="Copy Private Key to clipboard."
+            android:textSize="@dimen/info_txt_font_size"
+            android:textStyle="bold|italic"
+            android:textColor="@color/colorPrimary"
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/info_margin_top"
+            android:fontFamily="@font/akkurat"
+            android:text="## What is an Ethereum wallet?"
+            android:textSize="@dimen/info_txt_font_size"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/info_margin_top"
+            android:fontFamily="@font/akkurat"
+            android:text="An Ethereum wallet allows you to send and receive ETH."
+            android:textSize="@dimen/info_txt_font_size"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/info_margin_top"
+            android:fontFamily="@font/akkurat"
+            android:text="It also allows you to interact with applications running on Ethereum."
+            android:textSize="@dimen/info_txt_font_size"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/info_margin_top"
+            android:fontFamily="@font/akkurat"
+            android:text="## How do I load Credit?"
+            android:textSize="@dimen/info_txt_font_size"
+            android:textStyle="bold"
             android:textColor="@color/colorPrimary"
             />
 
 
-    </LinearLayout>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/info_margin_top"
+            android:fontFamily="@font/akkurat"
+            android:text="To load credit, send ETH to the app's Ethereum Address. This starts with 0x..."
+            android:textSize="@dimen/info_txt_font_size"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            />
 
+        <TextView
+            android:id="@+id/copy_address"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/info_margin_top"
+            android:fontFamily="@font/akkurat"
+            android:text="Copy Ethereum Address to clipboard."
+            android:textSize="@dimen/info_txt_font_size"
+            android:textStyle="bold|italic"
+            android:textColor="@color/colorPrimary"
+            />
+        
+    </LinearLayout>
 
 </RelativeLayout>
