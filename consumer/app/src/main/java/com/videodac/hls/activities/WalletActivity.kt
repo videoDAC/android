@@ -191,23 +191,12 @@ class WalletActivity : AppCompatActivity() {
             if (gasPriceResp.isSuccessful) {
 
                 val gasObj = JSONObject(gasPriceResp.body().toString())
-
-                // convert the gas price to gwei
-                val fastGasPriceInGwei = gasObj.getInt("fast") / 10
-
-                // then to wei
-                val fastGasPriceInWei = Convert.toWei(BigDecimal(fastGasPriceInGwei), Unit.GWEI)
+                val maticGasPrice = gasObj.getInt("fast")
 
                 // then set it globally
-                gasPrice = BigInteger.valueOf(fastGasPriceInWei.toLong())
+                gasPrice =  maticGasPrice.toBigDecimal() / BigDecimal(10000)
 
-                // then add it to the streaming fee
-                val streamingFeeInWei = Convert.toWei(BigDecimal(streamingFee), Unit.ETHER)
-
-                val totalFeeInWei = fastGasPriceInWei + streamingFeeInWei
-
-                // then finally get the total price to ETH
-                val totalFeeInEth = Convert.fromWei(totalFeeInWei, Unit.ETHER)
+               val totalFeeInEth = streamingFee.toBigDecimal() + BigDecimal(0.0004)
 
                 withContext(Dispatchers.Main) {
                     Log.d(WALLET_TAG, totalFeeInEth.toString())
@@ -250,7 +239,6 @@ class WalletActivity : AppCompatActivity() {
         }
 
     }
-
 
     @Suppress("BlockingMethodInNonBlockingContext")
     private fun checkWalletBalance() {

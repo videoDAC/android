@@ -34,7 +34,7 @@ object Utils {
 
 
     // we set a default gas price of 40 gwei
-    internal var gasPrice = BigInteger.valueOf(40_000_000_000L)
+    internal var gasPrice = BigDecimal(0.0004)
     internal val gasLimit = BigInteger.valueOf(12_500_000L)
 
     internal var walletPublicKey: String = ""
