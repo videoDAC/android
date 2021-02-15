@@ -170,7 +170,7 @@ class WalletActivity : AppCompatActivity() {
         binding.walletBalanceUnit.text = String.format("%.4f ", 0f) +  " " + getString(R.string.wallet_payment_unit) // default balance will always be zero
         binding.walletAddress.text = walletPublicKey
         binding.creatorFee.text = getString(R.string.creator_fee)
-        binding.creatorFeeUnit.text = String.format("%.4f ", streamingFee.toDouble()) + getString(R.string.wallet_payment_unit) + " per minute + gas"
+        binding.creatorFeeUnit.text = String.format("%.4f ", streamingFee.toDouble()) + getString(R.string.wallet_payment_unit) + " per minute + fee's"
 
         // set the qr code for the address too
         binding.qrCode.setImageBitmap(QRCode.from(walletPublicKey).withHint(EncodeHintType.MARGIN, 1).bitmap())
@@ -198,13 +198,13 @@ class WalletActivity : AppCompatActivity() {
 
                 val totalFeeInEth = streamingFee.toFloat() + gasPrice
 
-                withContext(Dispatchers.Main) {
+                /*withContext(Dispatchers.Main) {
                     Log.d(WALLET_TAG, totalFeeInEth.toString())
                     binding.creatorFeeUnit.text = String.format(
                         "%.4f ",
                         totalFeeInEth
-                    ) + getString(R.string.wallet_payment_unit) + " per minute + gas"
-                }
+                    ) + getString(R.string.wallet_payment_unit) + " per minute + fee's"
+                }*/
             }
         }
 
@@ -272,13 +272,19 @@ class WalletActivity : AppCompatActivity() {
                     checkingBal = false
                     // check if the user has enough funds to start streaming
                     if (balanceInEther >= BigDecimal.valueOf(streamingFee.toDouble())) {
+
                         walletBalanceLeft  = balanceInEther
                         startActivity(Intent(this@WalletActivity, ChannelActivity::class.java))
                         closeActivity(this@WalletActivity, null, null)
                     }
                     else {
                         withContext(Dispatchers.Main) {
-                            binding.walletBalanceUnit.text = """$balanceInEther ${getString(R.string.wallet_payment_unit)}"""
+                            binding.walletBalanceUnit.text = "${
+                                String.format(
+                                    "%.4f ",
+                                    balanceInEther
+                                )
+                            } ${getString(R.string.wallet_payment_unit)}"
                         }
                     }
                 } else{
