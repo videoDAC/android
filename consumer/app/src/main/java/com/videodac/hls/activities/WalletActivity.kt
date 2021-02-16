@@ -170,7 +170,7 @@ class WalletActivity : AppCompatActivity() {
         binding.walletBalanceUnit.text = String.format("%.4f ", 0f) +  " " + getString(R.string.wallet_payment_unit) // default balance will always be zero
         binding.walletAddress.text = walletPublicKey
         binding.creatorFee.text = getString(R.string.creator_fee)
-        binding.creatorFeeUnit.text = String.format("%.4f ", streamingFee.toDouble()) + getString(R.string.wallet_payment_unit) + " per minute + fee's"
+        binding.creatorFeeUnit.text = String.format("%.4f ", streamingFee.toDouble()) + getString(R.string.wallet_payment_unit) + " per minute + fees"
 
         // set the qr code for the address too
         binding.qrCode.setImageBitmap(QRCode.from(walletPublicKey).withHint(EncodeHintType.MARGIN, 1).bitmap())
@@ -203,7 +203,7 @@ class WalletActivity : AppCompatActivity() {
                     binding.creatorFeeUnit.text = String.format(
                         "%.4f ",
                         totalFeeInEth
-                    ) + getString(R.string.wallet_payment_unit) + " per minute + fee's"
+                    ) + getString(R.string.wallet_payment_unit) + " per minute + fee"
                 }*/
             }
         }
