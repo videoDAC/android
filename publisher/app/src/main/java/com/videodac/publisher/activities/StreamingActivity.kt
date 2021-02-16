@@ -29,6 +29,7 @@ import androidx.lifecycle.lifecycleScope
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.livinglifetechway.quickpermissions_kotlin.util.QuickPermissionsOptions
 import com.livinglifetechway.quickpermissions_kotlin.util.QuickPermissionsRequest
+
 import com.videodac.publisher.R
 import com.videodac.publisher.databinding.StreamingCameraScreenBinding
 import com.videodac.publisher.databinding.StreamingLaunchScreenBinding
@@ -50,10 +51,12 @@ import com.videodac.publisher.helpers.Utils.walletPrivateKey
 import com.videodac.publisher.helpers.Utils.walletAddress
 import com.videodac.publisher.helpers.WebThreeHelper.web3
 import com.videodac.publisher.ui.AspectTextureView
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 import me.lake.librestreaming.client.RESClient
 import me.lake.librestreaming.core.listener.RESConnectionListener
 import me.lake.librestreaming.core.listener.RESVideoChangeListener
