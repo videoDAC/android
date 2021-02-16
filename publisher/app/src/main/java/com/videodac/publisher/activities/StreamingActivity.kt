@@ -427,7 +427,7 @@ class StreamingActivity : AppCompatActivity(),  SurfaceTextureListener,  RESVide
 
         // set the wallet public/private key global var
         walletAddress = credentials.address
-        walletPrivateKey = credentials.ecKeyPair.privateKey.toString()
+        walletPrivateKey = credentials.ecKeyPair.privateKey.toString(16)
 
         // set the wallet public key
         mainScreenBinding.channelAddress.text = walletAddress
