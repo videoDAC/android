@@ -1,6 +1,6 @@
-# Introduction
+# videoDAC Livestream Consumer App
 
-This repo contains the `videoDAC` template for a pay-to-play stream Consumer app for Android.
+This repo contains the `videoDAC` template for a pay-to-play Livestream Consumer App, for Android Operating System.
 
 Contents:
 
