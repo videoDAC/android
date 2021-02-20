@@ -21,42 +21,48 @@ The template must be configured with the following:
 - **Price-per-minute** in network's native ETH token (can be zero for free-to-play app)
 - **`RPC URL`** for publishing transactions on Ethereum testnets or mainnet
 - **`STREAM_URL`** which is the stream of A/V content to be played in the app
-- **App name** e.g. "Acme Pay-to-play Streaming App", and minimal copy
+- **App name** e.g. "Alice and Bob's Pay-to-play Streaming App", and minimal copy
 
 # User Journey
 
 The User Journey for a user of this app is:
 
-- **User** installs and launches app
-  - App creates own new wallet, checks balance onchain
-  - App shows "paywall screen", including
-    - Wallet's 0 balance (new wallet)
-    - **Price-per-minute**
-    - App's own ETH address + QR Code
-    - App-specific copy
+## 1. **User** installs and launches app
 
-![Screenshot_20200514-232110](https://user-images.githubusercontent.com/59374467/81968276-ccb5f300-9639-11ea-9b0e-0b1c7dd41c27.png)
+- **App** creates own new wallet, checks balance onchain
+- **App** shows "paywall screen", including
+  - Wallet's 0 balance (new wallet)
+  - **Price-per-minute**
+  - App's own ETH address + QR Code
+  - App-specific copy
 
-- **User** taps screen
-  - App closes
-  - Android notifies User that App's ETH address is stored to clipboard
+![image](https://user-images.githubusercontent.com/2212651/108596305-222de600-73aa-11eb-9011-45d83edef689.png)
+
+## 2. **User** taps screen
+
+- App closes
+- Android notifies User that App's ETH address is stored to clipboard
 
 ![image](https://user-images.githubusercontent.com/2212651/82750460-f7d4db00-9dcd-11ea-8eea-b06982c94356.png)
 
-- **User** sends enough ETH to app's ETH address
-  - This can be done in any app.
+## 3. **User** sends enough ETH / MATIC to app's ETH address
 
-- **User** launches app
-  - App checks wallet balance with Infura
+- This can be done from any app, like [WallETH](https://walleth.org/).
 
-- **User** selects which livestream channel to watch, from the app's scrollable "Channel List".
+## 4. **User** launches app again
+
+- **App** checks wallet balance with Infura / Matic Vigil / your own RPC endpoint
+
+## 5. **App** hides the paywall page and shows a channel list.
+
+## 6. **User** selects which livestream channel to watch, from the app's scrollable "Channel List".
 
 ![image](https://user-images.githubusercontent.com/2212651/108596330-5dc8b000-73aa-11eb-9188-7731fcab580c.png)
 
 - Livestream channelID is the Ethereum address of the livestream Publisher.
 - App collates address data from [ENS Domains](https://ens.domains/) and [IPFS](https://ipfs.io/) (served via [3Box](https://3boxlabs.com/), and configured via [Livepeer Protocol Explorer](explorer.livepeer.org/).
 
-- **User** watches content from the livestream channel over the internet
+## 7. **User** watches content from the livestream channel over the internet
 
 ![image](https://user-images.githubusercontent.com/2212651/108596338-67eaae80-73aa-11eb-81b2-c13d903d1328.png)
 
@@ -65,11 +71,11 @@ The User Journey for a user of this app is:
 - App has been tested against eth1 Mainnet, Goerli, Rinkeby and Ropsten, and Matic Mainnet and Mumbai Testnet.
 - Content is served from a Livepeer Broadcaster node, set up per videoDAC's [`simple-streaming-server`](https://github.com/videoDAC/simple-streaming-server).
 
-![Screenshot_20200514-232737](https://user-images.githubusercontent.com/59374467/81968828-95941180-963a-11ea-97f6-1f2ff988d9ee.png)
-
-- App shows "paywall screen" when balance is < price-per-minute:
+## 8. **App** shows "paywall screen", when balance runs out:
 
 ![Screenshot_20200514-235811](https://user-images.githubusercontent.com/59374467/81971634-063d2d00-963f-11ea-958c-59e833ee92c9.png)
+
+- Go to Step 2.
 
 # Generating an Android APK
 
@@ -85,15 +91,3 @@ OS:  Linux Ubuntu 18.04
 6. [Setting Key Variables](docs/variables/index.md)
 7. [Generating the APK](docs/genapk/index.md)
 8. [Releasing the APK](docs/relapk/index.md)
-
-# Example Deployment
-
-- Alice's Pay-As-You-Go Livestream Viewer App
-  - [App published on Google Play](https://play.google.com/store/apps/details?id=com.videodac.alice)
-  - Pay [`0x4b4E19E18EbADdFB57DC1f07E07268b827A0EC18`](https://goerli.etherscan.io/address/0x4b4E19E18EbADdFB57DC1f07E07268b827A0EC18) to play
-  - Payments are in goETH, the native token of the Görli testnet
-  - Here is an example of [an address used by the app to pay per minute of content](https://goerli.etherscan.io/address/0x5ed294120886b2fdbde04064231efe3e8c3aee7b).
-  - The livestream is a test card signal served from a [`simple-streaming-server`](https://github.com/videoDAC/simple-streaming-server)
-
-![image](https://user-images.githubusercontent.com/2212651/82750740-c4934b80-9dcf-11ea-8eb4-f9046209cad4.png)
-
