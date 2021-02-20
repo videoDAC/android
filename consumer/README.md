@@ -28,7 +28,7 @@ The template must be configured with the following:
 The User Journey for a user of this app is:
 
 - **User** installs and launches app
-  - App creates own new wallet, checks balance with Infura
+  - App creates own new wallet, checks balance onchain
   - App shows "paywall screen", including
     - Wallet's 0 balance (new wallet)
     - **Price-per-minute**
@@ -49,15 +49,23 @@ The User Journey for a user of this app is:
 - **User** launches app
   - App checks wallet balance with Infura
 
-![Screenshot_20200514-232732](https://user-images.githubusercontent.com/59374467/81968815-9167f400-963a-11ea-94a9-5db498882865.png)
+- **User** selects which livestream channel to watch, from the app's scrollable "Channel List".
 
-  - App shows livestream video content (currently a test signal)
+![image](https://user-images.githubusercontent.com/2212651/108596330-5dc8b000-73aa-11eb-9188-7731fcab580c.png)
+
+- Livestream channelID is the Ethereum address of the livestream Publisher.
+- App collates address data from [ENS Domains](https://ens.domains/) and [IPFS](https://ipfs.io/) (served via [3Box](https://3boxlabs.com/), and configured via [Livepeer Protocol Explorer](explorer.livepeer.org/).
+
+- **User** watches content from the livestream channel over the internet
+
+![image](https://user-images.githubusercontent.com/2212651/108596338-67eaae80-73aa-11eb-81b2-c13d903d1328.png)
+
+- Content shown is an automatically generate test source, but contains audio and video.
+- The app pays every minute, directly to the Ethereum address of the livestream channel
+- App has been tested against eth1 Mainnet, Goerli, Rinkeby and Ropsten, and Matic Mainnet and Mumbai Testnet.
+- Content is served from a Livepeer Broadcaster node, set up per videoDAC's [`simple-streaming-server`](https://github.com/videoDAC/simple-streaming-server).
 
 ![Screenshot_20200514-232737](https://user-images.githubusercontent.com/59374467/81968828-95941180-963a-11ea-97f6-1f2ff988d9ee.png)
-
-- **User** watches livestream video content
-  - App pays to Livestreamer's ETH address
-  - Payment made every minute
 
 - App shows "paywall screen" when balance is < price-per-minute:
 
