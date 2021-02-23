@@ -212,7 +212,7 @@ class HttpLoggingInterceptor constructor(private val logger: Logger) : Intercept
             } else {
                 val source = responseBody.source()
                 source.request(java.lang.Long.MAX_VALUE) // Buffer the entire body.
-                var buffer = source.buffer()
+                var buffer = source.buffer
 
                 var gzippedLength: Long? = null
                 if (headers.get("Content-Encoding")?.equals("gzip", ignoreCase = true) == true) {

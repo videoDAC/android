@@ -6,25 +6,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+
 import com.github.ybq.android.spinkit.SpinKitView
-import com.lelloman.identicon.view.GithubIdenticonView
-import com.videodac.hls.GlideApp
+
 import com.videodac.hls.R
 import com.videodac.hls.activities.VideoActivity
+import com.videodac.hls.helpers.Constants.CHANNEL_ADDRESS
 import com.videodac.hls.helpers.StatusHelper.ensNames
 import com.videodac.hls.helpers.StatusHelper.threeBoxAvatarUris
 import com.videodac.hls.helpers.StatusHelper.threeBoxNames
 import com.videodac.hls.helpers.Utils
-import com.videodac.hls.helpers.Utils.CHANNEL_ADDRESS
+import com.videodac.hls.ui.BlockiesIdenticon
+
 import org.web3j.crypto.Hash
 import org.web3j.utils.Numeric
 import java.util.*
@@ -40,14 +44,14 @@ class ChannelAdapter(
         // only load valid ETH addresses
         val channel = channels[position]
 
-        if(Utils.isValidETHAddress(channel)!!) {
+        if(Utils.isValidETHAddress(channel)) {
 
-             holder.realChannelAddress.text = channel
+            holder.realChannelAddress.text = channel
 
-             val channelName = threeBoxNames[channel]
-             val ensName = ensNames[channel]
+            val channelName = threeBoxNames[channel]
+            val ensName = ensNames[channel]
 
-             if (!channelName.isNullOrEmpty()) {
+            if (!channelName.isNullOrEmpty()) {
                 holder.channelAddress.text = channelName
 
                 val userImageUri = threeBoxAvatarUris[channel]
@@ -58,7 +62,7 @@ class ChannelAdapter(
                     holder.channelIdenticon.visibility = View.GONE
                     holder.imgLoading.visibility = View.VISIBLE
 
-                    GlideApp
+                    Glide
                         .with(activity)
                         .load(userImageUri)
                         .centerCrop()
@@ -89,26 +93,26 @@ class ChannelAdapter(
                 }
 
             } else if(!ensName.isNullOrEmpty()) {
-                 holder.channelAddress.text = ensName
+                holder.channelAddress.text = ensName
 
-                 // then show the identicon
-                 holder.channelIdenticon.visibility = View.VISIBLE
+                // then show the identicon
+                holder.channelIdenticon.visibility = View.VISIBLE
 
-                 // and hide the image icon
-                 holder.channelIcon.visibility = View.GONE
+                // and hide the image icon
+                holder.channelIcon.visibility = View.GONE
 
-                 val params = holder.channelAddress.layoutParams as RelativeLayout.LayoutParams
-                 params.setMargins(260, 0, 0, 0)
+                val params = holder.channelAddress.layoutParams as RelativeLayout.LayoutParams
+                params.setMargins(260, 0, 0, 0)
 
-                 holder.channelAddress.layoutParams = params
+                holder.channelAddress.layoutParams = params
 
-                 val hash = Numeric.toBigInt(
-                     Hash.sha3(
-                         channel.toLowerCase(Locale.ROOT).toByteArray()
-                     )
-                 )
-                 holder.channelIdenticon.hash = hash.toInt()
-             }
+                val hash = Numeric.toBigInt(
+                    Hash.sha3(
+                        channel.toLowerCase(Locale.ROOT).toByteArray()
+                    )
+                )
+                holder.channelIdenticon.setAddress(channel)
+            }
             else{
                 holder.channelAddress.text = channel
 
@@ -119,7 +123,7 @@ class ChannelAdapter(
                         channel.toLowerCase(Locale.ROOT).toByteArray()
                     )
                 )
-                holder.channelIdenticon.hash = hash.toInt()
+                holder.channelIdenticon.setAddress(channel)
             }
 
         }
@@ -142,7 +146,7 @@ class ChannelAdapter(
         val channelAddress = v.findViewById(R.id.channel_address) as TextView
         val realChannelAddress = v.findViewById(R.id.real_channel_address) as TextView
         val channelIcon = v.findViewById(R.id.channel_icon) as ImageView
-        val channelIdenticon = v.findViewById(R.id.channel_identicon) as GithubIdenticonView
+        val channelIdenticon = v.findViewById(R.id.channel_identicon) as BlockiesIdenticon
         val imgLoading = v.findViewById(R.id.img_loader) as SpinKitView
 
         init {
@@ -151,14 +155,14 @@ class ChannelAdapter(
 
         override fun onClick(v: View?) {
 
-            if(Utils.isValidETHAddress(realChannelAddress.text.toString())!!) {
+            if(Utils.isValidETHAddress(realChannelAddress.text.toString())) {
                 activity.startActivity(
                     Intent(activity, VideoActivity::class.java).putExtra(
                         CHANNEL_ADDRESS,
                         realChannelAddress.text.toString()
                     )
                 )
-                Utils.closeActivity(activity, null)
+                Utils.closeActivity(activity, null, null)
             }
         }
     }

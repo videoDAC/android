@@ -3,6 +3,7 @@ package com.videodac.hls.helpers
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.os.Build
 import android.util.Log
 import android.view.View
@@ -11,12 +12,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 import com.videodac.hls.R
-import kotlinx.coroutines.delay
+import com.videodac.hls.helpers.Constants.LANDSCAPE_ORIENTATION
+import com.videodac.hls.helpers.Constants.PORTRAIT_ORIENTATION
 
 import org.web3j.crypto.Hash
 import org.web3j.ens.EnsResolutionException
 import org.web3j.ens.EnsResolver
 import org.web3j.protocol.Web3j
+import org.web3j.protocol.Web3j.build
 import org.web3j.protocol.http.HttpService
 import org.web3j.utils.Numeric
 import java.math.BigDecimal
@@ -27,15 +30,11 @@ import java.util.regex.Pattern
 
 object Utils {
 
-    internal const val WALLET_CREATED = "WALLET_CREATED"
-    internal const val WALLET_PATH = "WALLET_PATH"
-    internal const val CHANNEL_ADDRESS = "CHANNEL_ADDRESS"
-    internal var streamingFeeInEth = 0.0
     internal var walletBalanceLeft = BigDecimal(0)
-    internal const val walletPassword = "password"
+
 
     // we set a default gas price of 40 gwei
-    internal var gasPrice = BigInteger.valueOf(40_000_000_000L)
+    internal var gasPrice = BigDecimal(0.0004)
     internal val gasLimit = BigInteger.valueOf(12_500_000L)
 
     internal var walletPublicKey: String = ""
@@ -46,8 +45,17 @@ object Utils {
     private val upperCaseAddrPattern: Pattern = Pattern.compile("^(0x)?[0-9A-F]{40}$")
 
     @JvmStatic
-    internal fun goFullScreen(activity: AppCompatActivity) {
+    internal fun goFullScreen(activity: AppCompatActivity, orientation: String) {
         activity.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
+        if ( orientation.toLowerCase(Locale.getDefault()) == PORTRAIT_ORIENTATION ) {
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+
+        if ( orientation.toLowerCase(Locale.getDefault()) == LANDSCAPE_ORIENTATION ) {
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+
         if (Build.VERSION.SDK_INT in 12..18) { // lower api
             val v = activity.window.decorView
             v.systemUiVisibility = View.GONE
@@ -56,13 +64,15 @@ object Utils {
             val uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
             decorView.systemUiVisibility = uiOptions
         }
+
     }
 
     @JvmStatic
-    internal fun getWeb3(context: Context) = Web3j.build(HttpService(context.getString(R.string.infura_url)))
+    internal fun getWeb3(context: Context) = build(HttpService(context.getString(R.string.rpc_url)))
+
 
     @JvmStatic
-    internal fun closeActivity(activity: AppCompatActivity, userAddress: String?) {
+    internal fun closeActivity(activity: AppCompatActivity, userAddress: String?, reason: String?) {
         if (!userAddress.isNullOrEmpty()) {
             val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("User Address", userAddress)
@@ -70,14 +80,21 @@ object Utils {
 
             Toast.makeText(activity, "Address copied to clipboard" , Toast.LENGTH_LONG).show()
         }
+
+        if (!reason.isNullOrEmpty()) {
+            Toast.makeText(activity, reason, Toast.LENGTH_LONG).show()
+        }
         // finish activity
         activity.finish()
     }
 
+    // because ENS only resolves for mainnet addresses, we hardcode it to always point to the infura mainnet nodes
     @JvmStatic
-    internal suspend fun resolveChannelENSName(address: String, web3j: Web3j) :String {
+    internal fun resolveChannelENSName(address: String) :String {
 
-        val ens = EnsResolver(web3j)
+        val  web3ENS = build(HttpService("https://mainnet.infura.io/v3/1b159090386c48bbb7828f1b346dcc11"))
+
+        val ens = EnsResolver(web3ENS)
         var name = ""
 
         try {
@@ -110,7 +127,7 @@ object Utils {
      * @param address given address in HEX
      * @return is this a valid address
      */
-    internal fun isValidETHAddress(address: String): Boolean? {
+    internal fun isValidETHAddress(address: String): Boolean {
         /*
          * check basic address requirements, i.e. is not empty and contains
          * the valid number and type of characters
@@ -126,7 +143,7 @@ object Utils {
         }
     }
 
-    private fun validateChecksumAddress(ethAddress: String): Boolean? {
+    private fun validateChecksumAddress(ethAddress: String): Boolean {
         val address = ethAddress.replace("0x", "")
         val hash: String = Numeric.toHexStringNoPrefix(Hash.sha3(address.toLowerCase(Locale.ROOT).toByteArray()))
         for (i in 0..39) {

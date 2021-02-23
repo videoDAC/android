@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "510600034014",
+    "firebase_url": "https://video-dac-8875f.firebaseio.com",
+    "project_id": "video-dac-8875f",
+    "storage_bucket": "video-dac-8875f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510600034014:android:a401cb29d12b69bbd1f44f",
+        "android_client_info": {
+          "package_name": "com.videodac.hls"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510600034014-8ppvaerrtpm1njolh79sp5fi64eapkor.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCD5GoNTKnea8aD0-exVzCx0ukRaGlpReI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510600034014-8ppvaerrtpm1njolh79sp5fi64eapkor.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

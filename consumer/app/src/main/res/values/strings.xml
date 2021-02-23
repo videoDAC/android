@@ -1,24 +1,22 @@
 <resources>
-    <string name="app_name">HimPrdshLiveTV</string>
-    <string name="wallet_balance">This app\'s balance:</string>
-    <string name="wallet_address">0xdac817294c0c87ca4fa1895ef4b972eade99f2fd</string>
+    <!-- Tv -->
     <string name="qr_code">Qr Code</string>
-    <string name="infura_url">https://mainnet.infura.io/v3/2f1d95e69d874612a271a0c5745961d0</string>
     <string name="loading_burner_wallet">Loading wallet, please wait…</string>
     <string name="loading_stream">Loading stream, please wait…</string>
-    <string name="livestream_credits">Viewing credit balance:</string>
     <string name="welcome_title">Welcome to</string>
-    <string name="creator_fee">Pay to HimPrdshLiveTV to watch:</string>
-    <string name="tap_instructions">Tap to copy this app\'s\naddress to clipboard</string>
-    <string name="tv_name">HimPrdshLiveTV</string>
-    <string name="go_eth_unit">ETH</string>
     <string name="channel_header">Choose channel…</string>
     <string name="no_channels">No Channels Available</string>
 
-     <!-- URLS -->
-    <string name="status_base_url">http://89.145.161.141:7935/</string>
-    <string name="streaming_url">http://89.145.161.141:8935/stream/%s.m3u8</string>
-    <string name="gas_price_base_url">https://ethgasstation.info/</string>
+    <!-- Web3 -->
+    <string name="rpc_url">https://rpc-mainnet.maticvigil.com/v1/2fc198817cfdb343e061665ff554e207f7706f23</string>
+
+    <!-- Wallet -->
+    <string name="wallet_balance">This app\'s balance:</string>
+    <string name="wallet_address_placeholder">0xdac817294c0c87ca4fa1895ef4b972eade99f2fd</string>
+    <string name="wallet_balance_left_placeholder">0.0002</string>
+
+    <!-- URLS -->
+    <string name="gas_price_base_url">https://gasstation-mainnet.matic.network/</string>
     <string name="three_box_base_url">https://ipfs.3box.io/</string>
     <string name="ipfs_base_url">https://ipfs.infura.io/ipfs/</string>
 
@@ -32,8 +30,22 @@
     <string name="three_box_image_key">image</string>
     <string name="three_box_content_url_key">contentUrl</string>
     <string name="three_box_content_hash">/</string>
+
+    <!-- Google Play Errors -->
     <string name="google_play_error">Sorry this app requires the latest version of google play to work well, so please install or update it to continue</string>
     <string name="google_play_error_title">Google Play Error!</string>
     <string name="google_play_services_not_available_error">This app will not continue because google play services are not available in this device, please install them to continue!</string>
-    <string name="wallet_balance_left">0.0002 ETH</string>
+
+    <!-- Streaming Settings  -->
+    <string name="app_name">Consumer</string>
+    <string name="tv_name">> play</string>
+    <string name="creator_fee">Pay-to-play, direct to Publisher:</string>
+    <string name="livestream_credits">This app\'s pay-to-play balance:</string>
+    <string name="tap_instructions">Send MATIC on L2 here to top-up.\nTap to copy address + close.</string>
+    <string name="livestream_base_url">http://89.145.161.141:7935/</string>
+    <string name="streaming_url">http://89.145.161.141:8935/stream/%s.m3u8</string>
+    <string name="wallet_payment_unit">MATIC</string>
+    <string name="default_wallet_password">password</string>
+    <string name="streaming_fee">1</string>
+
 </resources>
