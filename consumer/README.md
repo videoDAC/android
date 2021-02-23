@@ -40,8 +40,8 @@ The User Journey for a user of this app is:
 
 ## 2. **User** taps screen
 
-- App closes
-- Android notifies User that App's ETH address is stored to clipboard
+- **App** closes
+- **Android** notifies User that App's ETH address is stored to clipboard
 
 ![image](https://user-images.githubusercontent.com/2212651/82750460-f7d4db00-9dcd-11ea-8eea-b06982c94356.png)
 
@@ -73,9 +73,9 @@ The User Journey for a user of this app is:
 
 ## 8. **App** shows "paywall screen", when balance runs out:
 
-![Screenshot_20200514-235811](https://user-images.githubusercontent.com/59374467/81971634-063d2d00-963f-11ea-958c-59e833ee92c9.png)
+![image](https://user-images.githubusercontent.com/2212651/108596305-222de600-73aa-11eb-9011-45d83edef689.png)
 
-- Go to Step 2.
+## Go to Step 2.
 
 # Generating an Android APK
 
