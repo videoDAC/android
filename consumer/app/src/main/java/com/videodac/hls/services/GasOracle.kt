@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 interface GasOracle {
 
-    @GET("/api/ethgasAPI.json")
+    @GET("/")
     suspend fun getGasPrice(): Response<JsonObject>
 }

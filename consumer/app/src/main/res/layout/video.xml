@@ -44,13 +44,15 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="5dp"
-        android:textSize="18sp"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="@android:color/white"
         android:background="@android:color/black"
         android:fontFamily="@font/akkurat"
-        android:text="@string/wallet_balance_left"
-         />
+        android:text="@string/wallet_balance_left_placeholder"
+        />
 
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/loader"
