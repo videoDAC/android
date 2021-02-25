@@ -17,11 +17,11 @@ A "template app" is all the code required to generate a file (`.apk`) which can 
 
 The template must be configured with the following:
 
-- **"Pay-to" address** i.e. where you would like the app to send payments
+- **`CONTENT INDEX`** which provides a list of available streams in the app
+  - This content index, and the streams available, are server from a Livepeer Broadcaster.
+- **`RPC URL`** for publishing transactions on Ethereum / MATIC
 - **Price-per-minute** in network's native ETH token (can be zero for free-to-play app)
-- **`RPC URL`** for publishing transactions on Ethereum testnets or mainnet
-- **`STREAM_URL`** which is the stream of A/V content to be played in the app
-- **App name** e.g. "Alice and Bob's Pay-to-play Streaming App", and minimal copy
+- **Copy** to appear in the app e.g. introduction text, guidance, titles, etc.
 
 # User Journey
 
@@ -45,9 +45,11 @@ The User Journey for a user of this app is:
 
 ![image](https://user-images.githubusercontent.com/2212651/82750460-f7d4db00-9dcd-11ea-8eea-b06982c94356.png)
 
-## 3. **User** sends enough ETH / MATIC to app's ETH address
+## 3. **User** sends enough funds to app's address
 
 - This can be done from any app, like [WallETH](https://walleth.org/).
+- App can be configured to use ETH or MATIC
+- User needs to send enough to pay for at least 1 minute.
 
 ## 4. **User** launches app again
 
