@@ -4,7 +4,7 @@ This repository contains software created by videoDAC for the android operating 
 
 It currently consists of 2 separate applications for mobile-based pay-to-pay livestreaming:
 
-- [Consumer](https://github.com/videoDAC/android/issues/27) - for consuming livestream content, and sending payments
+- [Consumer](https://github.com/videoDAC/android/blob/master/consumer/README.md) - for consuming livestream content, and sending payments
   - [Link to Code](https://github.com/videoDAC/android/tree/master/consumer)
 - [Publisher](https://github.com/videoDAC/android/issues/31) - for publishing livestream content, and receiving payments
   - Under construction :)
