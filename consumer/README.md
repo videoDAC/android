@@ -20,23 +20,23 @@ The User Journey for a user of this app is:
 - **App** shows "paywall screen", including
   - Wallet's 0 balance (new wallet)
   - **Price-per-minute**
-  - App's own ETH address + QR Code
+  - App's own `0x` address + QR Code
   - App-specific copy
 
-![image](https://user-images.githubusercontent.com/2212651/108596305-222de600-73aa-11eb-9011-45d83edef689.png)
+![image](https://user-images.githubusercontent.com/2212651/109386804-4dbd4d00-7923-11eb-956e-b0f36be923ea.png)
 
 ## 2. **User** taps screen
 
 - **App** closes
-- **Android** notifies User that App's ETH address is stored to clipboard
+- **Android** notifies User that App's `0x` address is stored to clipboard
 
 ![image](https://user-images.githubusercontent.com/2212651/82750460-f7d4db00-9dcd-11ea-8eea-b06982c94356.png)
 
 ## 3. **User** sends enough funds to app's address
 
-- This can be done from any app, like [WallETH](https://walleth.org/).
-- App can be configured to use ETH or MATIC
-- User needs to send enough to pay for at least 1 minute.
+- This can be done from any app which can send currency.
+- App can be configured to use Ethereum or Matic chains.
+- User needs to send enough to pay for at least 1 minute + fees.
 
 ## 4. **User** launches app again
 
