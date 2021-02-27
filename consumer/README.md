@@ -1,27 +1,14 @@
 # videoDAC Livestream Consumer App
 
-This repo contains the `videoDAC` template for a pay-to-play Livestream Consumer App, for Android Operating System.
+This folder contains the `videoDAC` template for a Livestream Consumer Pay-to-play App, for Android Operating System.
 
 Contents:
 
-- [What do you mean by "template"?](#what-do-you-mean-by-template)
 - [User Journey](#user-journey)
+- [What do you mean by "template"?](#what-do-you-mean-by-template)
 - [Generating an Android APK](#generating-an-android-apk)
-- [Example Deployment](#example-deployment)
 
 Please submit any issues or pull requests to this repository.
-
-# What do you mean by "template"?
-
-A "template app" is all the code required to generate a file (`.apk`) which can be installed onto an Android device.
-
-The template must be configured with the following:
-
-- **`CONTENT INDEX`** which provides a list of available streams in the app
-  - This content index, and the streams available, are server from a Livepeer Broadcaster.
-- **`RPC URL`** for publishing transactions on Ethereum / MATIC
-- **Price-per-minute** in network's native ETH token (can be zero for free-to-play app)
-- **Copy** to appear in the app e.g. introduction text, guidance, titles, etc.
 
 # User Journey
 
@@ -78,6 +65,18 @@ The User Journey for a user of this app is:
 ![image](https://user-images.githubusercontent.com/2212651/108596305-222de600-73aa-11eb-9011-45d83edef689.png)
 
 ## Go to Step 2.
+
+# What do you mean by "template"?
+
+A "template app" is all the code required to generate a file (`.apk`) which can be installed onto an Android device.
+
+The template must be configured with the following:
+
+- **`CONTENT INDEX`** which provides a list of available streams in the app
+  - This content index, and the streams available, are server from a Livepeer Broadcaster.
+- **`RPC URL`** for publishing transactions on Ethereum / MATIC
+- **Price-per-minute** in network's native ETH token (can be zero for free-to-play app)
+- **Copy** to appear in the app e.g. introduction text, guidance, titles, etc.
 
 # Generating an Android APK
 
