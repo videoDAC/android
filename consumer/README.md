@@ -4,13 +4,15 @@ This folder contains the `videoDAC` template for a Livestream Consumer Pay-to-pl
 
 Contents:
 
-- [User Journey](#user-journey)
+- [User Journey Overview](#user-journey-overview)
 - [What do you mean by "template"?](#what-do-you-mean-by-template)
 - [Generating an Android APK](#generating-an-android-apk)
 
 Please submit any issues or pull requests to this repository.
 
-# User Journey
+# User Journey Overview
+
+![image](https://user-images.githubusercontent.com/2212651/109388087-f1f6c200-792a-11eb-8641-0852044ed798.png)
 
 The User Journey for a user of this app is:
 
@@ -32,7 +34,7 @@ The User Journey for a user of this app is:
 
 ![image](https://user-images.githubusercontent.com/2212651/82750460-f7d4db00-9dcd-11ea-8eea-b06982c94356.png)
 
-## 3. **User** sends enough funds to app's address
+## 3. **User** sends enough currency to app address
 
 - This can be done from any app which can send currency.
 - App can be configured to use Ethereum or Matic chains.
@@ -44,18 +46,18 @@ The User Journey for a user of this app is:
 
 ## 5. **App** hides the paywall page and shows a channel list.
 
-## 6. **User** selects which livestream channel to watch, from the app's scrollable "Channel List".
+## 6. **User** selects channel
 
 ![image](https://user-images.githubusercontent.com/2212651/108596330-5dc8b000-73aa-11eb-9188-7731fcab580c.png)
 
 - Livestream channelID is the Ethereum address of the livestream Publisher.
 - App collates address data from [ENS Domains](https://ens.domains/) and [IPFS](https://ipfs.io/) (served via [3Box](https://3boxlabs.com/), and configured via [Livepeer Protocol Explorer](explorer.livepeer.org/).
 
-## 7. **User** watches content from the livestream channel over the internet
+## 7. **User** watches livestream content
 
 ![image](https://user-images.githubusercontent.com/2212651/108596338-67eaae80-73aa-11eb-81b2-c13d903d1328.png)
 
-- Content shown is an automatically generate test source, but contains audio and video.
+- Content shown is an automatically generated test source, but contains audio and video.
 - The app pays every minute, directly to the Ethereum address of the livestream channel
 - App has been tested against eth1 Mainnet, Goerli, Rinkeby and Ropsten, and Matic Mainnet and Mumbai Testnet.
 - Content is served from a Livepeer Broadcaster node, set up per videoDAC's [`simple-streaming-server`](https://github.com/videoDAC/simple-streaming-server).
