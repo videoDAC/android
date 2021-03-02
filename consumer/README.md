@@ -1,4 +1,4 @@
-# videoDAC Livestream Consumer App
+# Livestream Consumer App
 
 This folder contains the `videoDAC` template for a Livestream Consumer Pay-to-play App, for Android Operating System.
 
