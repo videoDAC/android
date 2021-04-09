@@ -13,7 +13,7 @@ The app enables a user to:
 - consume and display livestream content
 - send payments to the publisher.
 
-Livestream content is served to the app from a [simple-streaming-server](https://github.com/videoDAC/simple-streaming-server), using Livepeer client software.
+Livestream content is served to the app from a [Livepeer Broadcaster](https://github.com/videoDAC/livepeer-broadcaster).
 
 [More details of the Consumer app are here](https://github.com/videoDAC/android/blob/master/consumer/README.md).
 
